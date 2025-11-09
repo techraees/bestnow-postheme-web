@@ -1,0 +1,47 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+import StoreProvider from "@/redux/store/StoreProvider";
+import ThemeProvider from "@/theme/ThemeProvider";
+import ToastProvider from "@/theme/ToastProvider";
+// import { Navbar } from "@/components/navbar";
+// import ButtonNavbar from "@/components/navbar/ButtonNavbar";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "Beston Web App",
+  description: "Beston e-commerce platform",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-dark_mode_primary text-black dark:text-white`}
+      >
+        <StoreProvider>
+          <ThemeProvider>
+            <main className="min-h-screen bg-white dark:bg-dark_mode_primary">
+              {children}
+            </main>
+            <ToastProvider />
+          </ThemeProvider>
+        </StoreProvider>
+      </body>
+    </html>
+  );
+}
