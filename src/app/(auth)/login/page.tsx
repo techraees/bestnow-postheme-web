@@ -12,7 +12,6 @@ import { RootState } from "@/redux/store/store";
 const LoginPage = () => {
   const methods = useForm();
   const { theme_mode } = useSelector((s: RootState) => s.coreAppSlice);
-  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data: any) => {
     console.log("Login Data:", data);
