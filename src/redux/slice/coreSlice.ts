@@ -12,6 +12,7 @@ interface CoreAppState {
   userError?: string;
   expandedCourierForm: boolean;
   headerHeightPx?: number;
+  isMenuOpen: boolean;
 }
 
 // safer initial theme (won't blow up in SSR/HMR)
@@ -30,6 +31,7 @@ const initialState: CoreAppState = {
   userStatus: "idle",
   expandedCourierForm: false,
   headerHeightPx: undefined,
+  isMenuOpen: false,
 };
 
 // ----- Slice -----
@@ -82,6 +84,9 @@ export const coreAppSlice = createSlice({
     setHeaderHeightPx(state, action: PayloadAction<number | undefined>) {
       state.headerHeightPx = action.payload;
     },
+    setIsMenuOpen(state, action: PayloadAction<boolean>) {
+      state.isMenuOpen = action.payload;
+    },
   },
 
   // ----- Auto-wire RTK Query -> coreApp.user -----
@@ -124,6 +129,7 @@ export const {
   changeActiveFormOfCouriers,
   changeThemeInCoreAppSlice,
   setHeaderHeightPx,
+  setIsMenuOpen,
 } = coreAppSlice.actions;
 
 // ----- Selectors -----
@@ -139,6 +145,7 @@ export const selectThemeMode = (state: { coreApp: CoreAppState }) =>
   state.coreApp.theme_mode;
 export const selectExpandedCourierForm = (state: { coreApp: CoreAppState }) =>
   state.coreApp.expandedCourierForm;
-
+export const selectIsMenuOpen = (state: { coreApp: CoreAppState }) =>
+  state.coreApp.isMenuOpen;
 // ----- Reducer -----
 export default coreAppSlice.reducer;

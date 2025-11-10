@@ -8,7 +8,7 @@ interface Product {
   title: string;
   image: any;
   rating?: number;
-  soldCount?: number;
+  soldCount?: string;
   price: number;
   isFavorite?: boolean;
 }
@@ -29,8 +29,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   }
 
   return (
-    <div className="w-full px-4 mb-6">
-      <div className="grid grid-cols-2 gap-4 md:gap-4">
+    <div className="w-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4 lg:gap-5 xl:gap-6">
         {products.map((product) => (
           <ProductCard
             key={product.id}

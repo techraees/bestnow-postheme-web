@@ -1,0 +1,12 @@
+export { default as HomeIcon } from "./HomeIcon";
+export { default as FaviourteIcon } from "./FaviourteIcon";
+export { default as CategoriesIcon } from "./CategoriesIcon";
+export { default as MessageIcon } from "./MessageIcon";
+export { default as OrderIcon } from "./OrderIcon";
+export { default as ProfileIcon } from "./ProfileIcon";
+export { default as NoficationIcon } from "./NoficationIcon";
+export { default as LedgerIcon } from "./LedgerIcon";
+export { default as CartIcon } from "./CartIcon";
+export { default as ReplaceIcon } from "./ReplaceIcon";
+export { default as VoiceIcon } from "./VoiceIcon";
+export { default as QuickOrderIcon } from "./QuickOrderIcon";

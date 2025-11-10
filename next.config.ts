@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "adminapi.beston.co",
+        pathname: "/uploads/**",
+      },
+    ],
+  },
+
   /* config options here */
   // Allow external access for mobile testing
   async headers() {

@@ -28,8 +28,8 @@ const ActionButtonsGrid: React.FC<ActionButtonsGridProps> = ({
   onOffersClick,
 }) => {
   return (
-    <div className="w-full px-4 mb-6">
-      <div className="grid grid-cols-2 gap-3">
+    <div className="w-full">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
         <ActionButton
           icon={
             <Image
@@ -37,7 +37,7 @@ const ActionButtonsGrid: React.FC<ActionButtonsGridProps> = ({
               alt="Search"
               width={24}
               height={24}
-              className="w-6 h-6 object-contain"
+              className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 object-contain"
             />
           }
           label="Search"
@@ -50,7 +50,7 @@ const ActionButtonsGrid: React.FC<ActionButtonsGridProps> = ({
               alt="Fast Billing"
               width={24}
               height={24}
-              className="w-6 h-6 object-contain"
+              className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 object-contain"
             />
           }
           label="Fast Billing"
@@ -63,7 +63,7 @@ const ActionButtonsGrid: React.FC<ActionButtonsGridProps> = ({
               alt="My Cart"
               width={24}
               height={24}
-              className="w-6 h-6 object-contain"
+              className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 object-contain"
             />
           }
           label="My Cart"
@@ -77,7 +77,7 @@ const ActionButtonsGrid: React.FC<ActionButtonsGridProps> = ({
               alt="Discount & Offers"
               width={24}
               height={24}
-              className="w-6 h-6 object-contain"
+              className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 object-contain"
             />
           }
           label="Discount & Offers"

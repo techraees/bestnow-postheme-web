@@ -4,7 +4,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { MdMusicNote } from "react-icons/md";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
-import { BannerImage, BannerImage1 } from "@/assets/images";
+import {
+  SunlongDesktopBanner,
+  RoyalfalconDesktoopBanner,
+  ForceBannerDesktop,
+  GoldenCrownDesktopBanner,
+} from "@/assets/images";
 
 interface Banner {
   id: string;
@@ -21,22 +26,22 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
     {
       id: "1",
       title: "ORIGINAL COLOR SCREEN",
-      image: BannerImage,
+      image: ForceBannerDesktop,
     },
     {
       id: "2",
       title: "ORIGINAL COLOR SCREEN",
-      image: BannerImage1,
+      image: GoldenCrownDesktopBanner,
     },
     {
       id: "3",
       title: "ORIGINAL COLOR SCREEN",
-      image: BannerImage,
+      image: RoyalfalconDesktoopBanner,
     },
     {
       id: "4",
       title: "ORIGINAL COLOR SCREEN",
-      image: BannerImage1,
+      image: SunlongDesktopBanner,
     },
   ],
 }) => {
@@ -118,11 +123,11 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
   };
 
   return (
-    <div className="w-full px-4 mb-4">
+    <div className="w-full px-4 md:px-6 lg:px-0">
       {/* Banner Card with Swipe Support */}
       <div
         ref={bannerRef}
-        className="relative w-full bg-white rounded-2xl overflow-hidden h-48 md:h-64 cursor-grab active:cursor-grabbing"
+        className="relative w-full bg-white rounded-2xl md:rounded-3xl lg:rounded-none overflow-hidden h-48 md:h-72 lg:h-96 xl:h-[500px] 2xl:h-[600px] cursor-grab active:cursor-grabbing"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -159,15 +164,15 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
 
       {/* Pagination Dots */}
       {banners.length > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-3">
+        <div className="flex justify-center items-center gap-2 mt-3 md:mt-4 lg:mt-6 px-4 lg:px-0">
           {banners.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
               className={`transition-all duration-300 ${
                 index === currentIndex
-                  ? "w-8 h-1.5 bg-dark_mode_color dark:bg-light_mode_color rounded-full"
-                  : "w-1.5 h-1.5 bg-light_mode_color3 dark:bg-dark_mode_color3 rounded-full hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2"
+                  ? "w-8 h-1.5 md:w-10 md:h-2 bg-dark_mode_color dark:bg-light_mode_color rounded-full"
+                  : "w-1.5 h-1.5 md:w-2 md:h-2 bg-light_mode_color3 dark:bg-dark_mode_color3 rounded-full hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2"
               }`}
               aria-label={`Go to banner ${index + 1}`}
             />
