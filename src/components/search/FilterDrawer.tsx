@@ -66,14 +66,17 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
   };
 
   // Calculate price percentage for slider
-  const minPricePercent = ((minPrice - minPriceRange) / (maxPriceRange - minPriceRange)) * 100;
-  const maxPricePercent = ((maxPrice - minPriceRange) / (maxPriceRange - minPriceRange)) * 100;
+  const minPricePercent =
+    ((minPrice - minPriceRange) / (maxPriceRange - minPriceRange)) * 100;
+  const maxPricePercent =
+    ((maxPrice - minPriceRange) / (maxPriceRange - minPriceRange)) * 100;
 
   // Generate histogram data (mock data for visualization)
   const histogramBars = Array.from({ length: 20 }, (_, i) => {
     const barValue = Math.random() * 100;
     const barPosition = (i / 19) * 100;
-    const isInRange = barPosition >= minPricePercent && barPosition <= maxPricePercent;
+    const isInRange =
+      barPosition >= minPricePercent && barPosition <= maxPricePercent;
     return { value: barValue, position: barPosition, isInRange };
   });
 
@@ -85,7 +88,7 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end"
+      className="fixed bottom-[60px] inset-0 z-50 flex items-end"
       onClick={handleBackdropClick}
     >
       {/* Backdrop */}
@@ -245,4 +248,3 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
 };
 
 export default FilterDrawer;
-

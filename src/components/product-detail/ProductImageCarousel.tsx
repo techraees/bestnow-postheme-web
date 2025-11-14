@@ -1,3 +1,138 @@
+// "use client";
+
+// import React, { useState } from "react";
+// import Image from "next/image";
+// import { HiArrowLeft, HiOutlineHeart, HiHeart } from "react-icons/hi";
+// import { HiMagnifyingGlass } from "react-icons/hi2";
+// import { useRouter } from "next/navigation";
+
+// interface ProductImageCarouselProps {
+//   images: string[];
+//   productName: string;
+//   isFavorite?: boolean;
+//   onFavoriteClick?: () => void;
+//   onBack?: () => void;
+// }
+
+// const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
+//   images = [],
+//   productName,
+//   isFavorite = false,
+//   onFavoriteClick,
+//   onBack,
+// }) => {
+//   const router = useRouter();
+//   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+//   const handleBack = () => {
+//     if (onBack) {
+//       onBack();
+//     } else {
+//       router.back();
+//     }
+//   };
+
+//   const goToImage = (index: number) => {
+//     setCurrentImageIndex(index);
+//   };
+
+//   const goToNext = () => {
+//     setCurrentImageIndex((prev) => (prev + 1) % images.length);
+//   };
+
+//   const goToPrevious = () => {
+//     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+//   };
+
+//   return (
+//     <div className="relative w-full bg-white rounded-b-3xl overflow-hidden">
+//       {/* Navigation Buttons */}
+//       <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4">
+//         {/* Back Button */}
+//         <button
+//           onClick={handleBack}
+//           className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-400 bg-opacity-80 dark:bg-opacity-80 flex items-center justify-center hover:bg-opacity-100 transition-opacity"
+//           aria-label="Go back"
+//         >
+//           <HiArrowLeft className="h-5 w-5 text-dark_mode_color" />
+//         </button>
+
+//         {/* Favorite Button */}
+//         <button
+//           onClick={onFavoriteClick}
+//           className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-400 bg-opacity-80 dark:bg-opacity-80 flex items-center justify-center hover:bg-opacity-100 transition-opacity"
+//           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+//         >
+//           {isFavorite ? (
+//             <HiHeart className="h-5 w-5 text-dark_mode_color fill-current" />
+//           ) : (
+//             <HiOutlineHeart className="h-5 w-5 text-dark_mode_color" />
+//           )}
+//         </button>
+//       </div>
+
+//       {/* Zoom Button */}
+//       <div className="absolute bottom-20 right-4 z-20">
+//         <button
+//           className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-400 bg-opacity-80 dark:bg-opacity-80 flex items-center justify-center hover:bg-opacity-100 transition-opacity"
+//           aria-label="Zoom image"
+//         >
+//           <HiMagnifyingGlass className="h-5 w-5 text-dark_mode_color" />
+//         </button>
+//       </div>
+
+//       {/* Image Carousel */}
+//       <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px]">
+//         {images.length > 0 ? (
+//           <>
+//             {images.map((image, index) => (
+//               <div
+//                 key={index}
+//                 className={`absolute inset-0 transition-opacity duration-500 ${
+//                   index === currentImageIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+//                 }`}
+//               >
+//                 <Image
+//                   src={image}
+//                   alt={`${productName} - Image ${index + 1}`}
+//                   fill
+//                   className="object-contain"
+//                   priority={index === 0}
+//                   sizes="100vw"
+//                 />
+//               </div>
+//             ))}
+//           </>
+//         ) : (
+//           <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+//             <p className="text-gray-400">No image available</p>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* Image Indicators */}
+//       {images.length > 1 && (
+//         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+//           {images.map((_, index) => (
+//             <button
+//               key={index}
+//               onClick={() => goToImage(index)}
+//               className={`transition-all duration-300 ${
+//                 index === currentImageIndex
+//                   ? "w-2 h-2 bg-white rounded-full"
+//                   : "w-2 h-2 bg-gray-400 rounded-full opacity-50"
+//               }`}
+//               aria-label={`Go to image ${index + 1}`}
+//             />
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default ProductImageCarousel;
+
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -17,40 +152,30 @@ import {
 
 interface Banner {
   id: string;
-  title: string;
-  image?: any; // Next.js Image type (desktop)
-  mobileImage?: any; // Next.js Image type (mobile)
+  image?: any; // Next.js Image type (mobile)
 }
 
-interface PromotionalBannerProps {
+interface ProductImageCarouselProps {
   banners?: Banner[];
 }
 
-const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
+const ProductImageCarousel: React.FC<ProductImageCarouselProps> = ({
   banners = [
     {
       id: "1",
-      title: "ORIGINAL COLOR SCREEN",
       image: ForceBannerDesktop,
-      mobileImage: ForceBannerMobile,
     },
     {
       id: "2",
-      title: "ORIGINAL COLOR SCREEN",
       image: GoldenCrownDesktopBanner,
-      mobileImage: GoldenCrownMobileBanner,
     },
     {
       id: "3",
-      title: "ORIGINAL COLOR SCREEN",
       image: RoyalfalconDesktoopBanner,
-      mobileImage: RoyalfalconMobileBanner,
     },
     {
       id: "4",
-      title: "ORIGINAL COLOR SCREEN",
       image: SunlongDesktopBanner,
-      mobileImage: SunlongMobileBanner,
     },
   ],
 }) => {
@@ -132,11 +257,11 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
   };
 
   return (
-    <div className="w-full px-4 md:px-6 lg:px-0">
+    <div className="w-full bg-light_mode_color dark:bg-dark_mode_color">
       {/* Banner Card with Swipe Support */}
       <div
         ref={bannerRef}
-        className="relative w-full bg-white rounded-2xl md:rounded-3xl lg:rounded-none overflow-hidden h-48 md:h-72 lg:h-96 xl:h-[500px] 2xl:h-[600px] cursor-grab active:cursor-grabbing"
+        className="relative w-full bg-white  overflow-hidden h-[350px] md:h-72 lg:h-96 xl:h-[500px] 2xl:h-[600px] cursor-grab active:cursor-grabbing"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -145,7 +270,7 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
         <div className="relative w-full h-full">
           {banners.map((banner, index) => {
             // Use mobile image on mobile, desktop image on desktop
-            const bannerImage = banner.mobileImage || banner.image;
+            const bannerImage = banner.image;
             const isActive = index === currentIndex;
 
             return (
@@ -159,8 +284,8 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
                   <>
                     {/* Mobile Banner - Hidden on desktop */}
                     <Image
-                      src={banner.mobileImage || bannerImage}
-                      alt={banner.title}
+                      src={bannerImage}
+                      alt={`product-${banner.id}`}
                       fill
                       className="object-fill lg:hidden"
                       priority={index === 0}
@@ -169,7 +294,7 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
                     {/* Desktop Banner - Hidden on mobile */}
                     <Image
                       src={banner.image || bannerImage}
-                      alt={banner.title}
+                      alt={`product-${banner.id}`}
                       fill
                       className="object-cover hidden lg:block"
                       priority={index === 0}
@@ -211,4 +336,4 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
   );
 };
 
-export default PromotionalBanner;
+export default ProductImageCarousel;

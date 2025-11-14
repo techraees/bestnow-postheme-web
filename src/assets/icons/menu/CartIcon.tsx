@@ -36,7 +36,7 @@ const CartIcon = ({ className }: { className: string }) => {
       />
       <path
         d="M4.29248 7.63039L7.81446 0.586426"
-        stroke="#FFF100"
+        stroke="currentColor"
         stroke-width="1.17273"
         stroke-linecap="round"
         stroke-linejoin="round"

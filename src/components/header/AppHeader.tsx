@@ -10,6 +10,8 @@ import Link from "next/link";
 import { HiXMark } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import { ArrowUp } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { HIDDEN_HEADER_ROUTES } from "@/constants/routes";
 
 interface AppHeaderProps {
   theme_mode: string;
@@ -22,46 +24,25 @@ const AppHeader: React.FC<AppHeaderProps> = ({
   onMenuClick,
   onThemeToggle,
 }) => {
+  const pathname = usePathname();
   const logo =
     theme_mode === THEME_DATA.DARK ? BestonDarkLogo : BestonLightLogo;
   const isDark = theme_mode === THEME_DATA.DARK;
   const isMenuOpen = useSelector((state: any) => state.coreAppSlice.isMenuOpen);
 
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  // Check if current route should hide header
+  const shouldHideHeader = HIDDEN_HEADER_ROUTES.some((route) =>
+    pathname?.startsWith(route)
+  );
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Always show header at the top of the page
-      if (currentScrollY < 10) {
-        setIsVisible(true);
-      }
-      // Show header when scrolling up
-      else if (currentScrollY < lastScrollY) {
-        setIsVisible(true);
-      }
-      // Hide header when scrolling down (only if scrolled past threshold)
-      else if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        setIsVisible(false);
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
+  // Don't render header if route is in hidden routes array
+  if (shouldHideHeader) {
+    return null;
+  }
 
   return (
     <header
-      className={`w-full lg:h-[60px] h-[50px] fixed top-0 left-0 right-0 z-50 bg-light_mode_color dark:bg-dark_mode_color px-4 py-3 md:px-6 lg:px-8 xl:px-12 bg-opacity-95 dark:bg-opacity-95 backdrop-blur-sm transition-transform duration-300 ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
+      className={`w-full lg:h-[60px] h-[55px] fixed top-0 left-0 right-0 z-50 bg-light_mode_color dark:bg-dark_mode_color px-4 py-3 md:px-6 lg:px-8 xl:px-12 bg-opacity-95 dark:bg-opacity-95 backdrop-blur-sm transition-transform duration-300`}
     >
       <div className="flex items-center justify-between max-w-[1600px] mx-auto">
         {/* Logo and App Name */}

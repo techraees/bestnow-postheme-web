@@ -10,3 +10,6 @@ export { default as CartIcon } from "./CartIcon";
 export { default as ReplaceIcon } from "./ReplaceIcon";
 export { default as VoiceIcon } from "./VoiceIcon";
 export { default as QuickOrderIcon } from "./QuickOrderIcon";
+export { default as SearchIcon } from "./SearchIcon";
+export { default as DiscountIcon } from "./DiscountIcon";
+export { default as ArrowDescrptionIcon } from "./ArrowDescrptionIcon";

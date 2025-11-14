@@ -22,7 +22,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
       className="flex flex-col items-center gap-2  active:scale-95 transition-transform"
     >
       {/* Category Icon/Image */}
-      <div className="w-[65px] h-[65px] md:w-16 md:h-16 lg:w-[200px] lg:h-[200px] rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-transparent hover:border-accent transition-colors">
+      <div className="w-[65px] h-[65px] md:w-16 md:h-16 lg:w-[200px] lg:h-[200px] rounded-full bg-white flex items-center justify-center overflow-hidden border lg:border-2  hover:border-accent transition-colors">
         {image ? (
           <Image
             src={image}

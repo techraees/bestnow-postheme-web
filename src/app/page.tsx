@@ -12,6 +12,12 @@ import { BannerImage, BannerImage1 } from "@/assets/images";
 import useThemeCache from "@/theme/useThemeCache";
 import { setIsMenuOpen } from "@/redux/slice/coreSlice";
 import { useDispatch } from "react-redux";
+// import MenuModal from "@/components/menu-modal/MenuModal";
+import { CartIcon, DiscountIcon, QuickOrderIcon, SearchIcon } from "@/assets";
+import { useRouter } from "next/navigation";
+import MenuGrid from "@/components/MenuModal/MenuGrid";
+import { BottomNavbar } from "@/components/navigation";
+import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import MenuModal from "@/components/MenuModal/MenuModal";
 
 export default function Home() {
@@ -193,69 +199,118 @@ export default function Home() {
     console.log("isMenuOpen", isMenuOpen);
   };
   const [activeTab, setActiveTab] = useState<FilterTab>("popular");
+  const router = useRouter();
+
+  const menuData = [
+    {
+      icon: (
+        <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+          <SearchIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+        </div>
+      ),
+      label: "Search",
+      onClick: () => {
+        router.push("/search");
+        console.log("Search clicked");
+      },
+    },
+
+    {
+      icon: (
+        <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+          <CartIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+        </div>
+      ),
+      label: "My Cart",
+      onClick: () => {
+        router.push("/cart");
+        console.log("My Cart clicked");
+      },
+    },
+
+    {
+      icon: (
+        <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+          <QuickOrderIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+        </div>
+      ),
+      label: "Quick Order",
+      onClick: () => {
+        console.log("Quick Order clicked");
+      },
+    },
+    {
+      icon: (
+        <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+          <DiscountIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+        </div>
+      ),
+      label: "Discount & Offers",
+      onClick: () => {
+        console.log("Discount & Offers clicked");
+      },
+      badge: "10+",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-light_mode_color dark:bg-dark_mode_color w-full overflow-x-hidden">
-      {/* Header */}
-      <div className="w-full max-w-[1600px] mx-auto bg-light_mode_color dark:bg-dark_mode_color">
-        <AppHeader
-          theme_mode={theme_mode}
-          onMenuClick={handleMenuClick}
-          onThemeToggle={toggleTheme}
-        />
+    <TopSpacingWrapper>
+      <div className="min-h-screen bg-light_mode_color dark:bg-dark_mode_color w-full overflow-x-hidden">
+        {/* Header */}
+        <div className="w-full max-w-[1600px] mx-auto bg-light_mode_color dark:bg-dark_mode_color">
+          <AppHeader
+            theme_mode={theme_mode}
+            onMenuClick={handleMenuClick}
+            onThemeToggle={toggleTheme}
+          />
+        </div>
+        {isMenuOpen && <MenuModal />}
+        {/* Promotional Banner - Full width on desktop, padded on mobile */}
+        <div className="mb-6 md:mb-8 lg:mb-10">
+          <PromotionalBanner />
+        </div>
+
+        {/* Responsive Container - Mobile perfect, Desktop professional */}
+        <div className="w-full max-w-[1600px] mx-auto bg-light_mode_color dark:bg-dark_mode_color min-h-screen">
+          {/* Main Content Container */}
+          <main className="pb-8 md:pb-12 lg:pb-16">
+            {/* Content Wrapper - Responsive padding and max-width */}
+            <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
+              {/* Action Buttons Grid */}
+              <div className="mb-6 md:mb-8 lg:mb-10 lg:hidden block">
+                <MenuGrid data={menuData} />
+              </div>
+
+              {/* Categories Section */}
+              <div className="mb-6 md:mb-8 lg:mb-10">
+                <CategoriesSection
+                  onCategoryClick={handleCategoryClick}
+                  onSeeAllClick={handleSeeAllClick}
+                />
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="mb-6 md:mb-8 lg:mb-10">
+                <FilterTabs
+                  activeTab={activeTab}
+                  onTabChange={setActiveTab}
+                  onFilterClick={handleFilterClick}
+                />
+              </div>
+
+              {/* Products Grid */}
+              <div className="mb-6 md:mb-8 lg:mb-10">
+                <ProductGrid
+                  products={sampleProducts}
+                  onFavoriteClick={handleFavoriteClick}
+                  onAddToCart={handleAddToCart}
+                />
+              </div>
+            </div>
+          </main>
+        </div>
+        <BottomNavbar cartCount={10} />
       </div>
-      {isMenuOpen && <MenuModal />}
-      {/* Promotional Banner - Full width on desktop, padded on mobile */}
-      <div className="mb-6 md:mb-8 lg:mb-10">
-        <PromotionalBanner />
-      </div>
-
-      {/* Responsive Container - Mobile perfect, Desktop professional */}
-      <div className="w-full max-w-[1600px] mx-auto bg-light_mode_color dark:bg-dark_mode_color min-h-screen">
-        {/* Main Content Container */}
-        <main className="pb-8 md:pb-12 lg:pb-16">
-          {/* Content Wrapper - Responsive padding and max-width */}
-          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
-            {/* Action Buttons Grid */}
-            <div className="mb-6 md:mb-8 lg:mb-10 lg:hidden block">
-              <ActionButtonsGrid
-                cartCount={10}
-                offersCount={6}
-                onSearchClick={handleSearchClick}
-                onBillingClick={handleBillingClick}
-                onCartClick={handleCartClick}
-                onOffersClick={handleOffersClick}
-              />
-            </div>
-
-            {/* Categories Section */}
-            <div className="mb-6 md:mb-8 lg:mb-10">
-              <CategoriesSection
-                onCategoryClick={handleCategoryClick}
-                onSeeAllClick={handleSeeAllClick}
-              />
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="mb-6 md:mb-8 lg:mb-10">
-              <FilterTabs
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                onFilterClick={handleFilterClick}
-              />
-            </div>
-
-            {/* Products Grid */}
-            <div className="mb-6 md:mb-8 lg:mb-10">
-              <ProductGrid
-                products={sampleProducts}
-                onFavoriteClick={handleFavoriteClick}
-                onAddToCart={handleAddToCart}
-              />
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
+    </TopSpacingWrapper>
   );
 }
