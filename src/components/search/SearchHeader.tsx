@@ -9,12 +9,14 @@ import SubHeader from "../navigation/SubHeader";
 interface SearchHeaderProps {
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
+  onSearchSubmit?: (query: string) => void;
   onFilterClick?: () => void;
 }
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({
   searchQuery = "",
   onSearchChange,
+  onSearchSubmit,
   onFilterClick,
 }) => {
   const router = useRouter();
@@ -46,6 +48,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           <SearchInput
             initialValue={searchQuery}
             onSearchChange={onSearchChange}
+            onSearchSubmit={onSearchSubmit}
             onFilterClick={onFilterClick}
             placeholder="Search products..."
           />

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import { ProfileMenuItem } from "@/components/profile";
 import Image from "next/image";
@@ -26,13 +27,47 @@ import {
   SecurityIcon,
   DeviceIcon,
 } from "@/assets";
+import { Button } from "@/components/button";
+import { useLogoutCustomerMutation } from "@/redux/api/auth/customerAuthApi";
+import { useVerifyTokenQuery } from "@/redux/api/auth/customerAuthProfileApi";
+import { selectUserProfile } from "@/redux/slice/coreSlice";
+import { getCookie, removeCookie } from "@/utils/coreUtils/cookieFunction";
+import { COOKIES_LOGIN_TOKENS } from "@/data/coreData/coreData";
+import { toast } from "react-toastify";
 
 const ProfilePage = () => {
   const router = useRouter();
+  const [logoutCustomer, { isLoading }] = useLogoutCustomerMutation();
 
-  const handleDone = () => {
-    router.back();
-    // Or save changes if in edit mode
+  // Fetch user profile data
+  useVerifyTokenQuery(undefined);
+
+  // Get user profile from Redux state
+  const userProfile = useSelector(
+    (state: any) => state.coreAppSlice.userProfile
+  );
+
+  // Extract user data
+  const userName = userProfile?.name || userProfile?.username || "";
+  const userEmail = userProfile?.email || "";
+
+  const handleLogout = async () => {
+    const getRefreshTokenFromCookie = getCookie(
+      COOKIES_LOGIN_TOKENS.REFRESH_TOKEN
+    );
+
+    // Call the api
+    logoutCustomer({ refresh_token: getRefreshTokenFromCookie });
+
+    // Now clear the redux state by reloading the page
+    toast.success("Logout successfully");
+
+    // Remove the cookies
+    removeCookie(COOKIES_LOGIN_TOKENS.REFRESH_TOKEN);
+    removeCookie(COOKIES_LOGIN_TOKENS.ACCESS_TOKEN);
+    sessionStorage.removeItem("user_context");
+    // Now Redirecting
+    window.location.href = "/";
   };
 
   const profileMenuItems = [
@@ -42,7 +77,7 @@ const ProfilePage = () => {
         <ProfileIcon className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color w-5 h-5 md:w-6 md:h-6" />
       ),
       title: "Account",
-      subtitle: "dravenhorst123@gmail.com",
+      subtitle: userEmail || "Account settings",
       onClick: () => router.push("/profile/account"),
     },
     {
@@ -121,14 +156,18 @@ const ProfilePage = () => {
           </div>
 
           {/* Name */}
-          <h2 className="text-light_mode_text dark:text-dark_mode_text text-xl md:text-2xl lg:text-3xl font-bold mb-1 md:mb-2 text-center">
-            Draven Horst
-          </h2>
+          {userName && (
+            <h2 className="text-light_mode_text dark:text-dark_mode_text text-xl md:text-2xl lg:text-3xl font-bold mb-1 md:mb-2 text-center">
+              {userName}
+            </h2>
+          )}
 
           {/* Email */}
-          <p className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base opacity-80 text-center">
-            dravenhorst123@gmail.com
-          </p>
+          {userEmail && (
+            <p className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base opacity-80 text-center">
+              {userEmail}
+            </p>
+          )}
         </div>
 
         {/* Horizontal Line Separator */}
@@ -146,6 +185,17 @@ const ProfilePage = () => {
             />
           ))}
         </div>
+        <Button
+          type="submit"
+          isLoading={isLoading}
+          fullWidth
+          variant="primary"
+          size="md"
+          className="!rounded-full"
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
 
         {/* Footer Link */}
         <div className="flex bg-light_mode_color dark:bg-dark_mode_color justify-center fixed bottom-4 left-0 right-0">

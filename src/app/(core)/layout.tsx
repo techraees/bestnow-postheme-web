@@ -1,13 +1,14 @@
 "use client";
 import { AppHeader } from "@/components/header";
 import { BottomNavbar } from "@/components/navigation";
-import { setIsMenuOpen } from "@/redux/slice/coreSlice";
+import { setIsMenuOpen, setUserProfile } from "@/redux/slice/coreSlice";
 import useThemeCache from "@/theme/useThemeCache";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MenuModal from "@/components/MenuModal/MenuModal";
 import { usePathname } from "next/navigation";
 import { HIDDEN_HEADER_ROUTES } from "@/constants/routes";
+import { useVerifyTokenQuery } from "@/redux/api/auth/customerAuthProfileApi";
 
 interface CoreLayoutProps {
   children: React.ReactNode;
@@ -29,6 +30,12 @@ const CoreLayout = ({ children }: CoreLayoutProps) => {
     pathname?.startsWith(route)
   );
 
+  const { data, isLoading } = useVerifyTokenQuery(undefined);
+  useEffect(() => {
+    if (data?.payload) {
+      dispatch(setUserProfile(data.payload));
+    }
+  }, [data]);
   return (
     <div className="min-h-screen bg-light_mode_color dark:bg-dark_mode_color w-full overflow-x-hidden pb-16 lg:pb-0">
       <AppHeader
@@ -43,7 +50,7 @@ const CoreLayout = ({ children }: CoreLayoutProps) => {
       {isMenuOpen && <MenuModal />}
 
       {/* Bottom Navigation - Mobile Only */}
-      {/* <BottomNavbar cartCount={10} /> */}
+      <BottomNavbar cartCount={10} />
     </div>
   );
 };

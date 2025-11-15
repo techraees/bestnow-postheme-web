@@ -24,10 +24,19 @@ const AppHeader: React.FC<AppHeaderProps> = ({
   onMenuClick,
   onThemeToggle,
 }) => {
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Use default logo until mounted to prevent hydration mismatch
   const logo =
-    theme_mode === THEME_DATA.DARK ? BestonDarkLogo : BestonLightLogo;
-  const isDark = theme_mode === THEME_DATA.DARK;
+    !mounted || theme_mode === THEME_DATA.DARK
+      ? BestonDarkLogo
+      : BestonLightLogo;
+  const isDark = mounted && theme_mode === THEME_DATA.DARK;
   const isMenuOpen = useSelector((state: any) => state.coreAppSlice.isMenuOpen);
 
   // Check if current route should hide header

@@ -2,61 +2,57 @@
 
 import { SearchIcon } from "@/assets";
 import FilterIcon from "@/assets/icons/input/FilterIcon";
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 
 interface SearchInputProps {
   initialValue?: string;
   onSearchChange?: (query: string) => void;
+  onSearchSubmit?: (query: string) => void;
   onFilterClick?: () => void;
   placeholder?: string;
-}
-
-interface SearchFormData {
-  query: string;
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
   initialValue = "",
   onSearchChange,
+  onSearchSubmit,
   onFilterClick,
   placeholder = "Search products...",
 }) => {
-  const { register, watch, handleSubmit, reset } = useForm<SearchFormData>({
-    defaultValues: {
-      query: initialValue,
-    },
-  });
+  const [value, setValue] = useState(initialValue);
 
-  const queryValue = watch("query");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    onSearchChange?.(newValue);
+  };
 
-  // Update form when initialValue changes
-  React.useEffect(() => {
-    if (initialValue !== queryValue) {
-      reset({ query: initialValue });
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && value.trim()) {
+      e.preventDefault();
+      onSearchSubmit?.(value.trim());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialValue]);
+  };
 
-  // Watch for changes and call onSearchChange
-  React.useEffect(() => {
-    onSearchChange?.(queryValue);
-  }, [queryValue, onSearchChange]);
-
-  const onSubmit = (data: SearchFormData) => {
-    onSearchChange?.(data.query);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (value.trim()) {
+      onSearchSubmit?.(value.trim());
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="relative">
+    <form onSubmit={handleSubmit} className="relative">
       <div className="absolute left-4 top-1/2 -translate-y-1/2 text-light_mode_text dark:text-dark_mode_text opacity-60">
         <SearchIcon className="h-5 w-5 text-light_mode_yellow_color dark:text-dark_mode_yellow_color md:h-6 md:w-6" />
       </div>
       <input
         type="text"
-        {...register("query")}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-full bg-light_mode_color2 dark:bg-dark_mode_color2 text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color border border-light_mode_color2 dark:border-dark_mode_color2 rounded-full pl-12 pr-12 py-3.5 md:py-4 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-transparent"
+        className="w-full bg-light_mode_color2 dark:bg-dark_mode_color2 text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-light_mode_gray_color border border-light_mode_color2 dark:border-dark_mode_color2 rounded-full pl-12 pr-12 py-3.5 md:py-4 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-transparent"
       />
       {onFilterClick && (
         <button

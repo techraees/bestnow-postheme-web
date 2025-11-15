@@ -33,13 +33,7 @@ const FilterTabs: React.FC<FilterTabsProps> = ({
           className="shrink-0 w-[45px] h-[45px] md:w-[50px] md:h-[50px] lg:w-[55px] lg:h-[55px] rounded-full bg-light_mode_color3 dark:bg-dark_mode_color3 border border-light_mode_border1 dark:border-dark_mode_border2 flex items-center justify-center hover:opacity-80 transition-opacity"
           aria-label="Filter"
         >
-          <Image
-            src={FilterIcon}
-            alt="Filter"
-            width={20}
-            height={20}
-            className="md:w-6 md:h-6"
-          />
+          <FilterIcon className=" w-4 h-4 rotate-90 md:w-6 md:h-6 text-light_mode_blue_color dark:text-dark_mode_blue_color" />
         </button>
 
         {/* Tabs */}

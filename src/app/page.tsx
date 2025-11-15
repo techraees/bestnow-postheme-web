@@ -1,206 +1,171 @@
 "use client";
 
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AppHeader } from "@/components/header";
 import { PromotionalBanner } from "@/components/promotional-banner";
-import { ActionButtonsGrid } from "@/components/action-buttons";
 import { CategoriesSection } from "@/components/categories";
 import { FilterTabs, FilterTab } from "@/components/filter-tabs";
-import { ProductGrid } from "@/components/products";
-import { BannerImage, BannerImage1 } from "@/assets/images";
+import { ProductGrid, ProductSkeleton } from "@/components/products";
 import useThemeCache from "@/theme/useThemeCache";
 import { setIsMenuOpen } from "@/redux/slice/coreSlice";
-import { useDispatch } from "react-redux";
-// import MenuModal from "@/components/menu-modal/MenuModal";
 import { CartIcon, DiscountIcon, QuickOrderIcon, SearchIcon } from "@/assets";
-import { useRouter } from "next/navigation";
 import MenuGrid from "@/components/MenuModal/MenuGrid";
 import { BottomNavbar } from "@/components/navigation";
 import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import MenuModal from "@/components/MenuModal/MenuModal";
+import {
+  useGetAllProductsBasedOnFilterQuery,
+  useGetAllProductsCategoriesQuery,
+  useGetAllProductsBrandsNamesQuery,
+} from "@/redux/api/core/coreApi";
+import { ALLOWED_QUERY_PARAMS_PRODUCTS_HOME_PAGE } from "@/data/coreData/coreEnums/coreGeneralEnums";
+import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
+
+interface Product {
+  id?: string;
+  product_name?: string;
+  images?: string[];
+  rating?: number;
+  stock_status?: { LABEL?: string };
+  productPrice?: number;
+  isFavorite?: boolean;
+}
 
 export default function Home() {
-  const handleSearchClick = () => {
-    // Handle search click
-    console.log("Search clicked");
-  };
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+  const [mounted, setMounted] = useState(false);
 
-  const handleBillingClick = () => {
-    // Handle billing click
-    console.log("Billing clicked");
-  };
+  // Redux state
+  const { theme_mode } = useSelector((state: any) => state.coreAppSlice);
+  const { toggleTheme } = useThemeCache();
+  const isMenuOpen = useSelector((state: any) => state.coreAppSlice.isMenuOpen);
 
-  const handleCartClick = () => {
-    // Handle cart click
-    console.log("Cart clicked");
-  };
+  // Local state
+  const [activeTab, setActiveTab] = useState<FilterTab>("popular");
+  const [page, setPage] = useState(1);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [stopCalling, setStopCalling] = useState(false);
+  const [filters, setFilters] = useState<Record<string, string>>({});
 
-  const handleOffersClick = () => {
-    // Handle offers click
-    console.log("Offers clicked");
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Handlers
+  const handleMenuClick = () => {
+    dispatch(setIsMenuOpen(!isMenuOpen));
   };
 
   const handleCategoryClick = (category: any) => {
-    // Handle category click
     console.log("Category clicked:", category);
   };
 
   const handleSeeAllClick = () => {
-    // Handle see all click
     console.log("See all clicked");
   };
 
   const handleFilterClick = () => {
-    // Handle filter click
     console.log("Filter clicked");
   };
 
   const handleFavoriteClick = (productId: string) => {
-    // Handle favorite click
     console.log("Favorite clicked for product:", productId);
   };
 
   const handleAddToCart = (productId: string) => {
-    // Handle add to cart
     console.log("Add to cart clicked for product:", productId);
   };
 
-  // Sample products data
-  const sampleProducts = [
-    {
-      id: "1",
-      title: "Lcd Screen Samsung A52s 5G",
-      image:
-        "https://adminapi.beston.co/uploads/displayMappings/shop_assets/display_mappping/87/images/SUNLONG_UNIT_LCD_6VAZR52.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 3570,
-      isFavorite: false,
-    },
-    {
-      id: "2",
-      title: "Lcd Screen Apple iPhone 15 pro max",
-      image:
-        "https://adminapi.beston.co/uploads/products/5581/images/FALCON UNIT  -- LCD VIVO Y20 BLACK 1.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 13570,
-      isFavorite: true,
-    },
-    {
-      id: "3",
-      title: "Lcd Screen Samsung A52s 5G",
-      image:
-        "https://adminapi.beston.co/uploads/products/commonImages/7646/images/RF_PARTS_____BOARD_FLEX_HUAWEI_Y6_20182.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 3570,
-      isFavorite: false,
-    },
-    {
-      id: "4",
-      title: "Lcd Screen Apple iPhone 15 pro max",
-      image:
-        "https://adminapi.beston.co/uploads/products/4040/images/PARTS -- BOARD FLEX INFINIX X650 1.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 13570,
-      isFavorite: true,
-    },
-    {
-      id: "5",
-      title: "Lcd Screen Samsung A52s 5G",
-      image:
-        "https://adminapi.beston.co/uploads/products/4267/images/PARTS -- CHARGING FLEX TECNO SPARK 6 GO IC 1.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 3570,
-      isFavorite: false,
-    },
-    {
-      id: "6",
-      title: "Lcd Screen Apple iPhone 15 pro max",
-      image:
-        "https://adminapi.beston.co/uploads/products/commonImages/10890/images/FORCE_BT____BATTERY_APPLE_IPHONE_112.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 13570,
-      isFavorite: true,
-    },
-    {
-      id: "7",
-      title: "Lcd Screen Samsung A52s 5G",
-      image:
-        "https://adminapi.beston.co/uploads/products/commonImages/7327/images/RF_PARTS_____ON_OFF_FLEX_ONE_PLUS_H_9_R2.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 3570,
-      isFavorite: false,
-    },
-    {
-      id: "8",
-      title: "Lcd Screen Apple iPhone 15 pro max",
-      image:
-        "https://adminapi.beston.co/uploads/products/6344/images/FORCE_UNIT_____LCD_VIVO_Y27_BLACK1.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 13570,
-      isFavorite: true,
-    },
-    {
-      id: "9",
-      title: "Lcd Screen Samsung A52s 5G",
-      image:
-        "https://adminapi.beston.co/uploads/products/5640/images/FORCE_UNIT____LCD_INFINIX_X666_BLACK1.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 3570,
-      isFavorite: false,
-    },
-    {
-      id: "10",
-      title: "Lcd Screen Apple iPhone 15 pro max",
-      image:
-        "https://adminapi.beston.co/uploads/products/7513/images/FALCON_UNIT_____LCD_INFINIX_X688_BLACK1.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 13570,
-      isFavorite: true,
-    },
-    {
-      id: "11",
-      title: "Lcd Screen Samsung A52s 5G",
-      image:
-        "https://adminapi.beston.co/uploads/products/9902/images/SNL____GLASS_OCA_SAM_S8_BLACK1.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 3570,
-      isFavorite: false,
-    },
-    {
-      id: "12",
-      title: "Lcd Screen Apple iPhone 15 pro max",
-      image:
-        "https://adminapi.beston.co/uploads/products/10677/images/JK_UNIT_OLED2____TFT_SAM_J7_BLACK1.webp",
-      rating: 4.5,
-      soldCount: 456,
-      price: 13570,
-      isFavorite: true,
-    },
-  ];
+  // Read filters from URL params
+  useEffect(() => {
+    const filtersObj: Record<string, string> = {};
+    if (searchParams) {
+      searchParams.forEach((value, key) => {
+        if (ALLOWED_QUERY_PARAMS_PRODUCTS_HOME_PAGE.includes(key)) {
+          filtersObj[key] = value;
+        }
+      });
+    }
+    setFilters(filtersObj);
+    setProducts([]);
+    setPage(1);
+    setStopCalling(false);
+  }, [searchParams]);
 
-  const { theme_mode } = useSelector((state: any) => state.coreAppSlice);
-  const { toggleTheme } = useThemeCache();
-  const isMenuOpen = useSelector((state: any) => state.coreAppSlice.isMenuOpen);
-  const dispatch = useDispatch();
-  const handleMenuClick = () => {
-    dispatch(setIsMenuOpen(!isMenuOpen));
-    console.log("isMenuOpen", isMenuOpen);
-  };
-  const [activeTab, setActiveTab] = useState<FilterTab>("popular");
-  const router = useRouter();
+  // Build query string from filters
+  const queryString = Object.keys(filters)
+    .map((key) => `${key}=${filters[key]}`)
+    .join("&");
 
+  // API call - fetch products
+  const {
+    data: productsData,
+    isLoading,
+    isFetching,
+  } = useGetAllProductsBasedOnFilterQuery(
+    `page=${page}&limit=20${queryString ? `&${queryString}` : ""}`
+  );
+
+  // Merge new products with existing ones
+  useEffect(() => {
+    if (productsData?.payload?.results) {
+      const newProducts = productsData.payload.results;
+      setProducts((prev) => {
+        // Create unique products by id
+        const productMap = new Map<string, Product>();
+        prev.forEach((p) => {
+          if (p.id) productMap.set(p.id, p);
+        });
+        newProducts.forEach((p: Product) => {
+          if (p.id) productMap.set(p.id, p);
+        });
+        return Array.from(productMap.values());
+      });
+
+      // Stop calling if no more products
+      if (newProducts.length === 0) {
+        setStopCalling(true);
+      }
+    }
+  }, [productsData]);
+
+  // Infinite scroll - load more when user scrolls to bottom
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // Check if user is near bottom (within 200px)
+      if (documentHeight - (scrollTop + windowHeight) < 200) {
+        if (!isLoading && !isFetching && !stopCalling) {
+          setPage((prev) => prev + 1);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoading, isFetching, stopCalling]);
+
+  // Transform API products to component format
+  const transformedProducts = products.map((product) => ({
+    id: product.id || "",
+    title: product.product_name || "",
+    image: product.images?.[0] ? getImgBaseUrl(product.images[0]) : "",
+    rating: product.rating || 4.5,
+    soldCount: product.stock_status?.LABEL || "Very Low",
+    price: product.productPrice || 0,
+    isFavorite: product.isFavorite || false,
+  }));
+
+  // Menu data
   const menuData = [
     {
       icon: (
@@ -209,12 +174,8 @@ export default function Home() {
         </div>
       ),
       label: "Search",
-      onClick: () => {
-        router.push("/search");
-        console.log("Search clicked");
-      },
+      onClick: () => router.push("/search"),
     },
-
     {
       icon: (
         <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
@@ -222,12 +183,8 @@ export default function Home() {
         </div>
       ),
       label: "My Cart",
-      onClick: () => {
-        router.push("/cart");
-        console.log("My Cart clicked");
-      },
+      onClick: () => router.push("/cart"),
     },
-
     {
       icon: (
         <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
@@ -235,9 +192,7 @@ export default function Home() {
         </div>
       ),
       label: "Quick Order",
-      onClick: () => {
-        console.log("Quick Order clicked");
-      },
+      onClick: () => console.log("Quick Order clicked"),
     },
     {
       icon: (
@@ -246,9 +201,7 @@ export default function Home() {
         </div>
       ),
       label: "Discount & Offers",
-      onClick: () => {
-        console.log("Discount & Offers clicked");
-      },
+      onClick: () => console.log("Discount & Offers clicked"),
       badge: "10+",
     },
   ];
@@ -259,22 +212,21 @@ export default function Home() {
         {/* Header */}
         <div className="w-full max-w-[1600px] mx-auto bg-light_mode_color dark:bg-dark_mode_color">
           <AppHeader
-            theme_mode={theme_mode}
+            theme_mode={mounted ? theme_mode : "light"}
             onMenuClick={handleMenuClick}
             onThemeToggle={toggleTheme}
           />
         </div>
         {isMenuOpen && <MenuModal />}
-        {/* Promotional Banner - Full width on desktop, padded on mobile */}
+
+        {/* Promotional Banner */}
         <div className="mb-6 md:mb-8 lg:mb-10">
           <PromotionalBanner />
         </div>
 
-        {/* Responsive Container - Mobile perfect, Desktop professional */}
+        {/* Main Content */}
         <div className="w-full max-w-[1600px] mx-auto bg-light_mode_color dark:bg-dark_mode_color min-h-screen">
-          {/* Main Content Container */}
           <main className="pb-8 md:pb-12 lg:pb-16">
-            {/* Content Wrapper - Responsive padding and max-width */}
             <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
               {/* Action Buttons Grid */}
               <div className="mb-6 md:mb-8 lg:mb-10 lg:hidden block">
@@ -300,11 +252,34 @@ export default function Home() {
 
               {/* Products Grid */}
               <div className="mb-6 md:mb-8 lg:mb-10">
-                <ProductGrid
-                  products={sampleProducts}
-                  onFavoriteClick={handleFavoriteClick}
-                  onAddToCart={handleAddToCart}
-                />
+                {isLoading && products.length === 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4 lg:gap-5 xl:gap-6">
+                    {Array.from({ length: 12 }).map((_, index) => (
+                      <ProductSkeleton key={index} />
+                    ))}
+                  </div>
+                ) : transformedProducts.length > 0 ? (
+                  <>
+                    <ProductGrid
+                      products={transformedProducts}
+                      onFavoriteClick={handleFavoriteClick}
+                      onAddToCart={handleAddToCart}
+                    />
+                    {isFetching && (
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4 lg:gap-5 xl:gap-6 mt-6">
+                        {Array.from({ length: 6 }).map((_, index) => (
+                          <ProductSkeleton key={`skeleton-${index}`} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-light_mode_text dark:text-dark_mode_text text-lg">
+                      No products found
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </main>

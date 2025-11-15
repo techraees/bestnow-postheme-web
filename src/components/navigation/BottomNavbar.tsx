@@ -10,6 +10,8 @@ import {
   OrderIcon,
   ProfileIcon,
 } from "@/assets";
+import { useSelector } from "react-redux";
+import { truncateString } from "@/utils/coreUtils/truncateTexts";
 
 export interface NavItem {
   name: string;
@@ -27,6 +29,11 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
   cartCount = 0,
   navItems,
 }) => {
+  const user_profile = useSelector(
+    (state: any) => state.coreAppSlice.userProfile
+  );
+  console.log("user_profile", user_profile);
+
   const pathname = usePathname();
 
   const defaultNavItems: NavItem[] = [
@@ -67,9 +74,19 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
       ),
     },
     {
-      name: "Profile",
-      path: "/profile",
-      icon: (
+      name: user_profile
+        ? truncateString(user_profile?.name, 7, false, true)
+        : "Profile",
+      path: user_profile ? "/profile" : "/login",
+      icon: user_profile?.profile_path ? (
+        <div className="mb-1 w-5 h-5 overflow-hidden rounded-full">
+          <img
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${user_profile?.profile_path}`}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
         <ProfileIcon className="w-5 h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110" />
       ),
     },

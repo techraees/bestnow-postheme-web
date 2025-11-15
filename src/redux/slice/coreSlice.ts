@@ -1,13 +1,21 @@
 import { THEME_DATA } from "@/data/coreData/coreData";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { THEME_DATA } from "../../coreData/coreData";
-// import { UserProfile } from "../../../auth/authStates/authRedux/authapi.type";
-// import { authProfileApi } from "../../../auth/authStates/authRedux/authProfileApi";
+import { authProfileApi } from "@/redux/api/auth/customerAuthProfileApi";
+
+// ----- User Profile Type -----
+export interface UserProfile {
+  id?: string;
+  name?: string;
+  email?: string;
+  username?: string;
+  phone?: string;
+  [key: string]: any; // Allow additional properties from API
+}
 
 // ----- State -----
 interface CoreAppState {
   theme_mode: string | null;
-  user: null;
+  userProfile: UserProfile | null;
   userStatus: "idle" | "loading" | "succeeded" | "failed";
   userError?: string;
   expandedCourierForm: boolean;
@@ -27,7 +35,7 @@ function getInitialTheme(): string {
 
 const initialState: CoreAppState = {
   theme_mode: getInitialTheme(),
-  user: null,
+  userProfile: null,
   userStatus: "idle",
   expandedCourierForm: false,
   headerHeightPx: undefined,
@@ -40,8 +48,8 @@ export const coreAppSlice = createSlice({
   initialState,
   reducers: {
     // manual overrides if needed
-    setUser(state, action: PayloadAction<null>) {
-      state.user = action.payload;
+    setUserProfile(state, action: PayloadAction<UserProfile | null>) {
+      state.userProfile = action.payload;
       state.userStatus = action.payload ? "succeeded" : "idle";
       state.userError = undefined;
     },
@@ -49,7 +57,7 @@ export const coreAppSlice = createSlice({
       state.userStatus = action.payload;
     },
     clearUser(state) {
-      state.user = null;
+      state.userProfile = null;
       state.userStatus = "idle";
       state.userError = undefined;
     },
@@ -89,38 +97,39 @@ export const coreAppSlice = createSlice({
     },
   },
 
-  // ----- Auto-wire RTK Query -> coreApp.user -----
-  // extraReducers: (builder) => {
-  //   builder.addMatcher(
-  //     authProfileApi.endpoints.getProfile.matchPending,
-  //     (state) => {
-  //       state.userStatus = "loading";
-  //       state.userError = undefined;
-  //     }
-  //   );
+  // ----- Auto-wire RTK Query -> coreApp.userProfile -----
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      authProfileApi.endpoints.verifyToken.matchPending,
+      (state) => {
+        state.userStatus = "loading";
+        state.userError = undefined;
+      }
+    );
 
-  //   builder.addMatcher(
-  //     authProfileApi.endpoints.getProfile.matchFulfilled,
-  //     (state, { payload }) => {
-  //       state.user = payload;
-  //       state.userStatus = "succeeded";
-  //       state.userError = undefined;
-  //     }
-  //   );
+    builder.addMatcher(
+      authProfileApi.endpoints.verifyToken.matchFulfilled,
+      (state, { payload }: any) => {
+        state.userProfile = payload?.data || payload || null;
+        state.userStatus = "succeeded";
+        state.userError = undefined;
+      }
+    );
 
-  //   builder.addMatcher(
-  //     authProfileApi.endpoints.getProfile.matchRejected,
-  //     (state, { error }) => {
-  //       state.userStatus = "failed";
-  //       state.userError = (error as any)?.message || "Failed to load profile";
-  //     }
-  //   );
-  // },
+    builder.addMatcher(
+      authProfileApi.endpoints.verifyToken.matchRejected,
+      (state, { error }) => {
+        state.userStatus = "failed";
+        state.userError = (error as any)?.message || "Failed to load profile";
+        state.userProfile = null;
+      }
+    );
+  },
 });
 
 // ----- Actions -----
 export const {
-  setUser,
+  setUserProfile,
   setUserStatus,
   clearUser,
   setThemeMode,
@@ -135,8 +144,8 @@ export const {
 // ----- Selectors -----
 export const selectCoreApp = (state: { coreApp: CoreAppState }) =>
   state.coreApp;
-export const selectUser = (state: { coreApp: CoreAppState }) =>
-  state.coreApp.user;
+export const selectUserProfile = (state: { coreApp: CoreAppState }) =>
+  state.coreApp.userProfile;
 export const selectUserStatus = (state: { coreApp: CoreAppState }) =>
   state.coreApp.userStatus;
 export const selectUserError = (state: { coreApp: CoreAppState }) =>

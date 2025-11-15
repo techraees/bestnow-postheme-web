@@ -9,7 +9,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
     <div className="flex min-h-screen">
       {/* Left Panel */}
-      <div className="w-full md:w-1/2 bg-light_mode_color dark:bg-dark_mode_color dark:text-dark_mode_text flex flex-col justify-center lg:items-center px-6">
+      <div className="w-full md:w-1/2 bg-light_mode_color dark:bg-dark_mode_color dark:text-dark_mode_text lg:pt-0 pt-20 flex flex-col lg:justify-center lg:items-center px-6">
         {children}
       </div>
 

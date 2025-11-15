@@ -4,22 +4,16 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { MdMusicNote } from "react-icons/md";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
-import {
-  SunlongDesktopBanner,
-  RoyalfalconDesktoopBanner,
-  ForceBannerDesktop,
-  GoldenCrownDesktopBanner,
-  SunlongMobileBanner,
-  RoyalfalconMobileBanner,
-  ForceBannerMobile,
-  GoldenCrownMobileBanner,
-} from "@/assets/images";
+import { useGetAllBannerQuery } from "@/redux/api/core/bannerApi";
+import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
+import { ForceBannerDesktop } from "@/assets";
 
 interface Banner {
   id: string;
   title: string;
-  image?: any; // Next.js Image type (desktop)
-  mobileImage?: any; // Next.js Image type (mobile)
+  image?: string; // Image URL (desktop)
+  mobileImage?: string; // Image URL (mobile)
+  tabletImage?: string; // Image URL (tablet)
 }
 
 interface PromotionalBannerProps {
@@ -27,33 +21,39 @@ interface PromotionalBannerProps {
 }
 
 const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
-  banners = [
-    {
-      id: "1",
-      title: "ORIGINAL COLOR SCREEN",
-      image: ForceBannerDesktop,
-      mobileImage: ForceBannerMobile,
-    },
-    {
-      id: "2",
-      title: "ORIGINAL COLOR SCREEN",
-      image: GoldenCrownDesktopBanner,
-      mobileImage: GoldenCrownMobileBanner,
-    },
-    {
-      id: "3",
-      title: "ORIGINAL COLOR SCREEN",
-      image: RoyalfalconDesktoopBanner,
-      mobileImage: RoyalfalconMobileBanner,
-    },
-    {
-      id: "4",
-      title: "ORIGINAL COLOR SCREEN",
-      image: SunlongDesktopBanner,
-      mobileImage: SunlongMobileBanner,
-    },
-  ],
+  banners: propBanners,
 }) => {
+  // Fetch banners from API
+  const { data: bannersData, isLoading } = useGetAllBannerQuery();
+
+  // Transform API response to component format
+  const apiBanners: Banner[] =
+    bannersData?.payload
+      ?.filter((banner) => {
+        // Only show banners that have at least one image
+        return (
+          banner.mobile_img_path ||
+          banner.tablet_img_path ||
+          banner.desktop_img_path
+        );
+      })
+      .map((banner) => ({
+        id: String(banner.id),
+        title: banner.display_name || "",
+        image: banner.desktop_img_path
+          ? ForceBannerDesktop.src
+          : getImgBaseUrl(banner.desktop_img_path),
+        mobileImage: banner.mobile_img_path
+          ? ForceBannerDesktop
+          : getImgBaseUrl(banner.mobile_img_path),
+        tabletImage: banner.tablet_img_path
+          ? ForceBannerDesktop
+          : getImgBaseUrl(banner.tablet_img_path),
+      })) || [];
+
+  // Use prop banners if provided, otherwise use API banners
+  const banners = propBanners || apiBanners;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -143,50 +143,78 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
       >
         {/* Banner Images Container */}
         <div className="relative w-full h-full">
-          {banners.map((banner, index) => {
-            // Use mobile image on mobile, desktop image on desktop
-            const bannerImage = banner.mobileImage || banner.image;
-            const isActive = index === currentIndex;
+          {isLoading ? (
+            // Loading skeleton
+            <div className="absolute inset-0 bg-light_mode_color2 dark:bg-dark_mode_color2 animate-pulse" />
+          ) : banners.length === 0 ? (
+            // Empty state
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-yellow-100 via-orange-100 to-blue-100">
+              <div className="text-center px-4">
+                <div className="text-6xl mb-4">📱</div>
+                <p className="text-gray-600 text-sm">No banners available</p>
+              </div>
+            </div>
+          ) : (
+            banners.map((banner, index) => {
+              const isActive = index === currentIndex;
 
-            return (
-              <div
-                key={banner.id}
-                className={`absolute inset-0 transition-opacity duration-500 ${
-                  isActive ? "opacity-100 z-10" : "opacity-0 z-0"
-                }`}
-              >
-                {bannerImage ? (
-                  <>
-                    {/* Mobile Banner - Hidden on desktop */}
+              return (
+                <div
+                  key={banner.id}
+                  className={`absolute inset-0 transition-opacity duration-500 ${
+                    isActive ? "opacity-100 z-10" : "opacity-0 z-0"
+                  }`}
+                >
+                  {/* Mobile Banner - Hidden on tablet and desktop */}
+                  {banner.mobileImage && (
                     <Image
-                      src={banner.mobileImage || bannerImage}
+                      src={banner.mobileImage}
                       alt={banner.title}
                       fill
-                      className="object-fill lg:hidden"
+                      className="object-cover md:hidden"
                       priority={index === 0}
                       sizes="100vw"
                     />
-                    {/* Desktop Banner - Hidden on mobile */}
+                  )}
+                  {/* Tablet Banner - Hidden on mobile and desktop */}
+                  {banner.tabletImage && (
                     <Image
-                      src={banner.image || bannerImage}
+                      src={banner.tabletImage}
+                      alt={banner.title}
+                      fill
+                      className="object-cover hidden md:block lg:hidden"
+                      priority={index === 0}
+                      sizes="100vw"
+                    />
+                  )}
+                  {/* Desktop Banner - Hidden on mobile and tablet */}
+                  {banner.image && (
+                    <Image
+                      src={banner.image}
                       alt={banner.title}
                       fill
                       className="object-cover hidden lg:block"
                       priority={index === 0}
                       sizes="100vw"
                     />
-                  </>
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-yellow-100 via-orange-100 to-blue-100">
-                    <div className="text-center px-4">
-                      <div className="text-6xl mb-4">📱</div>
-                      <p className="text-gray-600 text-sm">Phone Screens</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  )}
+                  {/* Fallback if no image available */}
+                  {!banner.mobileImage &&
+                    !banner.tabletImage &&
+                    !banner.image && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-yellow-100 via-orange-100 to-blue-100">
+                        <div className="text-center px-4">
+                          <div className="text-6xl mb-4">📱</div>
+                          <p className="text-gray-600 text-sm">
+                            {banner.title || "Banner"}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 

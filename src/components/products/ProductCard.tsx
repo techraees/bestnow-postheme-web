@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { HiStar } from "react-icons/hi";
+import { BannerImage } from "@/assets";
 
 interface ProductCardProps {
   id: string;
@@ -68,7 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Product Image */}
           <div className="relative w-full h-full rounded-2xl flex items-center justify-center overflow-hidden">
             <Image
-              src={image}
+              src={BannerImage || image}
               alt={title}
               width={190}
               height={190}

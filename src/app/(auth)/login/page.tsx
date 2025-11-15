@@ -1,25 +1,66 @@
 "use client";
-import { useForm, FormProvider } from "react-hook-form";
-import { Eye, Lock, Mail } from "lucide-react";
+import { FormProvider, useForm } from "react-hook-form";
 import React, { useState } from "react";
 import CustomInputField from "@/components/input/CustomInputField";
+import { Button } from "@/components/button";
 import { BestonDarkLogo, BestonLightLogo } from "@/assets";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-import { THEME_DATA } from "@/data/coreData/coreData";
 import { RootState } from "@/redux/store/store";
+import { useLoginCustomerMutation } from "@/redux/api/auth/customerAuthApi";
+import { setCookie } from "@/utils/coreUtils/cookieFunction";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
-  const methods = useForm();
-  const { theme_mode } = useSelector((s: RootState) => s.coreAppSlice);
+  const methods = useForm({
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
-  const onSubmit = (data: any) => {
-    console.log("Login Data:", data);
+  const { theme_mode } = useSelector((s: RootState) => s.coreAppSlice);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [loginCustomer] = useLoginCustomerMutation();
+
+  const onSubmit = async (data: any) => {
+    try {
+      setIsLoading(true);
+
+      // Call the Api
+      const response = await loginCustomer(data);
+
+      if (response?.error && "data" in response.error) {
+        toast.error((response.error.data as any)?.message, {
+          toastId: "errorMessage",
+        });
+      } else if (response?.data?.status) {
+        if (response?.data?.status === "success") {
+          setCookie("access_token", response?.data?.payload?.access_token);
+          setCookie("refresh_token", response?.data?.payload?.refresh_token);
+          toast.success("Login successful!...");
+          methods.reset();
+
+          // Now Reroute to other page
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 1000);
+        } else {
+          toast.error("Unexpected response. Please try again.");
+        }
+      } else {
+        toast.error("Unknown error happened");
+      }
+    } catch (err) {
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
-  console.log(typeof theme_mode);
 
   return (
-    <div className=" lg:w-[50%] w-[100%] bg-light_mode_color dark:bg-dark_mode_color py-8 ">
+    <div className="lg:w-[50%] w-full bg-light_mode_color dark:bg-dark_mode_color py-8">
       <div className="">
         {/* Logo */}
         <div className="flex items-center justify-center py-6">
@@ -48,7 +89,7 @@ const LoginPage = () => {
             Hey, <br /> Login Now!
           </h1>
           <p className="text-light_mode_gray1_color dark:text-dark_mode_gray1_color font-outfit text-left font-light text-[15px] leading-[22px] tracking-[0] mt-2">
-            Please enter your Email / Mobile and password
+            Please enter your username / Mobile and password
             <br />
             to login to your existing account
           </p>
@@ -60,10 +101,10 @@ const LoginPage = () => {
             onSubmit={methods.handleSubmit(onSubmit)}
             className="w-full flex flex-col gap-4"
           >
-            {/* Email / Phone */}
+            {/* username / Phone */}
             <CustomInputField
-              name="email"
-              placeholder="Email / Phone"
+              name="username"
+              placeholder="Username"
               icon={
                 <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color w-[20px] h-[20px]">
                   <svg
@@ -86,7 +127,7 @@ const LoginPage = () => {
                   </svg>
                 </div>
               }
-              validation={{ required: "Email or phone is required" }}
+              validation={{ required: "username is required" }}
               inputClassName=" !w-full !bg-light_mode_color dark:!bg-dark_mode_color2 border placeholder:text-light_mode_gray1_color dark:placeholder:text-dark_mode_color3 !border-light_mode_border1 dark:!border-dark_mode_border1 text-light_mode_text dark:text-dark_mode_text"
             />
 
@@ -138,12 +179,15 @@ const LoginPage = () => {
             </div>
 
             {/* Login Button */}
-            <button
+            <Button
               type="submit"
-              className="w-full bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color text-black font-semibold py-3 rounded-lg hover:bg-light_mode_yellow_hover_color dark:hover:bg-dark_mode_yellow_hover_color transition"
+              isLoading={isLoading}
+              fullWidth
+              variant="primary"
+              size="md"
             >
               Login
-            </button>
+            </Button>
           </form>
         </FormProvider>
 
