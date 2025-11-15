@@ -28,7 +28,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-light_mode_color dark:bg-dark_mode_color border-t border-light_mode_color2 dark:border-dark_mode_color2 shadow-lg z-30">
+    <div className="fixed h-[230px] bottom-0 left-0 right-0 bg-light_mode_color dark:bg-dark_mode_color border-t border-light_mode_color2 dark:border-dark_mode_color2 shadow-lg z-30">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-5 lg:py-6">
         {/* Summary Details */}
         <div className="space-y-2 md:space-y-3 mb-4 md:mb-5">
@@ -108,4 +108,3 @@ const CartSummary: React.FC<CartSummaryProps> = ({
 };
 
 export default CartSummary;
-

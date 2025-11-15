@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { HiMinus, HiPlus } from "react-icons/hi";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface CartItemProps {
   id: string;
@@ -40,15 +41,15 @@ const CartItem: React.FC<CartItemProps> = ({
   const formattedTotalPrice = `Rs. ${totalPrice.toLocaleString("en-PK")}`;
 
   return (
-    <div className="bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-3 md:p-4 lg:p-5 shadow-sm border border-light_mode_color2 dark:border-dark_mode_color2 hover:shadow-md transition-shadow">
+    <div className="bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-1 md:p-4 lg:p-5  transition-shadow">
       <div className="flex gap-3 md:gap-4 lg:gap-5">
         {/* Product Image */}
-        <div className="relative flex-shrink-0 w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div className="relative flex-shrink-0 w-[100px] h-[100px] md:w-24 md:h-24 lg:w-28 lg:h-28 bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
           <Image
             src={image}
             alt={name}
             fill
-            className="object-contain p-2 md:p-3"
+            className="object-fill"
             sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
           />
         </div>
@@ -56,11 +57,11 @@ const CartItem: React.FC<CartItemProps> = ({
         {/* Product Details */}
         <div className="flex-1 min-w-0 flex flex-col justify-between">
           {/* Product Name and Unit Price */}
-          <div className="flex-1 mb-2 md:mb-3">
-            <h3 className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base lg:text-lg font-medium line-clamp-2 mb-1 md:mb-2 leading-tight">
+          <div className="flex-1 mb-0 md:mb-3">
+            <h3 className="text-light_mode_text dark:text-dark_mode_text opacity-85 text-sm md:text-base lg:text-lg font-medium line-clamp-2 mb-1 md:mb-2 leading-tight">
               {name}
             </h3>
-            <p className="text-light_mode_text dark:text-dark_mode_text text-xs md:text-sm lg:text-base font-semibold">
+            <p className="text-light_mode_text dark:text-dark_mode_text text-[16px] lg:text-base font-[400]">
               {formattedUnitPrice}
             </p>
           </div>
@@ -68,29 +69,25 @@ const CartItem: React.FC<CartItemProps> = ({
           {/* Quantity Controls and Total Price */}
           <div className="flex items-center justify-between gap-3 md:gap-4">
             {/* Quantity Controls */}
-            <div className="flex items-center gap-2 md:gap-3 bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl px-2 md:px-3 py-1 md:py-1.5">
-              <button
+            <div className="flex items-center text-light_mode_blue_color dark:text-dark_mode_blue_color tetx-sm gap-2 md:gap-3 ">
+              <div
                 onClick={handleDecrease}
-                className="text-light_mode_text dark:text-dark_mode_text hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 rounded-lg p-1 md:p-1.5 transition-colors active:scale-95"
-                aria-label="Decrease quantity"
+                className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px] flex justify-center items-center text-dark_mode_color dark:text-light_mode_color"
               >
-                <HiMinus className="h-4 w-4 md:h-5 md:w-5" />
-              </button>
-              <span className="text-blue-500 dark:text-blue-400 font-semibold text-sm md:text-base lg:text-lg min-w-[2rem] md:min-w-[2.5rem] text-center">
-                {quantity.toString().padStart(2, "0")}
-              </span>
-              <button
+                <ChevronDown size={20} />
+              </div>
+              {quantity.toString().padStart(2, "0")}
+              <div
                 onClick={handleIncrease}
-                className="text-light_mode_text dark:text-dark_mode_text hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 rounded-lg p-1 md:p-1.5 transition-colors active:scale-95"
-                aria-label="Increase quantity"
+                className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full  h-[30px] w-[30px] flex justify-center items-center text-light_mode_yellow_color dark:text-dark_mode_yellow_color"
               >
-                <HiPlus className="h-4 w-4 md:h-5 md:w-5" />
-              </button>
+                <ChevronUp size={20} />
+              </div>
             </div>
 
             {/* Total Price */}
             <div className="text-right">
-              <p className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base lg:text-lg font-bold">
+              <p className="text-light_mode_text dark:text-dark_mode_text text-[16px] md:text-base lg:text-lg font-bold">
                 {formattedTotalPrice}
               </p>
             </div>
@@ -102,4 +99,3 @@ const CartItem: React.FC<CartItemProps> = ({
 };
 
 export default CartItem;
-

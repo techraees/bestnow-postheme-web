@@ -10,7 +10,11 @@ import {
   ChevronDown,
   ChevronLeft,
 } from "lucide-react";
-import { ProductImageCarousel } from "@/components/product-detail";
+import {
+  ProductImageCarousel,
+  RatingDrawer,
+  ReviewsDrawer,
+} from "@/components/product-detail";
 import { ArrowDescrptionIcon, CartIcon } from "@/assets";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -32,14 +36,68 @@ const product = {
   description: "High quality LCD screen replacement for Samsung A52s 5G",
 };
 
+const sampleReviews = [
+  {
+    id: "1",
+    userName: "Finn Carver",
+    userLocation: "Lahore, Pakistan",
+    userAvatar: "",
+    rating: 4,
+    date: "24, Jan 2025",
+    time: "03:42 PM",
+    reviewText:
+      "I recently replaced the LCD screen of my Vivo Y20, and I'm quite impressed with the overall performance. The display is bright and clear, with vibrant colors. The touch sensitivity is excellent, and it feels just like the original screen. Installation was fairly easy, and it fits perfectly. My only downside is that it took a bit longer to receive the part than expected, but once it was installed, everything worked great. Highly recommend for anyone needing a reliable replacement!",
+    images: [
+      "https://adminapi.beston.co/uploads/products/5581/images/FALCON UNIT  -- LCD VIVO Y20 BLACK 1.webp",
+      "https://adminapi.beston.co/uploads/products/commonImages/7646/images/RF_PARTS_____BOARD_FLEX_HUAWEI_Y6_20182.webp",
+      "https://adminapi.beston.co/uploads/products/4040/images/PARTS -- BOARD FLEX INFINIX X650 1.webp",
+    ],
+  },
+  {
+    id: "2",
+    userName: "Ethan Blake",
+    userLocation: "Lahore, Pakistan",
+    userAvatar: "",
+    rating: 4,
+    date: "24, Jan 2025",
+    time: "03:42 PM",
+    reviewText:
+      "I recently replaced the LCD screen of my Vivo Y20, and I'm quite impressed with the overall performance. The display is bright and clear, with vibrant colors. The touch sensitivity is excellent, and it feels just like the original screen. Installation was fairly easy, and it fits perfectly. My only downside is that it took a bit longer to receive the part than expected, but once it was installed, everything worked great. Highly recommend for anyone needing a reliable replacement!",
+    images: [
+      "https://adminapi.beston.co/uploads/products/5581/images/FALCON UNIT  -- LCD VIVO Y20 BLACK 1.webp",
+      "https://adminapi.beston.co/uploads/products/commonImages/7646/images/RF_PARTS_____BOARD_FLEX_HUAWEI_Y6_20182.webp",
+      "https://adminapi.beston.co/uploads/products/4040/images/PARTS -- BOARD FLEX INFINIX X650 1.webp",
+    ],
+  },
+];
+
 export default function ProductPage() {
   const [favorite, setFavorite] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [isReviewsDrawerOpen, setIsReviewsDrawerOpen] = useState(false);
+  const [isRatingDrawerOpen, setIsRatingDrawerOpen] = useState(false);
   const router = useRouter();
 
   const handleBack = () => {
     setIsExiting(true);
     setTimeout(() => router.back(), 320); // animation ke baad navigate
+  };
+
+  const handleRatingSubmit = (rating: number, review?: string) => {
+    console.log("Rating submitted:", { rating, review });
+    // Here you would typically send the rating to your API
+    // Close rating drawer and refresh reviews
+    setIsRatingDrawerOpen(false);
+  };
+
+  const handleOpenRatingDrawer = () => {
+    setIsRatingDrawerOpen(true);
+  };
+
+  const handleReviewsDrawerClose = () => {
+    setIsReviewsDrawerOpen(false);
+    // Close rating drawer if it's open
+    setIsRatingDrawerOpen(false);
   };
 
   return (
@@ -83,7 +141,7 @@ export default function ProductPage() {
 
               <ProductImageCarousel
                 banners={product.images.map((item, i) => ({
-                  id: i,
+                  id: String(i),
                   image: item,
                 }))}
               />
@@ -126,7 +184,10 @@ export default function ProductPage() {
 
               {/* Buttons Row 2 */}
               <div className="flex w-full gap-1">
-                <button className="w-[50%] h-[48px] bg-light_mode_color2 dark:bg-dark_mode_color2 text-dark_mode_color dark:text-light_mode_color text-[15px] font-[300] py-2.5 px-5 rounded-full flex justify-between items-center">
+                <button
+                  onClick={() => setIsReviewsDrawerOpen(true)}
+                  className="w-[50%] h-[48px] bg-light_mode_color2 dark:bg-dark_mode_color2 text-dark_mode_color dark:text-light_mode_color text-[15px] font-[300] py-2.5 px-5 rounded-full flex justify-between items-center"
+                >
                   Rating & Reviews
                   <ArrowDescrptionIcon className="w-2.5 h-2.5 text-light_mode_yellow_color dark:text-dark_mode_yellow_color" />
                 </button>
@@ -174,6 +235,21 @@ export default function ProductPage() {
           />
         )}
       </AnimatePresence>
+
+      {/* Reviews Drawer */}
+      <ReviewsDrawer
+        isOpen={isReviewsDrawerOpen}
+        onClose={handleReviewsDrawerClose}
+        onRateClick={handleOpenRatingDrawer}
+        reviews={sampleReviews}
+      />
+
+      {/* Rating Drawer */}
+      <RatingDrawer
+        isOpen={isRatingDrawerOpen}
+        onClose={() => setIsRatingDrawerOpen(false)}
+        onSubmit={handleRatingSubmit}
+      />
     </div>
   );
 }

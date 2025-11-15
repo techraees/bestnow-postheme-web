@@ -2,6 +2,7 @@
 
 import React from "react";
 import { SearchScreen, SearchProduct } from "@/components/search";
+import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 
 // Sample search products data - in production, this would come from API
 const sampleSearchProducts: SearchProduct[] = [
@@ -142,13 +143,15 @@ const SearchPage = () => {
   };
 
   return (
-    <SearchScreen
-      initialQuery="Lcd Screen"
-      products={sampleSearchProducts}
-      onFavoriteClick={handleFavoriteClick}
-      onAddToCart={handleAddToCart}
-      onFilterClick={handleFilterClick}
-    />
+    <TopSpacingWrapper>
+      <SearchScreen
+        initialQuery="Lcd Screen"
+        products={sampleSearchProducts}
+        onFavoriteClick={handleFavoriteClick}
+        onAddToCart={handleAddToCart}
+        onFilterClick={handleFilterClick}
+      />
+    </TopSpacingWrapper>
   );
 };
 

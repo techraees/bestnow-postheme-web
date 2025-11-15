@@ -8,11 +8,13 @@ import { ArrowLeft, ChevronLeft } from "lucide-react";
 interface SubHeaderProps {
   itemCount?: number;
   title?: string;
+  subtitle?: string;
 }
 
 const SubHeader: React.FC<SubHeaderProps> = ({
-  itemCount = 0,
-  title = "Favorites",
+  itemCount,
+  title = "UnKnown",
+  subtitle,
 }) => {
   const router = useRouter();
 
@@ -24,7 +26,7 @@ const SubHeader: React.FC<SubHeaderProps> = ({
     <div className="bg-light_mode_color dark:bg-dark_mode_color">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-5 lg:py-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 md:gap-4">
+          <div className="flex items-center gap-0 md:gap-4">
             <button
               onClick={handleBack}
               className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80 active:opacity-60 transition-opacity rounded-full hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2"
@@ -36,6 +38,11 @@ const SubHeader: React.FC<SubHeaderProps> = ({
               {title}
             </h1>
           </div>
+          {subtitle && (
+            <div className="text-light_mode_text dark:text-dark_mode_text text-sm ">
+              {subtitle}
+            </div>
+          )}
           {itemCount && (
             <div className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg lg:text-xl ">
               {itemCount.toString().padStart(2, "0")}{" "}

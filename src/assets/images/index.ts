@@ -3,3 +3,4 @@ export { default as BannerImage } from "./banner-image.png";
 export { default as BannerImage1 } from "./banner-image-1.png";
 export * from "./category/index";
 export * from "./bannersImages/index";
+export * from "./profile/index";
