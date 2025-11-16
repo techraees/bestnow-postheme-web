@@ -196,7 +196,7 @@ const MenuModal = () => {
 
   return (
     <div
-      className="fixed inset-0 w-full h-full bg-light_mode_color z-40 dark:bg-dark_mode_color overflow-y-auto"
+      className="fixed inset-0 w-full h-full bg-light_mode_color z-40 dark:bg-dark_mode_color overflow-y-auto scrollbar_hide_custom"
       onClick={handleBackdropClick}
     >
       <div className="min-h-full flex flex-col mt-16">
