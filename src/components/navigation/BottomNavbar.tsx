@@ -112,7 +112,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
             <Link
               key={index}
               href={item.path}
-              className={`inline-flex flex-col relative  items-center justify-center px-2 md:px-3 py-2  group transition-all ${
+              className={`inline-flex flex-col relative  items-center justify-center group transition-all ${
                 isCart ? "bottom-2" : ""
               } ${
                 active
