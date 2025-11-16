@@ -160,7 +160,7 @@ export default function Home() {
     title: product.product_name || "",
     image: product.images?.[0] ? getImgBaseUrl(product.images[0]) : "",
     rating: product.rating || 4.5,
-    soldCount: product.stock_status?.LABEL || "Very Low",
+    soldCount: product.stock_status?.LABEL || "Stock very low",
     price: product.productPrice || 0,
     isFavorite: product.isFavorite || false,
   }));

@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   title,
   image,
   rating = 4.5,
-  soldCount = "Very Low",
+  soldCount = "Stock very low",
   price,
   isFavorite = false,
   onFavoriteClick,
@@ -102,14 +102,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
             if (soldCount) {
               const lower = soldCount;
               console.log(lower);
-              if (lower === "Very High") {
+              if (lower === "Stock High") {
                 colorClass =
                   "text-light_mode_green_color dark:text-dark_mode_green_color";
-              } else if (lower == "Moderate") {
+              } else if (lower == "Stock Low") {
                 colorClass = "text-orange-500 dark:text-dark_mode_orange_color";
-              } else if (lower == "Very Low") {
+              } else if (lower == "Stock very low") {
                 colorClass =
                   "text-light_mode_red_color dark:text-dark_mode_red_color";
+              } else if (lower == "Coming Soon") {
+                colorClass =
+                  "text-light_mode_cyan_color dark:text-dark_mode_cyan_color";
               }
             }
             return <span className={colorClass}>{soldCount}</span>;
