@@ -77,7 +77,7 @@ const CartScreen: React.FC<CartScreenProps> = ({
       <SubHeader title="My Cart" itemCount={itemCount} />
 
       {/* Cart Items List - Scrollable */}
-      <div className="max-w-[1600px]  overflow-y-auto mx-auto h-[calc(100vh-340px)] px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8 lg:py-10">
+      <div className="max-w-[1600px]  overflow-y-auto mx-auto h-[calc(100vh-340px)] px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8 lg:py-10 scrollbar_hide_custom">
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 md:py-20 lg:py-24">
             <div className="text-light_mode_text dark:text-dark_mode_text text-center">
