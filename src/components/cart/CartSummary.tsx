@@ -69,17 +69,6 @@ const CartSummary: React.FC<CartSummaryProps> = ({
             </div>
           )}
 
-          {deliveryCharges !== 0 && (
-            <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
-              <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
-                Delivery Charges
-              </span>
-              <span className="text-light_mode_text dark:text-dark_mode_text font-semibold">
-                {formatPrice(deliveryCharges)}
-              </span>
-            </div>
-          )}
-
           {/* Divider */}
           <div className="border-t border-light_mode_color2 dark:border-dark_mode_color2 my-2 md:my-3 pt-2 md:pt-3"></div>
 

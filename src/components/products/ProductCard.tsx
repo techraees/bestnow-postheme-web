@@ -1,11 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { HiStar } from "react-icons/hi";
 import { BannerImage } from "@/assets";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import {
+  useAddToCartMutation,
+  useUpdateCartItemMutation,
+  useGetCartQuery,
+  useRemoveCartItemMutation,
+  useGetCartItemsIdsQuery,
+} from "@/redux/api/core/cartApi";
+import { toast } from "react-toastify";
 
 interface ProductCardProps {
   id: string;
@@ -31,18 +40,69 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
 }) => {
   const [favorite, setFavorite] = useState(isFavorite);
+  const [quantity, setQuantity] = useState(1);
+
+  const [addToCart, { isLoading: isAdding }] = useAddToCartMutation();
+
+  const { data: cartItemsIds, refetch: refetchCartItemsIds } =
+    useGetCartItemsIdsQuery();
 
   const handleFavoriteClick = () => {
     setFavorite(!favorite);
     onFavoriteClick?.(id);
   };
 
-  const handleAddToCart = () => {
-    onAddToCart?.(id);
+  const handleQuantityChange = async (newQuantity: number) => {
+    const validQuantity = Math.max(1, newQuantity);
+    setQuantity(validQuantity);
+  };
+
+  const handleIncrease = async () => {
+    const newQuantity = quantity + 1;
+    await handleQuantityChange(newQuantity);
+  };
+
+  const handleDecrease = async () => {
+    if (quantity <= 1) return; // Can't go below 1
+    const newQuantity = quantity - 1;
+    await handleQuantityChange(newQuantity);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow empty string for editing, or valid numbers
+    if (value === "" || /^\d+$/.test(value)) {
+      const numValue = value === "" ? 1 : parseInt(value, 10);
+      setQuantity(Math.max(1, numValue));
+    }
+  };
+
+  const handleInputBlur = async () => {
+    // Ensure minimum is 1 when input loses focus
+    if (quantity < 1) {
+      setQuantity(1);
+      await handleQuantityChange(1);
+    } else {
+      await handleQuantityChange(quantity);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      const newQuantity = quantity + 1;
+      setQuantity(newQuantity);
+      await addToCart({ productId: id, quantity: newQuantity }).unwrap();
+      refetchCartItemsIds();
+      toast.success("Added to cart");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to add to cart");
+    }
   };
 
   // Format price with Rs. prefix
   const formattedPrice = `Rs. ${price.toLocaleString("en-PK")}`;
+
+  console.log(cartItemsIds);
 
   return (
     <div className="relative w-full bg-light_mode_color dark:bg-dark_mode_color rounded-2xl overflow-hidden transition-transform hover:scale-[1.02] duration-200">
@@ -87,7 +147,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {title}
           </h3>
         </Link>
-
         {/* Rating and Sold Count */}
         <div className="flex items-center justify-between text-xs md:text-sm">
           <div className="flex items-center gap-1">
@@ -115,21 +174,53 @@ const ProductCard: React.FC<ProductCardProps> = ({
             return <span className={colorClass}>{soldCount}</span>;
           })()}
         </div>
-
-        {/* Price - Bright Yellow */}
-        <div className="pt-1">
+        {/* Price and Quantity Controls */}
+        <div className="pt-1 flex items-center justify-between ">
           <span className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color text-base md:text-lg lg:text-xl font-bold">
             {formattedPrice}
           </span>
+          {!cartItemsIds?.payload.includes(id) && (
+            <div className="flex items-center text-light_mode_blue_color dark:text-dark_mode_blue_color text-sm gap-0 md:gap-3">
+              <button
+                onClick={handleDecrease}
+                disabled={quantity <= 1}
+                className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-dark_mode_color dark:text-light_mode_color hover:opacity-80 active:opacity-60 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+              >
+                <ChevronDown size={20} />
+              </button>
+              <input
+                type="number"
+                min="1"
+                value={quantity}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+                disabled={isAdding}
+                className="min-w-[24px] max-w-[40px] text-center bg-transparent border-none outline-none text-light_mode_text dark:text-dark_mode_text text-sm font-medium focus:ring-0 p-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+              <button
+                onClick={handleIncrease}
+                disabled={isAdding}
+                className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-light_mode_yellow_color dark:text-dark_mode_yellow_color hover:opacity-80 active:opacity-60 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+              >
+                <ChevronUp size={20} />
+              </button>
+            </div>
+          )}
         </div>
-
         {/* Add to Cart Button - Dark gray rounded rectangle */}
-        <button
-          onClick={handleAddToCart}
-          className="w-full mt-1 md:mt-2 bg-light_mode_color2 dark:bg-dark_mode_color2 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 text-light_mode_text dark:text-dark_mode_text py-2.5 md:py-3 rounded-2xl font-medium text-xs md:text-sm transition-colors active:scale-95"
-        >
-          Add to Cart
-        </button>
+        {cartItemsIds?.payload.includes(id) ? (
+          <button className=" w-full mt-1 md:mt-2 bg-light_mode_color2 dark:bg-dark_mode_color2 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 text-light_mode_text dark:text-dark_mode_text py-2.5 md:py-3 rounded-2xl font-medium text-xs md:text-sm  opacity-80 cursor-not-allowed">
+            Already inside cart
+          </button>
+        ) : (
+          <button
+            onClick={handleAddToCart}
+            disabled={isAdding}
+            className="w-full mt-1 md:mt-2 bg-light_mode_color2 dark:bg-dark_mode_color2 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 text-light_mode_text dark:text-dark_mode_text py-2.5 md:py-3 rounded-2xl font-medium text-xs md:text-sm transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isAdding ? "Adding..." : "Add to Cart"}
+          </button>
+        )}
       </div>
     </div>
   );
