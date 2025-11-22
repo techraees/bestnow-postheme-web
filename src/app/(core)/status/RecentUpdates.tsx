@@ -36,7 +36,7 @@ const RecentUpdates: React.FC = () => {
   return (
     <>
       <div className="flex items-center justify-between select-none text-[14px]">
-        <span className="text-dark_mode_gray_color dark:text-white">
+        <span className="text-light_mode_primary_text_primary dark:text-dark_mode_primary_text_primary">
           Recent Updates
         </span>
       </div>
@@ -75,7 +75,7 @@ const RecentUpdates: React.FC = () => {
                       </div>
                     ) : (
                       <div className="w-[56px] h-[56px] flex items-center justify-center bg-primary rounded-full">
-                        <div className="w-[52px] h-[52px] flex items-center justify-center bg-white dark:bg-dark_mode_primary rounded-full">
+                        <div className="w-[52px] h-[52px] flex items-center justify-center bg-light_mode_color dark:bg-dark_mode_primary rounded-full">
                           {item?.profile_photo_url ? (
                             <div className="w-[48px] h-[48px] rounded-full overflow-hidden">
                               <img
@@ -102,8 +102,10 @@ const RecentUpdates: React.FC = () => {
 
                     <div className="flex items-center justify-between ml-3">
                       <div>
-                        <p>{item?.name}</p>
-                        <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                        <p className="text-light_mode_text dark:text-dark_mode_text">
+                          {item?.name}
+                        </p>
+                        <span className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                           {formatTime(item?.createdAt)}
                         </span>
                       </div>

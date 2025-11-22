@@ -47,7 +47,7 @@ const StatusHeader: React.FC<StatusHeaderProps> = ({ item, onClose }) => {
                 <p className="truncate whitespace-nowrap w-[180px]">
                   {item?.name}
                 </p>
-                <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                <span className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                   {item?.community_member_count}
                   {" followers"}
                 </span>

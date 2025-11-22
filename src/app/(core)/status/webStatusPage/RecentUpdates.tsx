@@ -75,7 +75,7 @@ const RecentUpdates: React.FC<RecentUpdatesProps> = ({
   return (
     <>
       <div className="flex items-center justify-between select-none text-[14px] mt-1">
-        <span className="text-dark_mode_gray_color dark:text-white mb-3">
+        <span className="text-light_mode_primary_text_primary dark:text-dark_mode_primary_text_primary mb-3">
           Recent Updates
         </span>
       </div>
@@ -123,7 +123,7 @@ const RecentUpdates: React.FC<RecentUpdatesProps> = ({
                     </div>
                   ) : (
                     <div className="w-[56px] h-[56px] flex items-center justify-center bg-primary rounded-full">
-                      <div className="w-[52px] h-[52px] flex items-center justify-center bg-white dark:bg-dark_mode_primary rounded-full">
+                      <div className="w-[52px] h-[52px] flex items-center justify-center bg-light_mode_color dark:bg-dark_mode_primary rounded-full">
                         {item?.profile_photo_url ? (
                           <div className="w-[48px] h-[48px] rounded-full overflow-hidden">
                             <img
@@ -150,8 +150,10 @@ const RecentUpdates: React.FC<RecentUpdatesProps> = ({
 
                   <div className="flex items-center justify-between ml-3">
                     <div>
-                      <p>{item?.name}</p>
-                      <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                      <p className="text-light_mode_text dark:text-dark_mode_text">
+                        {item?.name}
+                      </p>
+                      <span className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                         {formatTime(item?.createdAt)}
                       </span>
                     </div>
@@ -196,7 +198,7 @@ const RecentUpdates: React.FC<RecentUpdatesProps> = ({
             >
               <motion.div
                 onClick={(e) => e.stopPropagation()}
-                className="dark:bg-dark_mode_primary_overlay_5  bg-light_mode_light_bg_color border  shadow-2xl dark:border-border_dark_color border-border_light_color py-5 px-4 w-[80vw] h-[80vh]"
+                className="dark:bg-dark_mode_color1 bg-light_mode_color border border-light_mode_border1 dark:border-dark_mode_border1 shadow-2xl py-5 px-4 w-[80vw] h-[80vh]"
               >
                 <div className="w-full h-[75vh] relative  overflow-hidden bg-black">
                   <StatusHeader

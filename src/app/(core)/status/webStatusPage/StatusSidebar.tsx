@@ -21,7 +21,7 @@ const StatusSidebar: React.FC<StatusSidebarProps> = ({
     <div>
       {!activeAllCommunities ? (
         <>
-          <div className="w-full h-[48px] flex items-center text-[1.25rem] font-[500]">
+          <div className="w-full h-[48px] flex items-center text-[1.25rem] font-[500] text-light_mode_text dark:text-dark_mode_text">
             Reel/Status
           </div>
           <RecentUpdates

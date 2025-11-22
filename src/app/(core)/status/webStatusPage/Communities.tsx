@@ -55,8 +55,10 @@ const Communities: React.FC<CommunitiesProps> = ({
       <div>
         {/* Communities */}
         <div className="my-4">
-          <h3 className="mb-1 font-[800]">Communities</h3>
-          <p className="text-[14px] text-gray-500 dark:text-dark_mode_gray_color">
+          <h3 className="mb-1 font-[800] text-light_mode_text dark:text-dark_mode_text">
+            Communities
+          </h3>
+          <p className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
             Stay updated on topics that matter to you. Find communities to
             follow.
           </p>
@@ -65,7 +67,9 @@ const Communities: React.FC<CommunitiesProps> = ({
 
       {/* Find Communities to Follow */}
       <div className="flex items-center justify-between select-none cursor-pointer text-[14px]">
-        <span className="">Find communities to follow</span>
+        <span className="text-light_mode_text dark:text-dark_mode_text">
+          Find communities to follow
+        </span>
       </div>
       <div>
         <div className="flex flex-col gap-5 mt-4">
@@ -97,10 +101,10 @@ const Communities: React.FC<CommunitiesProps> = ({
 
                         <div className="flex items-center justify-between ml-3">
                           <div>
-                            <p>
+                            <p className="text-light_mode_text dark:text-dark_mode_text">
                               {item?.name?.split(" ").slice(0, 3).join(" ")}
                             </p>
-                            <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                            <span className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                               {item?.community_member_count} followers
                             </span>
                           </div>
@@ -154,7 +158,7 @@ const Communities: React.FC<CommunitiesProps> = ({
       <div className="my-5">
         <button
           onClick={() => setAllCommunities(true)}
-          className="cursor-pointer border border-gray-400 px-5 py-1.5 rounded-full text-[14px] text-primary transition-colors duration-200 active:bg-blue-200"
+          className="cursor-pointer border border-light_mode_border1 dark:border-dark_mode_border1 px-5 py-1.5 rounded-full text-[14px] text-primary transition-colors duration-200 active:bg-light_mode_color2 dark:active:bg-dark_mode_color2"
         >
           <span>Explore more</span>
         </button>

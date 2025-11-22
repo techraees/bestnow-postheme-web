@@ -22,7 +22,9 @@ const StatusPageIconWithText: React.FC<StatusPageIconWithTextProps> = ({
         </div>
         {item.text && (
           <div>
-            <p className="text-[16px] text-shadow-lg/20">{item.text}</p>
+            <p className="text-[16px] text-light_mode_text dark:text-dark_mode_text">
+              {item.text}
+            </p>
           </div>
         )}
       </div>

@@ -61,10 +61,10 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
             </div>
             <div className="flex items-center justify-between ml-3">
               <div>
-                <p className="truncate whitespace-nowrap w-[180px]">
+                <p className="truncate whitespace-nowrap w-[180px] text-light_mode_text dark:text-dark_mode_text">
                   {item?.name || "Sunlong Official"}
                 </p>
-                <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                <span className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                   {item?.community_member_count}
                   {"0 followers"}
                 </span>

@@ -52,14 +52,16 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ item, refetch }) => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gray-200 dark:bg-gray-700" />
+                <div className="w-full h-full bg-light_mode_color2 dark:bg-dark_mode_color2" />
               )}
             </div>
 
             <div className="flex items-center justify-between ml-3">
               <div>
-                <p>{item?.name?.split(" ").slice(0, 3).join(" ")}</p>
-                <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                <p className="text-light_mode_text dark:text-dark_mode_text">
+                  {item?.name?.split(" ").slice(0, 3).join(" ")}
+                </p>
+                <span className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                   {item?.community_member_count} followers
                 </span>
               </div>

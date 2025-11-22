@@ -18,7 +18,7 @@ const StatusContent: React.FC<StatusContentProps> = ({
     <>
       <div className="h-full">
         {!community_id ? (
-          <div className="flex flex-col gap-3 items-center justify-center relative flex-1 self-stretch grow rounded-[20px] h-full bg-chat_light_color1 dark:bg-chat_dark_color1">
+          <div className="flex flex-col gap-3 items-center justify-center relative flex-1 self-stretch grow rounded-[20px] h-full bg-light_mode_color1 dark:bg-dark_mode_color1">
             <svg
               width="428"
               height="287"
@@ -1035,7 +1035,7 @@ const StatusContent: React.FC<StatusContentProps> = ({
               <h3 className="text-[20px] font-[600] text-black dark:text-white">
                 Select a community to view status
               </h3>
-              <p className="text-[14px] text-gray-500 dark:text-dark_mode_gray_color text-center">
+              <p className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color text-center">
                 Choose from your followed communities or explore new ones to see
                 their latest updates
               </p>

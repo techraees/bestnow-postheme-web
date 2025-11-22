@@ -50,7 +50,7 @@ const MutedUpdates: React.FC = () => {
         className="flex items-center justify-between select-none cursor-pointer text-[14px] mt-5"
         onClick={() => setIsOpenMutedUpdates(!isOpenMutedUpdated)}
       >
-        <span className="text-dark_mode_gray_color dark:text-white">
+        <span className="text-light_mode_primary_text_primary dark:text-dark_mode_primary_text_primary">
           Muted Updates
         </span>
         {isOpenMutedUpdated ? (
@@ -74,7 +74,7 @@ const MutedUpdates: React.FC = () => {
               >
                 <div className="flex">
                   <div className="w-[56px] h-[56px] flex items-center justify-center bg-primary rounded-full">
-                    <div className="w-[52px] h-[52px] flex items-center justify-center bg-white dark:bg-dark_mode_primary rounded-full">
+                    <div className="w-[52px] h-[52px] flex items-center justify-center bg-light_mode_color dark:bg-dark_mode_primary rounded-full">
                       <div className="w-[48px] h-[48px] rounded-full overflow-hidden">
                         <img src={item?.img_url} alt="" />
                       </div>
@@ -83,8 +83,10 @@ const MutedUpdates: React.FC = () => {
 
                   <div className="flex items-center justify-between ml-3">
                     <div>
-                      <p>{item?.community_name}</p>
-                      <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                      <p className="text-light_mode_text dark:text-dark_mode_text">
+                        {item?.community_name}
+                      </p>
+                      <span className="text-[14px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                         {item?.time}
                       </span>
                     </div>
