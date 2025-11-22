@@ -68,8 +68,6 @@ const MenuModal = () => {
       ),
       label: "Favorites",
       onClick: () => {
-        router.push("/favourites");
-
         console.log("Favorites clicked");
       },
     },
@@ -93,8 +91,6 @@ const MenuModal = () => {
       ),
       label: "Order History",
       onClick: () => {
-        router.push("/order-history");
-
         console.log("Order History clicked");
       },
     },
@@ -106,8 +102,6 @@ const MenuModal = () => {
       ),
       label: "Categories",
       onClick: () => {
-        router.push("/categories");
-
         console.log("Categories clicked");
       },
     },
@@ -132,8 +126,6 @@ const MenuModal = () => {
       ),
       label: "Voice Search",
       onClick: () => {
-        router.push("/voice-search");
-
         console.log("Voice Search clicked");
       },
     },
@@ -145,8 +137,6 @@ const MenuModal = () => {
       ),
       label: "Quick Order",
       onClick: () => {
-        router.push("/quick-order");
-
         console.log("Quick Order clicked");
       },
     },
