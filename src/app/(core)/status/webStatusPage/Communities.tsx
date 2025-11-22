@@ -1,0 +1,166 @@
+import React from "react";
+import {
+  // getImgBaseUrl,
+  useFollowCommunityMutation,
+  useGetAllCommunitiesQuery,
+} from "@/redux/api/core/communitiesApi";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
+import Image from "next/image";
+
+import CommunityCardSkeletal from "./CommunityCardSkeletal";
+import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
+
+interface CommunitiesProps {
+  setAllCommunities: (value: boolean) => void;
+  community_id: number | null;
+  setCommunity_id: (id: number | null) => void;
+  community_slug: string | null;
+  setCommunity_slug: (slug: string | null) => void;
+}
+
+const Communities: React.FC<CommunitiesProps> = ({
+  setAllCommunities,
+  community_id,
+  setCommunity_id,
+  community_slug,
+  setCommunity_slug,
+}) => {
+  const { theme_mode } = useSelector((state: any) => state.coreAppSlice);
+
+  const { user_profile } = useSelector((state: any) => state.coreAppSlice);
+  const {
+    data: getAllCommunities,
+    refetch,
+    isLoading,
+  } = useGetAllCommunitiesQuery("");
+  const [FollowCommunity, { isLoading: followLoading, originalArgs }] =
+    useFollowCommunityMutation();
+
+  const handleFollowCommunities = async (slug: string) => {
+    if (!user_profile) {
+      return toast.error("Please login to follow communities");
+    }
+    const res = await FollowCommunity(slug);
+    if (res?.data?.status === "success") {
+      toast.success(res?.data?.payload?.message);
+      refetch();
+    } else {
+      toast.error("Failed to follow community");
+    }
+  };
+  return (
+    <>
+      <div>
+        {/* Communities */}
+        <div className="my-4">
+          <h3 className="mb-1 font-[800]">Communities</h3>
+          <p className="text-[14px] text-gray-500 dark:text-dark_mode_gray_color">
+            Stay updated on topics that matter to you. Find communities to
+            follow.
+          </p>
+        </div>
+      </div>
+
+      {/* Find Communities to Follow */}
+      <div className="flex items-center justify-between select-none cursor-pointer text-[14px]">
+        <span className="">Find communities to follow</span>
+      </div>
+      <div>
+        <div className="flex flex-col gap-5 mt-4">
+          {isLoading
+            ? Array.from({ length: 5 }).map((item, index) => (
+                <CommunityCardSkeletal key={index} />
+              ))
+            : getAllCommunities?.payload?.results?.map((item: any) => {
+                const isThisLoading =
+                  followLoading && originalArgs === item.slug;
+
+                return (
+                  <div key={item.id}>
+                    <div
+                      onClick={() => {
+                        setCommunity_id(item.id);
+                        setCommunity_slug(item.slug);
+                      }}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex items-center">
+                        <Image
+                          src={getImgBaseUrl(item.profile_photo_url)}
+                          alt={item.name}
+                          width={40}
+                          height={40}
+                          className="rounded-full object-cover"
+                        />
+
+                        <div className="flex items-center justify-between ml-3">
+                          <div>
+                            <p>
+                              {item?.name?.split(" ").slice(0, 3).join(" ")}
+                            </p>
+                            <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                              {item?.community_member_count} followers
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleFollowCommunities(item.slug);
+                          }}
+                          disabled={isThisLoading}
+                          className={`w-full h-full rounded-lg px-3 py-0.5 flex items-center cursor-pointer justify-center text-[14px]
+    ${
+      item.follow
+        ? "bg-transparent border border-primary text-primary"
+        : "bg-blue-200 dark:bg-blue-900 dark:text-blue-300 text-primary"
+    }
+  `}
+                        >
+                          {item?.follow ? (
+                            isThisLoading ? (
+                              <ClipLoader
+                                size={15}
+                                className="!text-white mx-3 my-1"
+                                color="#006BFF"
+                              />
+                            ) : (
+                              "Following"
+                            )
+                          ) : isThisLoading ? (
+                            <ClipLoader
+                              size={15}
+                              className="!text-white mx-3 my-1"
+                              color="#006BFF"
+                            />
+                          ) : (
+                            "Follow"
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+        </div>
+      </div>
+
+      <div className="my-5">
+        <button
+          onClick={() => setAllCommunities(true)}
+          className="cursor-pointer border border-gray-400 px-5 py-1.5 rounded-full text-[14px] text-primary transition-colors duration-200 active:bg-blue-200"
+        >
+          <span>Explore more</span>
+        </button>
+      </div>
+    </>
+  );
+};
+
+export default Communities;

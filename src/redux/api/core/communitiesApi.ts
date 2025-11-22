@@ -1,0 +1,126 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+// import baseQueryWithReauth from "@/redux/api/core/baseQueryWithReauth";
+
+// Define a service using a base URL and expected endpoints
+export const communitiesApi = createApi({
+  reducerPath: "communitiesApi",
+  tagTypes: ["Comments", "allNestedCommunities", "getSingleCommunity"],
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
+  endpoints: (builder) => ({
+    // Used to get All Communities for listing
+    getAllCommunities: builder.query({
+      query: (queryParams: string) =>
+        `community-system/community?${queryParams}`,
+    }),
+    // Used to get All Communities and Nested for listing
+    getAllCommunitiesWithNested: builder.query({
+      query: (queryParams: string) =>
+        `community-system/community/nested?${queryParams}`,
+      providesTags: ["allNestedCommunities"],
+    }),
+    // used to follow the community
+    followCommunity: builder.mutation({
+      query: (slug: string) => ({
+        url: `/community-system/community-member/follow/${slug}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["allNestedCommunities", "getSingleCommunity"],
+    }),
+    // used to get thhe post of specific comunity
+    getPostOfSpecificCommuntiy: builder.query({
+      query: (queryParams: string) =>
+        `/community-system/community-post?${queryParams}`,
+    }),
+    // used to get Single Community Detail
+    getSingleCommunity: builder.query({
+      query: (slug: string) => `/community-system/community/single/${slug}`,
+      providesTags: ["getSingleCommunity"],
+    }),
+
+    getCommentsOfSpecificCommunity: builder.query({
+      query: ({ slug, query }: { slug: string; query: string }) =>
+        `/community-system/community-post/get-comments/${slug}?${query}`,
+      providesTags: ["Comments"],
+    }),
+
+    getAllCommunitiesHavingActiveStatus: builder.query({
+      query: ({ queryParams }: { queryParams: string }) =>
+        `/community-system/community-status/communities?${queryParams}`,
+    }),
+
+    commentOnSpecificPost: builder.mutation({
+      query: ({ slug, data }: { slug: string; data: any }) => ({
+        url: `/community-system/community-post/create-comment/${slug}`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Comments"],
+    }),
+
+    engagementOnSpecificPost: builder.mutation({
+      query: ({ slug, data }: { slug: string; data: any }) => ({
+        url: `/community-system/community-post/engagement/${slug}`,
+        method: "PUT",
+        body: data,
+      }),
+      // invalidatesTags: ["Comments"],
+    }),
+    getStatusOfSpecificCommunity: builder.query({
+      query: ({ slug }: { slug: string }) => {
+        return `/community-system/community-status/all-status/${slug}`;
+      },
+    }),
+
+    getCommentsOfSpecificStatus: builder.query({
+      query: ({ slug, query }: { slug: string; query: string }) =>
+        `/community-system/community-status/comment-all/${slug}?${query}`,
+    }),
+    commentOnSpecificStatus: builder.mutation({
+      query: ({ slug, data }: { slug: string; data: any }) => ({
+        url: `/community-system/community-status/comment/${slug}`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    engagementOnSpecificStatus: builder.mutation({
+      query: ({ slug, data }: { slug: string; data: any }) => ({
+        url: `/community-system/community-status/engagement/${slug}`,
+        method: "POST",
+        body: data,
+      }),
+      // invalidatesTags: ["Comments"],
+    }),
+
+    // Used to get count of unviewed status of specific user
+    getCountOfUnViewedStatus: builder.query({
+      query: () => `/community-system/community-status/communities/view-count`,
+    }),
+    getTheUserPermissionToSeeTheCommunity: builder.mutation({
+      query: (data: any) => ({
+        url: `/community-system/community/user`,
+        method: "POST",
+        body: data,
+      }),
+      // invalidatesTags: ["Comments"],
+    }),
+  }),
+});
+
+export const {
+  useGetAllCommunitiesQuery,
+  useGetAllCommunitiesWithNestedQuery,
+  useFollowCommunityMutation,
+  useGetPostOfSpecificCommuntiyQuery,
+  useGetSingleCommunityQuery,
+  useGetCommentsOfSpecificCommunityQuery,
+  useLazyGetCommentsOfSpecificCommunityQuery,
+  useCommentOnSpecificPostMutation,
+  useGetAllCommunitiesHavingActiveStatusQuery,
+  useEngagementOnSpecificPostMutation,
+  useGetStatusOfSpecificCommunityQuery,
+  useLazyGetCommentsOfSpecificStatusQuery,
+  useCommentOnSpecificStatusMutation,
+  useEngagementOnSpecificStatusMutation,
+  useGetCountOfUnViewedStatusQuery,
+  useGetTheUserPermissionToSeeTheCommunityMutation,
+} = communitiesApi;

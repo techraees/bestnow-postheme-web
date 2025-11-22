@@ -4,6 +4,7 @@ import { authProfileApi } from "../api/auth/customerAuthProfileApi";
 import { coreApi } from "../api/core/coreApi";
 import { searchApi } from "../api/core/searchApi";
 import { bannerApi } from "../api/core/bannerApi";
+import { communitiesApi } from "../api/core/communitiesApi";
 import { cartApi } from "../api/core/cartApi";
 ("");
 import { orderApi } from "../api/core/orderApi";
@@ -17,5 +18,6 @@ export const middlewares = [
   bannerApi.middleware,
   cartApi.middleware,
   orderApi.middleware,
+  communitiesApi.middleware,
   // You can add other middlewares here if needed
 ];
