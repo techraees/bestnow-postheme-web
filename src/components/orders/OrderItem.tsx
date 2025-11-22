@@ -21,6 +21,7 @@ const OrderItem: React.FC<OrderItemProps> = ({
   const totalPrice = unitPrice * quantity;
   const formattedUnitPrice = `Rs. ${unitPrice.toLocaleString("en-PK")}`;
   const formattedTotalPrice = `Rs. ${totalPrice.toLocaleString("en-PK")}`;
+  console.log("totalPrice", image);
 
   return (
     <div className="bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-1 md:p-4 lg:p-5 transition-shadow">
@@ -69,4 +70,3 @@ const OrderItem: React.FC<OrderItemProps> = ({
 };
 
 export default OrderItem;
-

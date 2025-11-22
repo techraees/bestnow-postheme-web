@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import SubHeader from "@/components/navigation/SubHeader";
 import { OrderItem, OrderSummary } from "@/components/orders";
+import { useGetOrderDetailsQuery } from "@/redux/api/core/orderApi";
 
 interface OrderItemData {
   id: string;
@@ -14,102 +15,117 @@ interface OrderItemData {
   quantity: number;
 }
 
-interface OrderData {
-  id: string;
-  orderId: string;
-  date: string;
-  time: string;
-  items: OrderItemData[];
-  total: number;
-  discount: number;
-  deliveryCharges: number;
-  totalPayable: number;
-  paid: number;
-  methodOfPayment: string;
-  status: "completed" | "in-progress" | "canceled";
-  newBalance: number;
-}
-
-// Sample order data - in production, this would come from API
-const sampleOrder: OrderData = {
-  id: "1",
-  orderId: "76052",
-  date: "09 July, 2025",
-  time: "05:42 pm",
-  items: [
-    {
-      id: "1",
-      name: "Charging Flex Cable, Perfect Fit Replacement",
-      image:
-        "https://adminapi.beston.co/uploads/products/commonImages/7646/images/RF_PARTS_____BOARD_FLEX_HUAWEI_Y6_20182.webp",
-      unitPrice: 3450,
-      quantity: 4,
-    },
-    {
-      id: "2",
-      name: "Apple air pods 3rd generation with Type-C cable",
-      image:
-        "https://adminapi.beston.co/uploads/products/commonImages/10890/images/FORCE_BT____BATTERY_APPLE_IPHONE_112.webp",
-      unitPrice: 8360,
-      quantity: 2,
-    },
-    {
-      id: "3",
-      name: "Lcd Screen Samsung A52s 5G Golden Crown brand",
-      image:
-        "https://adminapi.beston.co/uploads/displayMappings/shop_assets/display_mappping/87/images/SUNLONG_UNIT_LCD_6VAZR52.webp",
-      unitPrice: 4280,
-      quantity: 24,
-    },
-    {
-      id: "4",
-      name: "Charging Flex Cable, Perfect Fit Replacement",
-      image:
-        "https://adminapi.beston.co/uploads/products/commonImages/7646/images/RF_PARTS_____BOARD_FLEX_HUAWEI_Y6_20182.webp",
-      unitPrice: 3450,
-      quantity: 4,
-    },
-    {
-      id: "5",
-      name: "Apple air pods 3rd generation with Type-C cable",
-      image:
-        "https://adminapi.beston.co/uploads/products/commonImages/10890/images/FORCE_BT____BATTERY_APPLE_IPHONE_112.webp",
-      unitPrice: 8360,
-      quantity: 2,
-    },
-    {
-      id: "6",
-      name: "Lcd Screen Samsung A52s 5G Golden Crown brand",
-      image:
-        "https://adminapi.beston.co/uploads/displayMappings/shop_assets/display_mappping/87/images/SUNLONG_UNIT_LCD_6VAZR52.webp",
-      unitPrice: 4280,
-      quantity: 24,
-    },
-  ],
-  total: 73320,
-  discount: 0,
-  deliveryCharges: 120,
-  totalPayable: 28440,
-  paid: 28400,
-  methodOfPayment: "Transfer",
-  status: "completed",
-  newBalance: 40,
-};
-
 const OrderDetailPage = () => {
   const params = useParams();
   const router = useRouter();
   const orderId = params?.id as string;
 
-  // In production, fetch order data based on orderId
-  const order = sampleOrder;
+  // Fetch order details from API
+  const {
+    data: orderData,
+    isLoading,
+    error,
+  } = useGetOrderDetailsQuery({ order_id: orderId });
 
-  const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
+  // Transform API response to order format
+  const order = useMemo(() => {
+    if (!orderData?.payload) return null;
+
+    const payload = orderData.payload;
+    const preorderItems = payload.preorderItems || [];
+
+    // Parse date and time from createdAt
+    const createdAt = payload.createdAt || "";
+    const [datePart, timePart] = createdAt.split(" ");
+    const date = datePart || "";
+    const time = timePart || "";
+
+    // Map status
+    const status = mapStatusToOrderStatus(payload.status);
+
+    // Transform items
+    const items: OrderItemData[] = preorderItems.map(
+      (item: any, index: number) => ({
+        id: item.id?.toString() || index.toString(),
+        name: item.product_name || "",
+        image: item.image?.[0] || item.image || "",
+        unitPrice: item.price_rate || 0,
+        quantity: item.quantity || 0,
+      })
+    );
+
+    return {
+      id: payload.id?.toString() || orderId,
+      orderId: payload.id?.toString() || orderId,
+      date: date,
+      time: time,
+      items: items,
+      total: payload.total_amount || 0,
+      discount: 0,
+      deliveryCharges: 0,
+      totalPayable: payload.total_amount || 0,
+      paid: payload.total_amount || 0,
+      methodOfPayment: "Transfer",
+      status: status,
+      newBalance: 0,
+      // Additional fields from API
+      active_phone_number: payload.active_phone_number || "",
+      city_name: payload.city_name || "",
+      whole_address_of_customer: payload.whole_address_of_customer || "",
+    };
+  }, [orderData, orderId]);
+
+  // Map API status to order status
+  function mapStatusToOrderStatus(
+    status: string
+  ): "completed" | "in-progress" | "canceled" {
+    const statusLower = status?.toLowerCase() || "";
+    if (statusLower === "accepted" || statusLower === "completed")
+      return "completed";
+    if (statusLower === "pending") return "in-progress";
+    if (statusLower === "canceled" || statusLower === "cancelled")
+      return "canceled";
+    return "in-progress";
+  }
+
+  const totalItems = order
+    ? order.items.reduce((sum, item) => sum + item.quantity, 0)
+    : 0;
 
   const handleViewScreenshot = () => {
     console.log("View screenshot clicked");
     // Navigate to screenshot view or open modal
   };
+
+  if (isLoading) {
+    return (
+      <TopSpacingWrapper>
+        <div className="min-h-[calc(100vh-180px)] bg-light_mode_color dark:bg-dark_mode_color w-full flex flex-col items-center justify-center">
+          <p className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl font-medium">
+            Loading order details...
+          </p>
+        </div>
+      </TopSpacingWrapper>
+    );
+  }
+
+  if (error || !order) {
+    return (
+      <TopSpacingWrapper>
+        <div className="min-h-[calc(100vh-180px)] bg-light_mode_color dark:bg-dark_mode_color w-full flex flex-col items-center justify-center">
+          <p className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl font-medium mb-2">
+            Order not found
+          </p>
+          <button
+            onClick={() => router.push("/orders")}
+            className="text-light_mode_blue_color dark:text-dark_mode_blue_color text-sm md:text-base hover:opacity-80"
+          >
+            Back to Orders
+          </button>
+        </div>
+      </TopSpacingWrapper>
+    );
+  }
 
   return (
     <TopSpacingWrapper>

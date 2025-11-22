@@ -31,7 +31,13 @@ interface UpdateCartItemParams {
 }
 
 interface RemoveCartItemParams {
-  productId: string;
+  cartItemId: string;
+}
+
+interface PlaceOrderParams {
+  new_active_phone_number: string;
+  new_type_city: string;
+  whole_address_of_customer: string;
 }
 
 export const cartApi = createApi({

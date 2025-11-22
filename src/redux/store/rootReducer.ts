@@ -7,6 +7,7 @@ import { coreApi } from "../api/core/coreApi";
 import { searchApi } from "../api/core/searchApi";
 import { bannerApi } from "../api/core/bannerApi";
 import { cartApi } from "../api/core/cartApi";
+import { orderApi } from "../api/core/orderApi";
 
 import coreReducer from "./../slice/coreSlice";
 
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   [searchApi.reducerPath]: searchApi.reducer,
   [bannerApi.reducerPath]: bannerApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
+  [orderApi.reducerPath]: orderApi.reducer,
   // Set Slice State Data
   coreAppSlice: coreReducer,
 });

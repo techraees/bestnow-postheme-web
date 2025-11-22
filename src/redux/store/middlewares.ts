@@ -5,6 +5,8 @@ import { coreApi } from "../api/core/coreApi";
 import { searchApi } from "../api/core/searchApi";
 import { bannerApi } from "../api/core/bannerApi";
 import { cartApi } from "../api/core/cartApi";
+("");
+import { orderApi } from "../api/core/orderApi";
 
 // Add the api middleware to the store
 export const middlewares = [
@@ -14,5 +16,6 @@ export const middlewares = [
   searchApi.middleware,
   bannerApi.middleware,
   cartApi.middleware,
+  orderApi.middleware,
   // You can add other middlewares here if needed
 ];

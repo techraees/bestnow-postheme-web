@@ -1,18 +1,22 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { CartScreen, CartItemData } from "@/components/cart";
 import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import { useGetCartQuery } from "@/redux/api/core/cartApi";
 import { toast } from "react-toastify";
 
 const CartPage = () => {
+  const router = useRouter();
   const { data: cartData, isLoading, refetch: refetchCart } = useGetCartQuery();
 
   const handleCheckout = async (items: CartItemData[]) => {
-    console.log("Checkout initiated with items:", items);
-    // Handle checkout logic here
-    // You can navigate to checkout page, process payment, etc.
+    if (items.length === 0) {
+      toast.error("Cart is empty");
+      return;
+    }
+    router.push("/checkout");
   };
 
   const handleCartUpdate = () => {

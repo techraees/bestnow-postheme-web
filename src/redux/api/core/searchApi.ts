@@ -39,12 +39,24 @@ export const searchApi = createApi({
             page: page.toString(),
             limit: limit.toString(),
           });
-          return `/mobile-accessories/web/sales/products/dropdown?${params.toString()}`;
+          return `/mobile-accessories/web/sales/products?${params.toString()}`;
         },
       }
     ),
+    getDropdownSearchResults: builder.query<
+      SearchResultsResponse,
+      SearchResultsParams
+    >({
+      query: ({ q, page = 1, limit = 20 }) => ({
+        url: `/mobile-accessories/web/sales/products/dropdown?q=${q}&page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useGetSearchSuggestionsQuery, useGetSearchResultsQuery } =
-  searchApi;
+export const {
+  useGetSearchSuggestionsQuery,
+  useGetSearchResultsQuery,
+  useGetDropdownSearchResultsQuery,
+} = searchApi;
