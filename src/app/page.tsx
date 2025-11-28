@@ -9,7 +9,7 @@ import { CategoriesSection } from "@/components/categories";
 import { FilterTabs, FilterTab } from "@/components/filter-tabs";
 import { ProductGrid, ProductSkeleton } from "@/components/products";
 import useThemeCache from "@/theme/useThemeCache";
-import { setIsMenuOpen } from "@/redux/slice/coreSlice";
+import { setIsMenuOpen, setUserProfile } from "@/redux/slice/coreSlice";
 import { CartIcon, DiscountIcon, QuickOrderIcon, SearchIcon } from "@/assets";
 import MenuGrid from "@/components/MenuModal/MenuGrid";
 import { BottomNavbar } from "@/components/navigation";
@@ -22,6 +22,7 @@ import {
 } from "@/redux/api/core/coreApi";
 import { ALLOWED_QUERY_PARAMS_PRODUCTS_HOME_PAGE } from "@/data/coreData/coreEnums/coreGeneralEnums";
 import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
+import { useVerifyTokenQuery } from "@/redux/api/auth/customerAuthProfileApi";
 
 interface Product {
   id?: string;
@@ -205,6 +206,13 @@ export default function Home() {
       badge: "10+",
     },
   ];
+
+  const { data } = useVerifyTokenQuery(undefined);
+  useEffect(() => {
+    if (data?.payload) {
+      dispatch(setUserProfile(data.payload));
+    }
+  }, [data]);
 
   return (
     <TopSpacingWrapper>

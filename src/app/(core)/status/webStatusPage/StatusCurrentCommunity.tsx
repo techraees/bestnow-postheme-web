@@ -51,7 +51,7 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
             <div className="w-[40px] h-[40px]  rounded-full overflow-hidden flex justify-center items-center">
               <div className="w-[24px] h-[24px] object-cover">
                 <Image
-                  src={getImgBaseUrl(item?.profile_photo_url)}
+                  src={item?.profile_photo_url}
                   alt={item?.name || "Sunlong Official"}
                   width={24}
                   height={24}

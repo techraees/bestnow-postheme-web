@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
 import {
   // ALLOWED_WEB_USER,
   // THEME_DATA,
@@ -41,9 +40,7 @@ export const Comments = ({
     reset,
     formState: { errors },
   } = useForm();
-  const [page, setPage] = useState(1);
   const [comments, setComments] = useState<any[]>([] as any);
-  const [hasMore, setHasMore] = useState(true);
 
   const [replyInputVisible, setReplyInputVisible] = useState<any>(null);
   const [nestedReplyVisible, setNestedReplyVisible] = useState<any>(null);
@@ -53,24 +50,17 @@ export const Comments = ({
 
   useEffect(() => {
     if (postSlug) {
-      setPage(1);
-      setComments([]);
-      loadComments(1, true);
+      loadComments();
     }
   }, [postSlug]);
 
-  const loadComments = async (pageNumber: number, reset = false) => {
+  const loadComments = async () => {
     const res = await triggerGetComments({
       slug: postSlug,
-      query: `page=${pageNumber}&limit=20`,
+      query: `page=1&limit=100`,
     });
     const results = res?.data?.payload?.rows || [];
-    if (results.length === 0) {
-      setHasMore(false);
-    } else {
-      setComments((prev) => (reset ? results : [...prev, ...results]));
-      setPage((prev) => prev + 1);
-    }
+    setComments(results);
   };
 
   const handleReplyClick = (commentId: string) => {
@@ -120,14 +110,14 @@ export const Comments = ({
           overflow: "auto",
         }}
       >
-        <InfiniteScroll
-          dataLength={comments.length}
-          next={() => loadComments(page)}
-          hasMore={hasMore}
-          scrollableTarget="scrollableDiv"
-          loader={<h4 className="text-center">Loading...</h4>}
-        >
-          {comments.map((comment: any) => {
+        {isFetching ? (
+          <div className="text-center p-4">
+            <p className="text-light_mode_gray_color dark:text-dark_mode_gray_color">
+              Loading...
+            </p>
+          </div>
+        ) : (
+          comments.map((comment: any) => {
             const name =
               comment?.user_type === ALLOWED_WEB_USER.TBLCHART
                 ? comment?.user?.fldName
@@ -147,17 +137,19 @@ export const Comments = ({
                   <div className=" w-[calc(100%-44px)]  ml-3">
                     <div>
                       <div className=" flex justify-between items-center w-full">
-                        <p className="text-[14px] font-[600]">
+                        <p className="text-[14px] font-[600] text-light_mode_text dark:text-dark_mode_text">
                           {comment?.user_type === ALLOWED_WEB_USER.TBLCHART
                             ? comment?.user?.fldName
                             : `@admin ${comment?.webUser?.UserName}`}
                         </p>
-                        <p className="text-[12px] text-gray-600  dark:text-gray-300">
+                        <p className="text-[12px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                           {formatTime(comment.createdAt)}
                         </p>
                       </div>
 
-                      <p className=" text-[13px] ">{comment.content}</p>
+                      <p className="text-[13px] text-light_mode_text dark:text-dark_mode_text">
+                        {comment.content}
+                      </p>
                       <button
                         onClick={() => {
                           handleReplyClick(comment.id);
@@ -210,18 +202,18 @@ export const Comments = ({
                                 <div className="w-[calc(100%-44px)] ml-3">
                                   <div>
                                     <div className="flex justify-between items-center w-full">
-                                      <p className="text-[14px] font-[600]">
+                                      <p className="text-[14px] font-[600] text-light_mode_text dark:text-dark_mode_text">
                                         {item?.user_type ===
                                         ALLOWED_WEB_USER.TBLCHART
                                           ? item?.user?.fldName
                                           : `@admin ${item?.webUser?.UserName}`}
                                       </p>
-                                      <p className="text-[12px] text-gray-600 dark:text-gray-300">
+                                      <p className="text-[12px] text-light_mode_gray_color dark:text-dark_mode_gray_color">
                                         {formatTime(item?.createdAt)}
                                       </p>
                                     </div>
 
-                                    <p className="text-[13px]">
+                                    <p className="text-[13px] text-light_mode_text dark:text-dark_mode_text">
                                       {item.content}
                                     </p>
 
@@ -255,8 +247,8 @@ export const Comments = ({
                 </div>
               </div>
             );
-          })}
-        </InfiniteScroll>
+          })
+        )}
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -266,7 +258,7 @@ export const Comments = ({
           <input
             {...register("commentText", { required: true })}
             placeholder="Write your comment..."
-            className="w-full px-3 py-[7px] border border-gray-400 rounded-lg text-sm"
+            className="w-full px-3 py-[7px] border border-light_mode_border1 dark:border-dark_mode_border1 rounded-lg text-sm bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text"
           />
           {errors.commentText && (
             <p className="text-red-500 text-xs mt-1">Comment is required</p>

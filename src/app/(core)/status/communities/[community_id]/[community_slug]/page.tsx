@@ -5,22 +5,12 @@ import { useParams, useRouter } from "next/navigation";
 
 import { MessageCircle, Send } from "lucide-react";
 import { useSelector } from "react-redux";
-import Slider from "react-slick";
 import {
-  useEngagementOnSpecificPostMutation,
   useGetPostOfSpecificCommuntiyQuery,
   useGetSingleCommunityQuery,
-  useGetTheUserPermissionToSeeTheCommunityMutation,
 } from "@/redux/api/core/communitiesApi";
-import { formattedDate } from "@/utils/coreUtils/formatedDate";
-import { formatTimeFromISO } from "@/utils/coreUtils/formatTimeFromISO";
-import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
 import "./index.css";
-import { Comments } from "./components/Comments";
 import CommunityDetailHeader from "./components/CommunityDetailHeader";
-import PostReact from "./components/PostReact";
-import PostSaved from "./components/PostSaved";
-import ShareModal from "./components/ShareModel";
 import PostDetailCardSkeletal from "./PostDetailCardSkeletal";
 import PostCard from "./components/PostCard";
 

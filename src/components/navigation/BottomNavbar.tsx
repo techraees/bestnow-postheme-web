@@ -29,9 +29,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
   cartCount = 0,
   navItems,
 }) => {
-  const user_profile = useSelector(
-    (state: any) => state.coreAppSlice.userProfile
-  );
+  const { user_profile } = useSelector((state: any) => state.coreAppSlice);
   console.log("user_profile", user_profile);
 
   const pathname = usePathname();
@@ -68,7 +66,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
     },
     {
       name: "Orders",
-      path: "/orders",
+      path: user_profile ? "/orders" : "/login",
       icon: (
         <OrderIcon className="w-5 h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110" />
       ),

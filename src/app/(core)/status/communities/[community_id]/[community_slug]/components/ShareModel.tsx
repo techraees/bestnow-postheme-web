@@ -14,7 +14,6 @@ import {
   TelegramIcon,
   TwitterIcon,
   WhatsappIcon,
-  InstagramIcon,
 } from "react-share";
 import { useEngagementOnSpecificPostMutation } from "@/redux/api/core/communitiesApi";
 import { toast } from "react-toastify";
@@ -173,7 +172,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ onClose, url, post_slug }) => {
               </span>
             </div>
           ))}
-          <div className="flex flex-col items-center space-y-1">
+          {/* <div className="flex flex-col items-center space-y-1">
             <button onClick={handleInstagramShare}>
               <img
                 src={InstagramIcon.src}
@@ -185,7 +184,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ onClose, url, post_slug }) => {
             <span className="text-xs font-bold text-black dark:text-white">
               Instagram
             </span>
-          </div>
+          </div> */}
         </div>
         <div className="flex items-center space-x-2 border border-gray-400 rounded-[10px] sm:px-3 px-1.5 sm:py-2.5 py-1.5">
           <input
