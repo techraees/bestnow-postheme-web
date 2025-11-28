@@ -55,6 +55,8 @@ const MenuModal = () => {
       ),
       label: "Home",
       onClick: () => {
+        router.push("/");
+
         console.log("Home clicked");
       },
     },
@@ -111,6 +113,8 @@ const MenuModal = () => {
       ),
       label: "Ledger",
       onClick: () => {
+        router.push("/ledger");
+
         console.log("Ledger clicked");
       },
     },

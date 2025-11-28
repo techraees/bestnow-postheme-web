@@ -159,7 +159,7 @@ export default function Home() {
   const transformedProducts = products.map((product) => ({
     id: product.id || "",
     title: product.product_name || "",
-    image: product.images?.[0] ? getImgBaseUrl(product.images[0]) : "",
+    image: product.images?.[0] ? product.images[0] : "",
     rating: product.rating || 4.5,
     soldCount: product.stock_status?.LABEL || "Stock very low",
     price: product.productPrice || 0,
