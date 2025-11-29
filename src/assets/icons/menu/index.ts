@@ -13,3 +13,4 @@ export { default as QuickOrderIcon } from "./QuickOrderIcon";
 export { default as SearchIcon } from "./SearchIcon";
 export { default as DiscountIcon } from "./DiscountIcon";
 export { default as ArrowDescrptionIcon } from "./ArrowDescrptionIcon";
+export { default as StatusIcon } from "./StatusIcon";

@@ -155,14 +155,14 @@ const LedgerDateDetailPage = () => {
         </div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pb-4 md:py-6">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-6 lg:py-8 pb-8 md:pb-12 lg:pb-16">
         {/* Summary Cards */}
-        <div className="space-y-2 md:space-y-4 mb-4 md:mb-6">
+        <div className="space-y-3 md:space-y-4 mb-4 md:mb-6 lg:mb-8">
           {/* Closing Balance Card */}
           <ClosingBalanceCard balance={closingBalance} />
 
           {/* Debit and Credit Cards */}
-          <div className="grid grid-cols-2 gap-2 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             <DebitCreditCard amount={debitAmount} label="Debit" />
             <DebitCreditCard amount={creditAmount} label="Credit" />
           </div>

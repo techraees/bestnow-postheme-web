@@ -1,35 +1,17 @@
 "use client";
 
 import React from "react";
-import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
 import { THEME_DATA } from "@/data/coreData/coreData";
 import { useFollowCommunityMutation } from "@/redux/api/core/communitiesApi";
 import { useSelector } from "react-redux";
-import {
-  Dark_Mode_Bestnow_Icon,
-  Light_Mode_Bestnow_Icon,
-} from "@/assets/coreAssets/coreAssets";
-import Link from "next/link";
+import { BestonDarkLogo, BestonLightLogo } from "@/assets/icons/logo";
 import { useRouter } from "next/navigation";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
+import Link from "next/link";
 
-interface CommunityDetailHeaderProps {
-  item?: {
-    slug: string;
-    name: string;
-    profile_photo_url?: string;
-    community_member_count: number;
-    follow: boolean;
-  };
-  refetch: () => void;
-}
-
-const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
-  item,
-  refetch,
-}) => {
+const CommunityDetailHeader: React.FC<> = ({ item, refetch }) => {
   const { theme_mode } = useSelector((state: any) => state.coreAppSlice);
   const { user_profile } = useSelector((state: any) => state.coreAppSlice);
   const router = useRouter();
@@ -61,7 +43,7 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
               <div className="w-[24px] h-[24px] object-cover">
                 {item?.profile_photo_url ? (
                   <img
-                    src={getImgBaseUrl(item.profile_photo_url)}
+                    src={item.profile_photo_url}
                     alt="Community"
                     className="w-full h-full object-cover"
                   />
@@ -69,8 +51,8 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
                   <img
                     src={
                       theme_mode === THEME_DATA.DARK
-                        ? Dark_Mode_Bestnow_Icon.src
-                        : Light_Mode_Bestnow_Icon.src
+                        ? BestonDarkLogo.src
+                        : BestonLightLogo.src
                     }
                     alt="Default"
                     className="w-full h-full object-cover"

@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import SearchHeader from "./SearchHeader";
+
 import { ProductGrid } from "@/components/products";
+import SearchHeader from "./SearchHeader";
 
 export interface SearchProduct {
   id: string;

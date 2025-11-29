@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "adminapi.beston.co",
-        pathname: "/uploads/**",
+        pathname: "/**",
       },
     ],
   },

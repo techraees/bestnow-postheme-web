@@ -9,9 +9,11 @@ import {
   CartIcon,
   OrderIcon,
   ProfileIcon,
+  StatusIcon,
 } from "@/assets";
 import { useSelector } from "react-redux";
 import { truncateString } from "@/utils/coreUtils/truncateTexts";
+import { useGetCartItemsCountQuery } from "@/redux/api/core/cartApi";
 
 export interface NavItem {
   name: string;
@@ -25,14 +27,12 @@ interface BottomNavbarProps {
   navItems?: NavItem[];
 }
 
-const BottomNavbar: React.FC<BottomNavbarProps> = ({
-  cartCount = 0,
-  navItems,
-}) => {
-  const user_profile = useSelector(
-    (state: any) => state.coreAppSlice.userProfile
-  );
+const BottomNavbar: React.FC<BottomNavbarProps> = ({ navItems }) => {
+  const { user_profile } = useSelector((state: any) => state.coreAppSlice);
   console.log("user_profile", user_profile);
+  const { data: cartItemsCount } = useGetCartItemsCountQuery();
+
+  const cartCount = cartItemsCount?.payload || 0;
 
   const pathname = usePathname();
 
@@ -45,15 +45,15 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
       ),
     },
     {
-      name: "Favorites",
-      path: "/favorites",
+      name: "Status",
+      path: user_profile ? "/status" : "/login",
       icon: (
-        <FaviourteIcon className="w-5 h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110" />
+        <StatusIcon className="w-5 h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110" />
       ),
     },
     {
       name: "Cart",
-      path: "/cart",
+      path: user_profile ? "/cart" : "/login",
       icon: (
         <div className="relative">
           <CartIcon className="w-8 h-8 md:w-6 md:h-6 transition-transform group-hover:scale-110" />
@@ -68,7 +68,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
     },
     {
       name: "Orders",
-      path: "/orders",
+      path: user_profile ? "/orders" : "/login",
       icon: (
         <OrderIcon className="w-5 h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110" />
       ),

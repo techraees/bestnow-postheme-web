@@ -15,6 +15,7 @@ import {
   useGetCartItemsIdsQuery,
 } from "@/redux/api/core/cartApi";
 import { toast } from "react-toastify";
+import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
 
 interface ProductCardProps {
   id: string;
@@ -129,7 +130,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Product Image */}
           <div className="relative w-full h-full rounded-2xl flex items-center justify-center overflow-hidden">
             <Image
-              src={image}
+              src={getImgBaseUrl(image)}
               alt={title}
               width={190}
               height={190}

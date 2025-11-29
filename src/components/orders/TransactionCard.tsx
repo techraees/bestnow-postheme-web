@@ -66,19 +66,17 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
   const statusConfig = getStatusConfig();
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base font-medium shrink-0 w-6 md:w-8 text-left">
+    <div className="flex items-center gap-2 md:gap-3">
+      <span className="text-light_mode_text dark:text-dark_mode_text text-xs md:text-sm lg:text-base font-medium shrink-0 w-6 md:w-8 lg:w-10 text-left">
         {String(index).padStart(2, "0")}
       </span>
       <button
         onClick={handleClick}
-        className="w-full flex-1 flex items-center gap-3 md:gap-4 p-4.5 md:p-4 bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-3xl hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 active:scale-[0.98] transition-all duration-200"
+        className="w-full flex-1 flex items-center gap-2 md:gap-3 lg:gap-4 p-3 md:p-4 lg:p-5 bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl md:rounded-2xl hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 active:scale-[0.98] transition-all duration-200 group"
       >
-        {/* Index Number */}
-
         {/* Transaction Details */}
-        <div className="flex-1 flex flex-col gap-2">
-          <span className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg font-semibold text-left">
+        <div className="flex-1 flex flex-col gap-1.5 md:gap-2 min-w-0">
+          <span className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base lg:text-lg font-semibold text-left truncate">
             {transactionId}
           </span>
           <span className="text-light_mode_gray_color dark:text-dark_mode_gray_color text-xs md:text-sm text-left">
@@ -87,20 +85,22 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
         </div>
 
         {/* Status and Amount */}
-        <div className="flex flex-col items-end gap-2 shrink-0 ">
-          <div className={`flex items-center gap-1.5 ${statusConfig.color}`}>
+        <div className="flex flex-col items-end gap-1.5 md:gap-2 shrink-0">
+          <div
+            className={`flex items-center gap-1 md:gap-1.5 ${statusConfig.color}`}
+          >
             {statusConfig.icon}
-            <span className="text-sm md:text-base font-medium">
+            <span className="text-xs md:text-sm lg:text-base font-medium whitespace-nowrap">
               {statusConfig.text}
             </span>
           </div>
-          <span className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg font-semibold">
+          <span className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base lg:text-lg font-semibold whitespace-nowrap">
             {amount}
           </span>
         </div>
 
         {/* Arrow Icon */}
-        <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-light_mode_text dark:text-dark_mode_text opacity-60 shrink-0" />
+        <ChevronRight className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-light_mode_text dark:text-dark_mode_text opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0" />
       </button>
     </div>
   );

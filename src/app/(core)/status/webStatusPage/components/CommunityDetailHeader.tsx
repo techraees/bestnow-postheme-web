@@ -54,9 +54,10 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
           <div className="flex items-center">
             <div className="w-[40px] h-[40px]  rounded-full overflow-hidden flex justify-center items-center">
               <div className="w-[24px] h-[24px] object-cover">
-                <SmartImage
-                  src={getImgBaseUrl(item?.profile_photo_url)}
-                  customDiv={true}
+                <img
+                  src={item?.profile_photo_url}
+                  alt={item?.name}
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>

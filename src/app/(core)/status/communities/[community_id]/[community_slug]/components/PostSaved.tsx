@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useEngagementOnSpecificPostMutation } from "@/redux/api/core/communitiesApi";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 

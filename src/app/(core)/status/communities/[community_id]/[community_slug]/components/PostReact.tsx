@@ -2,7 +2,7 @@
 
 import { Heart } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useEngagementOnSpecificPostMutation } from "@/redux/api/core/communitiesApi";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";

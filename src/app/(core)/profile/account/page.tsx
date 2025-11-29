@@ -2,15 +2,19 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import SubHeader from "@/components/navigation/SubHeader";
-import { AccountField, ChangeEmailModal, ChangePasswordModal } from "@/components/profile";
+import {
+  AccountField,
+  ChangeEmailModal,
+  ChangePasswordModal,
+} from "@/components/profile";
 import { User, Mail, Phone, Lock, X } from "lucide-react";
 
 const AccountPage = () => {
   const router = useRouter();
   const [isChangeEmailModalOpen, setIsChangeEmailModalOpen] = useState(false);
-  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
+    useState(false);
   const [isChangePhoneModalOpen, setIsChangePhoneModalOpen] = useState(false);
   const [isChangeNameModalOpen, setIsChangeNameModalOpen] = useState(false);
 
@@ -48,42 +52,85 @@ const AccountPage = () => {
   };
 
   return (
-    <TopSpacingWrapper>
+    <>
       <SubHeader title="Account" subtitle="Done" />
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8">
-        {/* Full Name Field */}
-        <AccountField
-          label="Full name"
-          icon={<User className="w-5 h-5 md:w-6 md:h-6" />}
-          value={fullName}
-          onChange={() => setIsChangeNameModalOpen(true)}
-        />
+        {/* Desktop Layout */}
+        <div className="hidden lg:block">
+          <div className="bg-light_mode_color1 dark:bg-dark_mode_color1 rounded-2xl shadow-lg p-8 lg:p-10">
+            <div className="space-y-6">
+              {/* Full Name Field */}
+              <AccountField
+                label="Full name"
+                icon={<User className="w-5 h-5" />}
+                value={fullName}
+                onChange={() => setIsChangeNameModalOpen(true)}
+              />
 
-        {/* Email Address Field */}
-        <AccountField
-          label="Email address"
-          icon={<Mail className="w-5 h-5 md:w-6 md:h-6" />}
-          value={email}
-          onChange={() => setIsChangeEmailModalOpen(true)}
-        />
+              {/* Email Address Field */}
+              <AccountField
+                label="Email address"
+                icon={<Mail className="w-5 h-5" />}
+                value={email}
+                onChange={() => setIsChangeEmailModalOpen(true)}
+              />
 
-        {/* Mobile Number Field */}
-        <AccountField
-          label="Mobile Number"
-          icon={<Phone className="w-5 h-5 md:w-6 md:h-6" />}
-          value={mobileNumber}
-          onChange={() => setIsChangePhoneModalOpen(true)}
-        />
+              {/* Mobile Number Field */}
+              <AccountField
+                label="Mobile Number"
+                icon={<Phone className="w-5 h-5" />}
+                value={mobileNumber}
+                onChange={() => setIsChangePhoneModalOpen(true)}
+              />
 
-        {/* Password Field */}
-        <AccountField
-          label="Your Password"
-          icon={<Lock className="w-5 h-5 md:w-6 md:h-6" />}
-          value={password}
-          type="password"
-          onChange={() => setIsChangePasswordModalOpen(true)}
-        />
+              {/* Password Field */}
+              <AccountField
+                label="Your Password"
+                icon={<Lock className="w-5 h-5" />}
+                value={password}
+                type="password"
+                onChange={() => setIsChangePasswordModalOpen(true)}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="lg:hidden">
+          {/* Full Name Field */}
+          <AccountField
+            label="Full name"
+            icon={<User className="w-5 h-5 md:w-6 md:h-6" />}
+            value={fullName}
+            onChange={() => setIsChangeNameModalOpen(true)}
+          />
+
+          {/* Email Address Field */}
+          <AccountField
+            label="Email address"
+            icon={<Mail className="w-5 h-5 md:w-6 md:h-6" />}
+            value={email}
+            onChange={() => setIsChangeEmailModalOpen(true)}
+          />
+
+          {/* Mobile Number Field */}
+          <AccountField
+            label="Mobile Number"
+            icon={<Phone className="w-5 h-5 md:w-6 md:h-6" />}
+            value={mobileNumber}
+            onChange={() => setIsChangePhoneModalOpen(true)}
+          />
+
+          {/* Password Field */}
+          <AccountField
+            label="Your Password"
+            icon={<Lock className="w-5 h-5 md:w-6 md:h-6" />}
+            value={password}
+            type="password"
+            onChange={() => setIsChangePasswordModalOpen(true)}
+          />
+        </div>
       </div>
 
       {/* Change Email Modal */}
@@ -117,8 +164,8 @@ const AccountPage = () => {
 
       {/* Change Name Modal - Can create similar modal or reuse */}
       {isChangeNameModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-          <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-3xl p-6 md:p-8 w-full max-w-md mx-4 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+          <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-3xl p-6 md:p-8 w-full max-w-md shadow-xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-light_mode_text dark:text-dark_mode_text text-xl md:text-2xl font-semibold">
                 Change Full name
@@ -151,9 +198,8 @@ const AccountPage = () => {
           </div>
         </div>
       )}
-    </TopSpacingWrapper>
+    </>
   );
 };
 
 export default AccountPage;
-

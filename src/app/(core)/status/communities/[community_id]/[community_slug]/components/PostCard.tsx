@@ -90,7 +90,7 @@ const PostCard = ({ post, community_id }: { post: any; community_id: any }) => {
   };
   return (
     <>
-      <div className="bg-white   dark:bg-dark_mode_primary_overlay_5 rounded-lg p-2 shadow-md">
+      <div className=" bg-light_mode_color dark:bg-dark_mode_color rounded-lg p-2 shadow-md">
         <p className="mt-1 mb-5 text-[1.25rem]" style={{ fontWeight: 500 }}>
           {post?.title}
         </p>

@@ -92,7 +92,7 @@ const Communities: React.FC<CommunitiesProps> = ({
                     >
                       <div className="flex items-center">
                         <Image
-                          src={getImgBaseUrl(item.profile_photo_url)}
+                          src={item.profile_photo_url}
                           alt={item.name}
                           width={40}
                           height={40}

@@ -44,18 +44,19 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         </div> */}
 
         {/* Search Input */}
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-          <SearchInput
-            initialValue={searchQuery}
-            onSearchChange={onSearchChange}
-            onSearchSubmit={onSearchSubmit}
-            onFilterClick={onFilterClick}
-            placeholder="Search products..."
-          />
+        <div className="w-full flex lg:justify-end justify-baseline  px-4 sm:px-6 lg:px-16 mt-4 md:mt-6">
+          <div className="lg:w-[300px] w-full">
+            <SearchInput
+              initialValue={searchQuery}
+              onSearchChange={(query) => {
+                onSearchChange(query);
+              }}
+              placeholder="Search products..."
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default SearchHeader;

@@ -136,221 +136,313 @@ const CheckoutPage = () => {
   return (
     <TopSpacingWrapper>
       <SubHeader title="Checkout" subtitle="" />
-      <div className="min-h-[calc(100vh-230px)] bg-light_mode_color dark:bg-dark_mode_color w-full">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-5 lg:py-6">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Customer Information Section */}
-            <div className="space-y-4">
-              <h2 className="text-light_mode_text dark:text-dark_mode_text text-xl md:text-2xl font-semibold mb-4">
-                Customer Information
-              </h2>
+      <div className="min-h-[calc(100vh-230px)] bg-light_mode_color dark:bg-dark_mode_color w-full pb-0 md:pb-0 lg:pb-0 relative">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-6 lg:py-8">
+          <form id="checkout-form" onSubmit={handleSubmit(onSubmit)}>
+            {/* Two Column Layout for Desktop */}
+            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 pb-[200px] md:pb-0 lg:pb-0">
+              {/* Left Column - Customer Info & Order Items (Scrollable on Desktop) */}
+              <div className="w-full lg:w-2/3 space-y-6 md:space-y-8">
+                {/* Customer Information Section */}
+                <div className="lg:bg-light_mode_color1 lg:dark:bg-dark_mode_color1 rounded-xl md:rounded-2xl p-0 md:p-6 lg:p-8 space-y-4 md:space-y-5">
+                  <h2 className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl lg:text-2xl font-semibold mb-4 md:mb-6">
+                    Customer Information
+                  </h2>
 
-              {/* Name - Read Only */}
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
-                  <User size={20} />
-                </span>
-                <input
-                  type="text"
-                  value={userName}
-                  readOnly
-                  disabled
-                  className="w-full rounded-lg border py-3 pl-10 pr-4 text-light_mode_text dark:text-dark_mode_text bg-light_mode_color2 dark:bg-dark_mode_color2 border-light_mode_color2 dark:border-dark_mode_color2 opacity-60 cursor-not-allowed"
-                  placeholder="Name"
-                />
-              </div>
-
-              {/* Phone - Read Only */}
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
-                  <Phone size={20} />
-                </span>
-                <input
-                  type="text"
-                  value={userPhone}
-                  readOnly
-                  disabled
-                  className="w-full rounded-lg border py-3 pl-10 pr-4 text-light_mode_text dark:text-dark_mode_text bg-light_mode_color2 dark:bg-dark_mode_color2 border-light_mode_color2 dark:border-dark_mode_color2 opacity-60 cursor-not-allowed"
-                  placeholder="Phone Number"
-                />
-              </div>
-
-              {/* Actual Phone Number - Editable */}
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
-                  <Phone size={20} />
-                </span>
-                <input
-                  type="text"
-                  {...register("new_active_phone_number")}
-                  className={`w-full rounded-lg border py-3 pl-10 pr-4 text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color2 dark:bg-dark_mode_color2 ${
-                    errors.new_active_phone_number
-                      ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
-                      : "border-transparent focus:outline-none focus:ring-2 focus:ring-light_mode_blue_color dark:focus:ring-dark_mode_blue_color focus:border focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
-                  }`}
-                  placeholder="Enter actual phone number"
-                  maxLength={11}
-                />
-                {errors.new_active_phone_number && (
-                  <span className="text-sm text-red-500 mt-1 ml-1 block">
-                    {errors.new_active_phone_number?.message}
-                  </span>
-                )}
-              </div>
-
-              {/* City - Editable */}
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
-                  <Building2 size={20} />
-                </span>
-                <input
-                  type="text"
-                  {...register("new_type_city")}
-                  className={`w-full rounded-lg border py-3 pl-10 pr-4 text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color2 dark:bg-dark_mode_color2 ${
-                    errors.new_type_city
-                      ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
-                      : "border-transparent focus:outline-none focus:ring-2 focus:ring-light_mode_blue_color dark:focus:ring-dark_mode_blue_color focus:border focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
-                  }`}
-                  placeholder="City"
-                />
-                {errors.new_type_city && (
-                  <span className="text-sm text-red-500 mt-1 ml-1 block">
-                    {errors.new_type_city.message}
-                  </span>
-                )}
-              </div>
-
-              {/* Address - Editable */}
-              <div className="relative">
-                <span className="absolute left-3 top-3 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
-                  <MapPin size={20} />
-                </span>
-                <textarea
-                  {...register("whole_address_of_customer")}
-                  rows={3}
-                  className={`w-full rounded-lg border py-3 pl-10 pr-4 text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color2 dark:bg-dark_mode_color2 resize-none ${
-                    errors.whole_address_of_customer
-                      ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
-                      : "border-transparent focus:outline-none focus:ring-2 focus:ring-light_mode_blue_color dark:focus:ring-dark_mode_blue_color focus:border focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
-                  }`}
-                  placeholder="Enter complete address"
-                />
-                {errors.whole_address_of_customer && (
-                  <span className="text-sm text-red-500 mt-1 ml-1 block">
-                    {errors.whole_address_of_customer.message}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Cart Items Section */}
-            <div className="space-y-4">
-              <h2 className="text-light_mode_text dark:text-dark_mode_text text-xl md:text-2xl font-semibold mb-4">
-                Order Items
-              </h2>
-
-              {isCartLoading ? (
-                <div className="space-y-1 md:space-y-4 lg:space-y-5">
-                  {Array.from({ length: 3 }).map((_, index) => (
-                    <CartItemSkeleton key={`skeleton-${index}`} />
-                  ))}
-                </div>
-              ) : items.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-8">
-                  <p className="text-light_mode_text dark:text-dark_mode_text text-lg">
-                    No items in cart
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-1 md:space-y-4 lg:space-y-5">
-                  {items.map((item) => (
-                    <CartItem
-                      key={item.id}
-                      id={item.id}
-                      name={item.product_name}
-                      image={item.image}
-                      unitPrice={item.price_rate}
-                      quantity={item.quantity}
-                      onQuantityChange={handleQuantityChange}
-                      onRemove={handleRemoveItem}
-                      onUpdateSuccess={handleUpdateSuccess}
+                  {/* Name - Read Only */}
+                  <div className="relative">
+                    <span className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
+                      <User className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
+                    <input
+                      type="text"
+                      value={userName}
+                      readOnly
+                      disabled
+                      className="w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text bg-light_mode_color dark:bg-dark_mode_color border-light_mode_color3 dark:border-dark_mode_color3 opacity-60 cursor-not-allowed"
+                      placeholder="Name"
                     />
-                  ))}
+                  </div>
+
+                  {/* Phone - Read Only */}
+                  <div className="relative">
+                    <span className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
+                      <Phone className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
+                    <input
+                      type="text"
+                      value={userPhone}
+                      readOnly
+                      disabled
+                      className="w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text bg-light_mode_color dark:bg-dark_mode_color border-light_mode_color3 dark:border-dark_mode_color3 opacity-60 cursor-not-allowed"
+                      placeholder="Phone Number"
+                    />
+                  </div>
+
+                  {/* Actual Phone Number - Editable */}
+                  <div className="relative">
+                    <span className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
+                      <Phone className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
+                    <input
+                      type="text"
+                      {...register("new_active_phone_number")}
+                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color ${
+                        errors.new_active_phone_number
+                          ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
+                          : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
+                      }`}
+                      placeholder="Enter actual phone number"
+                      maxLength={11}
+                    />
+                    {errors.new_active_phone_number && (
+                      <span className="text-xs md:text-sm text-red-500 mt-1 ml-1 block">
+                        {errors.new_active_phone_number?.message as string}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* City - Editable */}
+                  <div className="relative">
+                    <span className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
+                      <Building2 className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
+                    <input
+                      type="text"
+                      {...register("new_type_city")}
+                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color ${
+                        errors.new_type_city
+                          ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
+                          : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
+                      }`}
+                      placeholder="City"
+                    />
+                    {errors.new_type_city && (
+                      <span className="text-xs md:text-sm text-red-500 mt-1 ml-1 block">
+                        {errors.new_type_city.message as string}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Address - Editable */}
+                  <div className="relative">
+                    <span className="absolute left-3 md:left-4 top-3 md:top-4 text-light_mode_gray1_color dark:text-dark_mode_gray1_color pointer-events-none">
+                      <MapPin className="w-4 h-4 md:w-5 md:h-5" />
+                    </span>
+                    <textarea
+                      {...register("whole_address_of_customer")}
+                      rows={3}
+                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color resize-none ${
+                        errors.whole_address_of_customer
+                          ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
+                          : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
+                      }`}
+                      placeholder="Enter complete address"
+                    />
+                    {errors.whole_address_of_customer && (
+                      <span className="text-xs md:text-sm text-red-500 mt-1 ml-1 block">
+                        {errors.whole_address_of_customer.message as string}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              )}
+
+                {/* Cart Items Section */}
+                <div className="lg:bg-light_mode_color1 lg:dark:bg-dark_mode_color1 rounded-xl md:rounded-2xl p-0 md:p-6 lg:p-8 space-y-4 md:space-y-5">
+                  <h2 className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl lg:text-2xl font-semibold mb-4 md:mb-6">
+                    Order Items
+                  </h2>
+
+                  {isCartLoading ? (
+                    <div className="space-y-2 md:space-y-3 lg:space-y-4">
+                      {Array.from({ length: 3 }).map((_, index) => (
+                        <CartItemSkeleton key={`skeleton-${index}`} />
+                      ))}
+                    </div>
+                  ) : items.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-8 md:py-12">
+                      <svg
+                        className="w-16 h-16 md:w-20 md:h-20 text-light_mode_gray_color dark:text-dark_mode_gray_color opacity-50 mb-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                        />
+                      </svg>
+                      <p className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg font-medium">
+                        No items in cart
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2 md:space-y-3 lg:space-y-4">
+                      {items.map((item) => (
+                        <CartItem
+                          key={item.id}
+                          id={item.id}
+                          name={item.product_name}
+                          image={item.image}
+                          unitPrice={item.price_rate}
+                          quantity={item.quantity}
+                          onQuantityChange={handleQuantityChange}
+                          onRemove={handleRemoveItem}
+                          onUpdateSuccess={handleUpdateSuccess}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column - Order Summary (Fixed Bottom on Mobile, Fixed on Desktop) */}
+              <div className="w-full lg:w-1/3 lg:hidden">
+                {items.length > 0 && (
+                  <div className="fixed bottom-0 left-0 right-0 md:relative md:bottom-auto md:left-auto md:right-auto z-50 md:z-auto">
+                    <div className="bg-light_mode_color1 dark:bg-dark_mode_color1 rounded-t-2xl md:rounded-xl p-4 md:p-6 lg:p-8 space-y-4 md:space-y-5 shadow-2xl md:shadow-none border-t border-light_mode_color3 dark:border-dark_mode_color3 md:border-t-0">
+                      <h2 className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl lg:text-2xl font-semibold mb-4 md:mb-6">
+                        Order Summary
+                      </h2>
+
+                      <div className="space-y-3 md:space-y-4">
+                        <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+                          <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
+                            Sub Total
+                          </span>
+                          <span className="text-light_mode_text dark:text-dark_mode_text font-semibold">
+                            {formatPrice(total)}
+                          </span>
+                        </div>
+
+                        {previousBalance !== 0 && (
+                          <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+                            <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
+                              Prev. Bal
+                            </span>
+                            <span
+                              className={`font-semibold ${
+                                previousBalance < 0
+                                  ? "text-red-500 dark:text-red-400"
+                                  : "text-light_mode_text dark:text-dark_mode_text"
+                              }`}
+                            >
+                              {formatPrice(previousBalance)}
+                            </span>
+                          </div>
+                        )}
+
+                        {discount !== 0 && (
+                          <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+                            <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
+                              Discount
+                            </span>
+                            <span className="text-green-500 dark:text-green-400 font-semibold">
+                              -{formatPrice(discount)}
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="border-t border-light_mode_color3 dark:border-dark_mode_color3 my-2 md:my-3 pt-3 md:pt-4"></div>
+
+                        <div className="flex justify-between items-center">
+                          <span className="text-light_mode_text dark:text-dark_mode_text font-bold text-base md:text-lg lg:text-xl">
+                            Total Payable
+                          </span>
+                          <span className="text-light_mode_text dark:text-dark_mode_text font-bold text-base md:text-lg lg:text-xl">
+                            {formatPrice(totalPayable)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Place Order Button */}
+                      <button
+                        type="submit"
+                        disabled={isPlacingOrder || isCartLoading}
+                        className="w-full bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color hover:opacity-90 active:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed text-dark_mode_color dark:text-light_mode_text font-bold py-3 md:py-4 lg:py-5 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg transition-all active:scale-[0.98] shadow-lg hover:shadow-xl mt-4 md:mt-6"
+                      >
+                        {isPlacingOrder ? "Placing Order..." : "Place Order"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+          </form>
+        </div>
 
-            {/* Summary Section */}
-            {items.length > 0 && (
-              <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl p-4 md:p-6 space-y-3">
-                <h2 className="text-light_mode_text dark:text-dark_mode_text text-xl md:text-2xl font-semibold mb-4">
-                  Order Summary
-                </h2>
+        {/* Desktop Fixed Summary - Outside Container */}
+        {items.length > 0 && (
+          <div className="hidden lg:block fixed top-[calc(120px+1.5rem)] right-[max(1.5rem,calc((100vw-1600px)/2+1.5rem))] w-[calc((1600px-2rem)*0.333)] max-w-md z-40">
+            <div className="bg-light_mode_color1 dark:bg-dark_mode_color1 rounded-2xl p-6 lg:p-8 space-y-4 md:space-y-5 shadow-2xl">
+              <h2 className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl lg:text-2xl font-semibold mb-4 md:mb-6">
+                Order Summary
+              </h2>
 
-                <div className="space-y-2 md:space-y-3">
+              <div className="space-y-3 md:space-y-4">
+                <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+                  <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
+                    Sub Total
+                  </span>
+                  <span className="text-light_mode_text dark:text-dark_mode_text font-semibold">
+                    {formatPrice(total)}
+                  </span>
+                </div>
+
+                {previousBalance !== 0 && (
                   <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
                     <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
-                      Sub Total
+                      Prev. Bal
                     </span>
-                    <span className="text-light_mode_text dark:text-dark_mode_text font-semibold">
-                      {formatPrice(total)}
-                    </span>
-                  </div>
-
-                  {previousBalance !== 0 && (
-                    <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
-                      <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
-                        Prev. Bal
-                      </span>
-                      <span
-                        className={`font-semibold ${
-                          previousBalance < 0
-                            ? "text-red-500 dark:text-red-400"
-                            : "text-light_mode_text dark:text-dark_mode_text"
-                        }`}
-                      >
-                        {formatPrice(previousBalance)}
-                      </span>
-                    </div>
-                  )}
-
-                  {discount !== 0 && (
-                    <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
-                      <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
-                        Discount
-                      </span>
-                      <span className="text-green-500 dark:text-green-400 font-semibold">
-                        -{formatPrice(discount)}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="border-t border-light_mode_color3 dark:border-dark_mode_color3 my-2 md:my-3 pt-2 md:pt-3"></div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-light_mode_text dark:text-dark_mode_text font-bold text-base md:text-lg lg:text-xl">
-                      Total Payable
-                    </span>
-                    <span className="text-light_mode_text dark:text-dark_mode_text font-bold text-base md:text-lg lg:text-xl">
-                      {formatPrice(totalPayable)}
+                    <span
+                      className={`font-semibold ${
+                        previousBalance < 0
+                          ? "text-red-500 dark:text-red-400"
+                          : "text-light_mode_text dark:text-dark_mode_text"
+                      }`}
+                    >
+                      {formatPrice(previousBalance)}
                     </span>
                   </div>
+                )}
+
+                {discount !== 0 && (
+                  <div className="flex justify-between items-center text-sm md:text-base lg:text-lg">
+                    <span className="text-light_mode_text dark:text-dark_mode_text font-medium">
+                      Discount
+                    </span>
+                    <span className="text-green-500 dark:text-green-400 font-semibold">
+                      -{formatPrice(discount)}
+                    </span>
+                  </div>
+                )}
+
+                <div className="border-t border-light_mode_color3 dark:border-dark_mode_color3 my-2 md:my-3 pt-3 md:pt-4"></div>
+
+                <div className="flex justify-between items-center">
+                  <span className="text-light_mode_text dark:text-dark_mode_text font-bold text-base md:text-lg lg:text-xl">
+                    Total Payable
+                  </span>
+                  <span className="text-light_mode_text dark:text-dark_mode_text font-bold text-base md:text-lg lg:text-xl">
+                    {formatPrice(totalPayable)}
+                  </span>
                 </div>
               </div>
-            )}
 
-            {/* Place Order Button */}
-            {items.length > 0 && (
+              {/* Place Order Button */}
               <button
                 type="submit"
+                form="checkout-form"
                 disabled={isPlacingOrder || isCartLoading}
-                className="w-full bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color hover:opacity-90 active:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed text-dark_mode_color dark:text-light_mode_text font-bold py-3 md:py-4 lg:py-5 rounded-2xl text-sm md:text-base lg:text-lg transition-all active:scale-[0.98] shadow-md"
+                className="w-full bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color hover:opacity-90 active:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed text-dark_mode_color dark:text-light_mode_text font-bold py-3 md:py-4 lg:py-5 rounded-2xl text-sm md:text-base lg:text-lg transition-all active:scale-[0.98] shadow-lg hover:shadow-xl mt-4 md:mt-6"
               >
                 {isPlacingOrder ? "Placing Order..." : "Place Order"}
               </button>
-            )}
-          </form>
-        </div>
+            </div>
+          </div>
+        )}
       </div>
     </TopSpacingWrapper>
   );

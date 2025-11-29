@@ -45,6 +45,9 @@ export const coreApi = createApi({
     getAllSocialLinks: builder.query<any, void>({
       query: () => `/common-features/social-links/get`,
     }),
+    getAllCategories: builder.query({
+      query: () => `/mobile-accessories/web/sales/products/category-list`,
+    }),
   }),
 });
 
@@ -56,4 +59,5 @@ export const {
   useVerifyImageFaceDetectionMutation,
   useGetSignupContactNumberQuery,
   useGetAllSocialLinksQuery,
+  useGetAllCategoriesQuery,
 } = coreApi;

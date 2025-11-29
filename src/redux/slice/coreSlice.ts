@@ -15,7 +15,7 @@ export interface UserProfile {
 // ----- State -----
 interface CoreAppState {
   theme_mode: string | null;
-  userProfile: UserProfile | null;
+  user_profile: UserProfile | null;
   userStatus: "idle" | "loading" | "succeeded" | "failed";
   userError?: string;
   expandedCourierForm: boolean;
@@ -35,7 +35,7 @@ function getInitialTheme(): string {
 
 const initialState: CoreAppState = {
   theme_mode: getInitialTheme(),
-  userProfile: null,
+  user_profile: null,
   userStatus: "idle",
   expandedCourierForm: false,
   headerHeightPx: undefined,
@@ -49,7 +49,7 @@ export const coreAppSlice = createSlice({
   reducers: {
     // manual overrides if needed
     setUserProfile(state, action: PayloadAction<UserProfile | null>) {
-      state.userProfile = action.payload;
+      state.user_profile = action.payload;
       state.userStatus = action.payload ? "succeeded" : "idle";
       state.userError = undefined;
     },
@@ -57,7 +57,7 @@ export const coreAppSlice = createSlice({
       state.userStatus = action.payload;
     },
     clearUser(state) {
-      state.userProfile = null;
+      state.user_profile = null;
       state.userStatus = "idle";
       state.userError = undefined;
     },
@@ -110,7 +110,7 @@ export const coreAppSlice = createSlice({
     builder.addMatcher(
       authProfileApi.endpoints.verifyToken.matchFulfilled,
       (state, { payload }: any) => {
-        state.userProfile = payload?.data || payload || null;
+        state.user_profile = payload?.data || payload || null;
         state.userStatus = "succeeded";
         state.userError = undefined;
       }
@@ -121,7 +121,7 @@ export const coreAppSlice = createSlice({
       (state, { error }) => {
         state.userStatus = "failed";
         state.userError = (error as any)?.message || "Failed to load profile";
-        state.userProfile = null;
+        state.user_profile = null;
       }
     );
   },
@@ -145,7 +145,7 @@ export const {
 export const selectCoreApp = (state: { coreApp: CoreAppState }) =>
   state.coreApp;
 export const selectUserProfile = (state: { coreApp: CoreAppState }) =>
-  state.coreApp.userProfile;
+  state.coreApp.user_profile;
 export const selectUserStatus = (state: { coreApp: CoreAppState }) =>
   state.coreApp.userStatus;
 export const selectUserError = (state: { coreApp: CoreAppState }) =>
