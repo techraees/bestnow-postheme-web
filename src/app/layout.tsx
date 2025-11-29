@@ -30,9 +30,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-dark_mode_primary text-black dark:text-white`}
       >
+
         <StoreProvider>
           <ThemeProvider>
             <main className="min-h-screen bg-white dark:bg-dark_mode_primary">
