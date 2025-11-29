@@ -11,6 +11,7 @@ import {
 } from "@/redux/api/core/cartApi";
 import { toast } from "react-toastify";
 import { BannerImage } from "@/assets";
+import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
 
 interface Product {
   id: number;
@@ -141,7 +142,6 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
     return "text-light_mode_gray_color dark:text-dark_mode_gray_color";
   };
 
-
   return (
     <div
       ref={dropdownRef}
@@ -164,7 +164,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                 {/* Product Image */}
                 <div className="relative w-20 h-20 md:w-24 md:h-24 shrink-0 bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
                   <Image
-                    src={product.image}
+                    src={getImgBaseUrl(product.image)}
                     alt={product.product_name}
                     fill
                     className="object-contain p-1.5"
