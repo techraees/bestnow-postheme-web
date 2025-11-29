@@ -1,11 +1,64 @@
+"use client";
+
 import { AuthBgImage } from "@/assets";
 import Image from "next/image";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { useVerifyTokenQuery } from "@/redux/api/auth/customerAuthProfileApi";
+import { setUserProfile } from "@/redux/slice/coreSlice";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  // Get user profile from Redux state
+  const userProfile = useSelector(
+    (state: any) => state.coreAppSlice.user_profile
+  );
+
+  // Verify token to check if user is logged in
+  const { data, isLoading } = useVerifyTokenQuery(undefined);
+
+  // Update user profile in Redux when data is fetched
+  useEffect(() => {
+    if (data?.payload) {
+      dispatch(setUserProfile(data.payload));
+    }
+  }, [data, dispatch]);
+
+  // Redirect to home page if user is already logged in
+  useEffect(() => {
+    if (!isLoading) {
+      // Check if user profile exists in Redux or in the API response
+      const hasUserProfile = userProfile || data?.payload;
+
+      if (hasUserProfile) {
+        router.push("/");
+      }
+    }
+  }, [userProfile, data, isLoading, router]);
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-light_mode_text dark:text-dark_mode_text">
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render auth pages if user is logged in (will redirect)
+  if (userProfile || data?.payload) {
+    return null;
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* Left Panel */}

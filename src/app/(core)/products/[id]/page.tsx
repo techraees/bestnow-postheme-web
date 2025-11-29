@@ -5,10 +5,12 @@ import Image from "next/image";
 import {
   Heart,
   Star,
-  ChevronRight,
   ChevronUp,
   ChevronDown,
   ChevronLeft,
+  ShoppingCart,
+  Minus,
+  Plus,
 } from "lucide-react";
 import {
   ProductImageCarousel,
@@ -18,6 +20,7 @@ import {
 import { ArrowDescrptionIcon, CartIcon } from "@/assets";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 
 const product = {
   id: "1",
@@ -76,17 +79,17 @@ export default function ProductPage() {
   const [isExiting, setIsExiting] = useState(false);
   const [isReviewsDrawerOpen, setIsReviewsDrawerOpen] = useState(false);
   const [isRatingDrawerOpen, setIsRatingDrawerOpen] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const router = useRouter();
 
   const handleBack = () => {
     setIsExiting(true);
-    setTimeout(() => router.back(), 320); // animation ke baad navigate
+    setTimeout(() => router.back(), 320);
   };
 
   const handleRatingSubmit = (rating: number, review?: string) => {
     console.log("Rating submitted:", { rating, review });
-    // Here you would typically send the rating to your API
-    // Close rating drawer and refresh reviews
     setIsRatingDrawerOpen(false);
   };
 
@@ -96,145 +99,373 @@ export default function ProductPage() {
 
   const handleReviewsDrawerClose = () => {
     setIsReviewsDrawerOpen(false);
-    // Close rating drawer if it's open
     setIsRatingDrawerOpen(false);
   };
 
+  const handleQuantityIncrease = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const handleQuantityDecrease = () => {
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  };
+
+  const handleAddToCart = () => {
+    console.log("Add to cart:", { productId: product.id, quantity });
+  };
+
+  const formatPrice = (price: number) => {
+    return `Rs. ${price.toLocaleString("en-PK")}`;
+  };
+
+  const totalPrice = product.price * quantity;
+
   return (
-    <div className="min-h-[calc(100vh-100px)] bg-light_mode_color dark:bg-dark_mode_color text-white flex flex-col items-center font-[Outfit] relative overflow-hidden">
-      <AnimatePresence mode="wait">
-        {!isExiting && (
-          <motion.div
-            key="product-detail"
-            initial={{ x: "0%", opacity: 1 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: "100%", opacity: 0 }}
-            transition={{ duration: 0.32, ease: "easeInOut" }}
-            className="w-full"
-          >
-            {/* top back & fav */}
-            <div className="relative w-full bg-light_mode_color dark:bg-dark_mode_color overflow-hidden">
-              {/* back (slide-out on click) */}
-              <button
-                onClick={handleBack}
-                className="absolute z-30 text-light_mode_color dark:text-dark_mode_color left-3 top-3 bg-dark_mode_color2 dark:bg-light_mode_color2 p-2 rounded-full"
-                aria-label="Go back"
+    <TopSpacingWrapper>
+      <div className="min-h-[calc(100vh-180px)] bg-light_mode_color dark:bg-dark_mode_color w-full pb-[120px] md:pb-0 lg:pb-0">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-6 lg:py-8">
+          <AnimatePresence mode="wait">
+            {!isExiting && (
+              <motion.div
+                key="product-detail"
+                initial={{ x: "0%", opacity: 1 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: "100%", opacity: 0 }}
+                transition={{ duration: 0.32, ease: "easeInOut" }}
+                className="w-full"
               >
-                <ChevronLeft size={22} />
-              </button>
+                {/* Mobile Layout */}
+                <div className="lg:hidden">
+                  {/* Back & Favorite Buttons */}
+                  <div className="relative w-full bg-light_mode_color dark:bg-dark_mode_color overflow-hidden mb-4">
+                    <button
+                      onClick={handleBack}
+                      className="absolute z-30 text-light_mode_text dark:text-dark_mode_text left-3 top-3 bg-light_mode_color2 dark:bg-dark_mode_color2 p-2 rounded-full hover:opacity-80 transition-opacity"
+                      aria-label="Go back"
+                    >
+                      <ChevronLeft size={22} />
+                    </button>
 
-              {/* fav */}
-              <button
-                onClick={() => setFavorite(!favorite)}
-                className="absolute z-30 right-3 top-3 bg-dark_mode_color2 dark:bg-light_mode_color2 p-2 rounded-full"
-                aria-label="Toggle favorite"
-              >
-                <Heart
-                  className={`${
-                    favorite
-                      ? "text-light_mode_color dark:text-dark_mode_color fill-light_mode_color dark:fill-dark_mode_color"
-                      : "text-light_mode_color dark:text-dark_mode_color"
-                  }`}
-                  size={22}
-                />
-              </button>
+                    <button
+                      onClick={() => setFavorite(!favorite)}
+                      className="absolute z-30 right-3 top-3 bg-light_mode_color2 dark:bg-dark_mode_color2 p-2 rounded-full hover:opacity-80 transition-opacity"
+                      aria-label="Toggle favorite"
+                    >
+                      <Heart
+                        className={`${
+                          favorite
+                            ? "text-red-500 fill-red-500"
+                            : "text-light_mode_text dark:text-dark_mode_text"
+                        }`}
+                        size={22}
+                      />
+                    </button>
 
-              <ProductImageCarousel
-                banners={product.images.map((item, i) => ({
-                  id: String(i),
-                  image: item,
-                }))}
+                    <ProductImageCarousel
+                      banners={product.images.map((item, i) => ({
+                        id: String(i),
+                        image: item,
+                      }))}
+                    />
+                  </div>
+
+                  {/* Product Info - Mobile */}
+                  <div className="w-full space-y-3">
+                    {/* Price and Name */}
+                    <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 p-4 rounded-2xl">
+                      <h2 className="text-2xl text-light_mode_text dark:text-dark_mode_text font-bold">
+                        {formatPrice(product.price)}
+                      </h2>
+                      <p className="text-base text-light_mode_text dark:text-dark_mode_text mt-2 leading-relaxed">
+                        {product.name}
+                      </p>
+                    </div>
+
+                    {/* Rating and Sold */}
+                    <div className="flex gap-2">
+                      <div className="flex-1 bg-light_mode_color2 dark:bg-dark_mode_color2 h-12 rounded-full flex items-center justify-center gap-2 px-4">
+                        <Star
+                          size={16}
+                          className="text-yellow-400 fill-yellow-400"
+                        />
+                        <span className="text-sm text-light_mode_text dark:text-dark_mode_text font-medium">
+                          {product.rating}/5 ({product.reviewCount})
+                        </span>
+                      </div>
+                      <div className="flex-1 bg-light_mode_color2 dark:bg-dark_mode_color2 h-12 rounded-full flex items-center justify-center">
+                        <span className="text-sm text-light_mode_text dark:text-dark_mode_text font-medium">
+                          {product.soldCount} Sold
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Warranty and Description */}
+                    <div className="flex gap-2">
+                      <button className="flex-1 bg-light_mode_color2 dark:bg-dark_mode_color2 h-12 rounded-full flex items-center justify-center">
+                        <span className="text-sm text-light_mode_blue_color dark:text-dark_mode_blue_color font-medium">
+                          {product.warranty}
+                        </span>
+                      </button>
+                      <button className="flex-1 bg-light_mode_color2 dark:bg-dark_mode_color2 h-12 rounded-full flex items-center justify-center gap-2">
+                        <span className="text-sm text-light_mode_text dark:text-dark_mode_text font-medium">
+                          Description
+                        </span>
+                        <ArrowDescrptionIcon className="w-3 h-3 text-light_mode_yellow_color dark:text-dark_mode_yellow_color" />
+                      </button>
+                    </div>
+
+                    {/* Reviews and Quantity */}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setIsReviewsDrawerOpen(true)}
+                        className="flex-1 bg-light_mode_color2 dark:bg-dark_mode_color2 h-12 rounded-full flex items-center justify-center gap-2"
+                      >
+                        <span className="text-sm text-light_mode_text dark:text-dark_mode_text font-medium">
+                          Rating & Reviews
+                        </span>
+                        <ArrowDescrptionIcon className="w-3 h-3 text-light_mode_yellow_color dark:text-dark_mode_yellow_color" />
+                      </button>
+                      <div className="flex-1 bg-light_mode_color2 dark:bg-dark_mode_color2 h-12 rounded-full flex items-center justify-between px-4">
+                        <button
+                          onClick={handleQuantityDecrease}
+                          disabled={quantity <= 1}
+                          className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80 disabled:opacity-50"
+                        >
+                          <ChevronDown size={20} />
+                        </button>
+                        <span className="text-base text-light_mode_text dark:text-dark_mode_text font-semibold">
+                          {quantity.toString().padStart(2, "0")}
+                        </span>
+                        <button
+                          onClick={handleQuantityIncrease}
+                          className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80"
+                        >
+                          <ChevronUp size={20} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Desktop Layout */}
+                <div className="hidden lg:block">
+                  <div className="flex items-start gap-8">
+                    {/* Left Column - Images */}
+                    <div className="w-1/2 space-y-4">
+                      {/* Main Image */}
+                      <div className="relative w-full aspect-square bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl overflow-hidden">
+                        <Image
+                          src={product.images[selectedImageIndex]}
+                          alt={product.name}
+                          fill
+                          className="object-contain p-4"
+                          priority
+                        />
+                        {/* Back Button */}
+                        <button
+                          onClick={handleBack}
+                          className="absolute top-4 left-4 z-10 bg-white dark:bg-dark_mode_color2 p-2 rounded-full hover:opacity-80 transition-opacity shadow-lg"
+                          aria-label="Go back"
+                        >
+                          <ChevronLeft
+                            size={20}
+                            className="text-light_mode_text dark:text-dark_mode_text"
+                          />
+                        </button>
+                        {/* Favorite Button */}
+                        <button
+                          onClick={() => setFavorite(!favorite)}
+                          className="absolute top-4 right-4 z-10 bg-white dark:bg-dark_mode_color2 p-2 rounded-full hover:opacity-80 transition-opacity shadow-lg"
+                          aria-label="Toggle favorite"
+                        >
+                          <Heart
+                            className={`${
+                              favorite
+                                ? "text-red-500 fill-red-500"
+                                : "text-light_mode_text dark:text-dark_mode_text"
+                            }`}
+                            size={20}
+                          />
+                        </button>
+                      </div>
+
+                      {/* Thumbnail Images */}
+                      {product.images.length > 1 && (
+                        <div className="grid grid-cols-4 gap-3">
+                          {product.images.map((image, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setSelectedImageIndex(index)}
+                              className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                                selectedImageIndex === index
+                                  ? "border-light_mode_yellow_color dark:border-dark_mode_yellow_color"
+                                  : "border-transparent hover:border-light_mode_color3 dark:hover:border-dark_mode_color3"
+                              }`}
+                            >
+                              <Image
+                                src={image}
+                                alt={`${product.name} - ${index + 1}`}
+                                fill
+                                className="object-cover"
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Right Column - Product Info */}
+                    <div className="w-1/2 space-y-6">
+                      {/* Product Name */}
+                      <div>
+                        <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-light_mode_text dark:text-dark_mode_text mb-4">
+                          {product.name}
+                        </h1>
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            <Star
+                              size={20}
+                              className="text-yellow-400 fill-yellow-400"
+                            />
+                            <span className="text-lg text-light_mode_text dark:text-dark_mode_text font-medium">
+                              {product.rating}/5
+                            </span>
+                            <span className="text-sm text-light_mode_gray_color dark:text-dark_mode_gray_color">
+                              ({product.reviewCount} reviews)
+                            </span>
+                          </div>
+                          <span className="text-sm text-light_mode_gray_color dark:text-dark_mode_gray_color">
+                            • {product.soldCount} sold
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Price */}
+                      <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl p-6">
+                        <p className="text-sm text-light_mode_gray_color dark:text-dark_mode_gray_color mb-2">
+                          Price
+                        </p>
+                        <h2 className="text-4xl lg:text-5xl font-bold text-light_mode_text dark:text-dark_mode_text">
+                          {formatPrice(product.price)}
+                        </h2>
+                      </div>
+
+                      {/* Warranty */}
+                      <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl p-4">
+                        <p className="text-sm text-light_mode_gray_color dark:text-dark_mode_gray_color mb-1">
+                          Warranty
+                        </p>
+                        <p className="text-lg text-light_mode_blue_color dark:text-dark_mode_blue_color font-semibold">
+                          {product.warranty}
+                        </p>
+                      </div>
+
+                      {/* Quantity Selector */}
+                      <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl p-4">
+                        <p className="text-sm text-light_mode_gray_color dark:text-dark_mode_gray_color mb-3">
+                          Quantity
+                        </p>
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3 bg-light_mode_color dark:bg-dark_mode_color rounded-xl p-2">
+                            <button
+                              onClick={handleQuantityDecrease}
+                              disabled={quantity <= 1}
+                              className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              <Minus
+                                size={20}
+                                className="text-light_mode_text dark:text-dark_mode_text"
+                              />
+                            </button>
+                            <span className="text-xl font-semibold text-light_mode_text dark:text-dark_mode_text min-w-[3rem] text-center">
+                              {quantity}
+                            </span>
+                            <button
+                              onClick={handleQuantityIncrease}
+                              className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2 transition-colors"
+                            >
+                              <Plus
+                                size={20}
+                                className="text-light_mode_text dark:text-dark_mode_text"
+                              />
+                            </button>
+                          </div>
+                          <div>
+                            <p className="text-sm text-light_mode_gray_color dark:text-dark_mode_gray_color">
+                              Total
+                            </p>
+                            <p className="text-2xl font-bold text-light_mode_text dark:text-dark_mode_text">
+                              {formatPrice(totalPrice)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="space-y-3">
+                        <button
+                          onClick={handleAddToCart}
+                          className="w-full bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color hover:opacity-90 active:opacity-80 text-dark_mode_color dark:text-light_mode_text font-bold py-4 rounded-2xl text-lg transition-all active:scale-[0.98] shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                        >
+                          <ShoppingCart size={24} />
+                          Add to Cart
+                        </button>
+                        <button
+                          onClick={() => setIsReviewsDrawerOpen(true)}
+                          className="w-full bg-light_mode_color2 dark:bg-dark_mode_color2 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 text-light_mode_text dark:text-dark_mode_text font-semibold py-4 rounded-2xl text-lg transition-all active:scale-[0.98]"
+                        >
+                          View Reviews & Ratings
+                        </button>
+                      </div>
+
+                      {/* Description Button */}
+                      <button className="w-full bg-light_mode_color2 dark:bg-dark_mode_color2 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 text-light_mode_text dark:text-dark_mode_text font-medium py-3 rounded-xl text-base transition-all flex items-center justify-center gap-2">
+                        <span>View Description</span>
+                        <ArrowDescrptionIcon className="w-4 h-4 text-light_mode_yellow_color dark:text-dark_mode_yellow_color" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Overlay while exiting */}
+            {isExiting && (
+              <motion.div
+                key="overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.6 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.32 }}
+                className="absolute inset-0 bg-black"
               />
-            </div>
+            )}
+          </AnimatePresence>
+        </div>
 
-            <div className="w-full px-4 mt-4 space-y-2">
-              {/* Price and name */}
-              <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 p-3 rounded-[15px]">
-                <h2 className="text-[22px] text-dark_mode_color3 dark:text-light_mode_color3 font-semibold">
-                  Rs.{product.price.toLocaleString()}
-                </h2>
-                <p className="text-[18px] leading-5.5 text-dark_mode_color3 dark:text-light_mode_color3 mt-1">
-                  {product.name}
+        {/* Mobile Bottom Bar */}
+        <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-light_mode_color dark:bg-dark_mode_color border-t border-light_mode_color3 dark:border-dark_mode_color3 z-50 shadow-2xl">
+          <div className="max-w-[1600px] mx-auto px-4 py-4">
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <p className="text-xs text-light_mode_gray_color dark:text-dark_mode_gray_color mb-1">
+                  Total
                 </p>
+                <h3 className="text-xl font-bold text-light_mode_text dark:text-dark_mode_text">
+                  {formatPrice(totalPrice)}
+                </h3>
               </div>
-
-              {/* Rating and sold */}
-              <div className="flex gap-1 w-full items-center justify-between mt-3">
-                <div className="w-[50%] h-[48px] bg-light_mode_color2 dark:bg-dark_mode_color2 text-[16px] font-medium p-2.5 rounded-full flex justify-center items-center gap-1">
-                  <Star size={16} className="text-[#FFD53F] fill-[#FFD53F]" />
-                  <span className="text-[13px] text-dark_mode_color3 dark:text-light_mode_color3">
-                    {product.rating}/5 ({product.reviewCount})
-                  </span>
-                </div>
-                <span className="w-[50%] h-[48px] bg-light_mode_color2 dark:bg-dark_mode_color2 text-dark_mode_color dark:text-light_mode_color text-[16px] font-[300] p-2.5 rounded-full flex justify-center items-center">
-                  {product.soldCount} Sold
-                </span>
-              </div>
-
-              {/* Buttons Row 1 */}
-              <div className="flex w-full gap-1">
-                <button className="w-[50%] h-[48px] bg-light_mode_color2 dark:bg-dark_mode_color2 text-light_mode_blue_color text-[16px] font-medium p-2.5 rounded-full flex justify-center items-center">
-                  {product.warranty}
-                </button>
-                <button className="w-[50%] h-[48px] bg-light_mode_color2 dark:bg-dark_mode_color2 text-dark_mode_color dark:text-light_mode_color text-[15px] font-[300] py-2.5 px-5 rounded-full flex justify-between items-center">
-                  Description
-                  <ArrowDescrptionIcon className="w-2.5 h-2.5 text-light_mode_yellow_color dark:text-dark_mode_yellow_color" />
-                </button>
-              </div>
-
-              {/* Buttons Row 2 */}
-              <div className="flex w-full gap-1">
-                <button
-                  onClick={() => setIsReviewsDrawerOpen(true)}
-                  className="w-[50%] h-[48px] bg-light_mode_color2 dark:bg-dark_mode_color2 text-dark_mode_color dark:text-light_mode_color text-[15px] font-[300] py-2.5 px-5 rounded-full flex justify-between items-center"
-                >
-                  Rating & Reviews
-                  <ArrowDescrptionIcon className="w-2.5 h-2.5 text-light_mode_yellow_color dark:text-dark_mode_yellow_color" />
-                </button>
-                <button className="w-[50%] h-[48px] text-light_mode_blue_color dark:text-dark_mode_blue_color text-[20px] font-medium rounded-full flex justify-between items-center">
-                  <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[48px] w-[65px] flex justify-center items-center text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
-                    <ChevronDown size={20} />
-                  </div>
-                  10
-                  <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[48px] w-[65px] flex justify-center items-center text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
-                    <ChevronUp size={20} />
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            {/* bottom bar */}
-            <div className="fixed bottom-0 left-1/2 -translate-x-1/2 h-[100px] w-full bg-light_mode_color dark:bg-dark_mode_color flex items-center justify-between gap-x-2 px-4 py-3">
-              <div className="flex w-[50%] h-[60px] flex-col justify-center items-center bg-light_mode_color2 dark:bg-dark_mode_color2 text-black font-semibold rounded-full transition">
-                <div>
-                  <p className="text-[10px] font-[300] text-left text-gray-400">
-                    Total
-                  </p>
-                  <h3 className="text-dark_mode_blue_color font-semibold text-lg">
-                    Rs. {product.price.toLocaleString()}
-                  </h3>
-                </div>
-              </div>
-              <button className="flex w-[50%] h-[60px] justify-center items-center gap-2 bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color text-black font-[400] px-5 py-3 rounded-full transition">
-                <CartIcon className="w-4.5 h-4.5 text-light_mode_color dark:text-dark_mode_color" />
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color hover:opacity-90 active:opacity-80 text-dark_mode_color dark:text-light_mode_text font-bold py-3 rounded-xl text-base transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+              >
+                <CartIcon className="w-5 h-5" />
                 Add to Cart
               </button>
             </div>
-          </motion.div>
-        )}
-
-        {/* overlay while exiting */}
-        {isExiting && (
-          <motion.div
-            key="overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.32 }}
-            className="absolute inset-0 bg-black"
-          />
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      </div>
 
       {/* Reviews Drawer */}
       <ReviewsDrawer
@@ -250,6 +481,6 @@ export default function ProductPage() {
         onClose={() => setIsRatingDrawerOpen(false)}
         onSubmit={handleRatingSubmit}
       />
-    </div>
+    </TopSpacingWrapper>
   );
 }

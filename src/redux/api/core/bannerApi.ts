@@ -26,7 +26,13 @@ export const bannerApi = createApi({
       query: () =>
         "/mobile-accessories/web/engagements/banners?type=homepage&platform_type=WEB",
     }),
+    clickBanner: builder.mutation<void, string>({
+      query: (bannerId: string) => ({
+        url: `/mobile-accessories/web/engagements/banners/click/${bannerId}`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
-export const { useGetAllBannerQuery } = bannerApi;
+export const { useGetAllBannerQuery, useClickBannerMutation } = bannerApi;

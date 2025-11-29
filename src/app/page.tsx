@@ -6,7 +6,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AppHeader } from "@/components/header";
 import { PromotionalBanner } from "@/components/promotional-banner";
 import { CategoriesSection } from "@/components/categories";
-import { FilterTabs, FilterTab } from "@/components/filter-tabs";
+import {
+  FilterTabs,
+  FilterTab,
+  FilterDrawer,
+  FilterOptions,
+} from "@/components/filter-tabs";
 import { ProductGrid, ProductSkeleton } from "@/components/products";
 import useThemeCache from "@/theme/useThemeCache";
 import { setIsMenuOpen, setUserProfile } from "@/redux/slice/coreSlice";
@@ -19,6 +24,7 @@ import {
   useGetAllProductsBasedOnFilterQuery,
   useGetAllProductsCategoriesQuery,
   useGetAllProductsBrandsNamesQuery,
+  useGetAllCategoriesQuery,
 } from "@/redux/api/core/coreApi";
 import { ALLOWED_QUERY_PARAMS_PRODUCTS_HOME_PAGE } from "@/data/coreData/coreEnums/coreGeneralEnums";
 import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
@@ -51,6 +57,13 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [stopCalling, setStopCalling] = useState(false);
   const [filters, setFilters] = useState<Record<string, string>>({});
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    brand: "",
+    category: "",
+    minPrice: 0,
+    maxPrice: 100000,
+  });
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -71,7 +84,43 @@ export default function Home() {
   };
 
   const handleFilterClick = () => {
-    console.log("Filter clicked");
+    setIsFilterDrawerOpen(true);
+  };
+
+  const handleApplyFilters = (filters: FilterOptions) => {
+    setFilterOptions(filters);
+    const params = new URLSearchParams();
+
+    // Add brand filter
+    if (filters.brand) {
+      params.set("fldMaker1", filters.brand);
+    }
+
+    // Add category filter
+    if (filters.category) {
+      params.set("fldCategory1", filters.category);
+    }
+
+    // Add price range filters
+    if (filters.minPrice > 0) {
+      params.set("fldSalRate.gte", filters.minPrice.toString());
+    }
+    if (filters.maxPrice < 100000) {
+      params.set("fldSalRate.lte", filters.maxPrice.toString());
+    }
+
+    // Update URL with new filters
+    router.push(`/?${params.toString()}`);
+  };
+
+  const handleResetFilters = () => {
+    setFilterOptions({
+      brand: "",
+      category: "",
+      minPrice: 0,
+      maxPrice: 100000,
+    });
+    router.push("/");
   };
 
   const handleFavoriteClick = (productId: string) => {
@@ -96,6 +145,18 @@ export default function Home() {
     setProducts([]);
     setPage(1);
     setStopCalling(false);
+
+    // Sync filter options with URL params
+    setFilterOptions({
+      brand: filtersObj["fldMaker1"] || "",
+      category: filtersObj["fldCategory1"] || "",
+      minPrice: filtersObj["fldSalRate.gte"]
+        ? parseInt(filtersObj["fldSalRate.gte"])
+        : 0,
+      maxPrice: filtersObj["fldSalRate.lte"]
+        ? parseInt(filtersObj["fldSalRate.lte"])
+        : 100000,
+    });
   }, [searchParams]);
 
   // Build query string from filters
@@ -214,6 +275,8 @@ export default function Home() {
     }
   }, [data]);
 
+  const { data: categoriesData } = useGetAllCategoriesQuery();
+
   return (
     <TopSpacingWrapper>
       <div className="min-h-screen bg-light_mode_color dark:bg-dark_mode_color w-full overflow-x-hidden">
@@ -244,6 +307,7 @@ export default function Home() {
               {/* Categories Section */}
               <div className="mb-6 md:mb-8 lg:mb-10">
                 <CategoriesSection
+                  categories={categoriesData?.payload || []}
                   onCategoryClick={handleCategoryClick}
                   onSeeAllClick={handleSeeAllClick}
                 />
@@ -257,6 +321,17 @@ export default function Home() {
                   onFilterClick={handleFilterClick}
                 />
               </div>
+
+              {/* Filter Drawer */}
+              <FilterDrawer
+                isOpen={isFilterDrawerOpen}
+                onClose={() => setIsFilterDrawerOpen(false)}
+                onApply={handleApplyFilters}
+                onReset={handleResetFilters}
+                initialFilters={filterOptions}
+                minPriceRange={0}
+                maxPriceRange={100000}
+              />
 
               {/* Products Grid */}
               <div className="mb-6 md:mb-8 lg:mb-10">

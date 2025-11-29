@@ -59,6 +59,10 @@ export const cartApi = createApi({
       }),
       providesTags: ["Cart"],
     }),
+    getCartItemsCount: builder.query<number, void>({
+      query: () => `/mobile-accessories/web/sales/cart/count-items`,
+      providesTags: ["Cart"],
+    }),
     addToCart: builder.mutation<CartResponse, AddToCartParams>({
       query: ({ productId, quantity }) => ({
         url: `/mobile-accessories/web/sales/cart/add-item/${productId}`,
@@ -99,4 +103,5 @@ export const {
   useRemoveCartItemMutation,
   useClearCartMutation,
   useGetCartItemsIdsQuery,
+  useGetCartItemsCountQuery,
 } = cartApi;

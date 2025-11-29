@@ -7,7 +7,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MenuModal from "@/components/MenuModal/MenuModal";
 import { usePathname } from "next/navigation";
-import { HIDDEN_HEADER_ROUTES } from "@/constants/routes";
+import {
+  HIDDEN_HEADER_ROUTES,
+  HIDDEN_BOTTOM_NAVBAR_ROUTES,
+} from "@/constants/routes";
 import { useVerifyTokenQuery } from "@/redux/api/auth/customerAuthProfileApi";
 
 interface CoreLayoutProps {
@@ -27,6 +30,11 @@ const CoreLayout = ({ children }: CoreLayoutProps) => {
 
   // Check if current route should hide header
   const shouldHideHeader = HIDDEN_HEADER_ROUTES.some((route) =>
+    pathname?.startsWith(route)
+  );
+
+  // Check if current route should hide bottom navbar
+  const shouldHideBottomNavbar = HIDDEN_BOTTOM_NAVBAR_ROUTES.some((route) =>
     pathname?.startsWith(route)
   );
 
@@ -50,7 +58,7 @@ const CoreLayout = ({ children }: CoreLayoutProps) => {
       {isMenuOpen && <MenuModal />}
 
       {/* Bottom Navigation - Mobile Only */}
-      <BottomNavbar cartCount={10} />
+      {!shouldHideBottomNavbar && <BottomNavbar cartCount={10} />}
     </div>
   );
 };

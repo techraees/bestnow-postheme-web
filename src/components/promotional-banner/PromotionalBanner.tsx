@@ -4,9 +4,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { MdMusicNote } from "react-icons/md";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
-import { useGetAllBannerQuery } from "@/redux/api/core/bannerApi";
+import {
+  useClickBannerMutation,
+  useGetAllBannerQuery,
+} from "@/redux/api/core/bannerApi";
 import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
-import { ForceBannerDesktop } from "@/assets";
+import { ForceBannerDesktop, ForceBannerMobile } from "@/assets";
 
 interface Banner {
   id: string;
@@ -44,7 +47,7 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
           ? ForceBannerDesktop.src
           : getImgBaseUrl(banner.desktop_img_path),
         mobileImage: banner.mobile_img_path
-          ? ForceBannerDesktop
+          ? ForceBannerMobile
           : getImgBaseUrl(banner.mobile_img_path),
         tabletImage: banner.tablet_img_path
           ? ForceBannerDesktop
@@ -131,6 +134,11 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
     }, 1000);
   };
 
+  const [clickBanner] = useClickBannerMutation();
+  const handleClickBanner = (bannerId: string) => {
+    clickBanner(bannerId);
+  };
+
   return (
     <div className="w-full px-4 md:px-6 lg:px-0">
       {/* Banner Card with Swipe Support */}
@@ -161,9 +169,10 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
               return (
                 <div
                   key={banner.id}
-                  className={`absolute inset-0 transition-opacity duration-500 ${
+                  className={`absolute inset-0 transition-opacity duration-500 cursor-pointer ${
                     isActive ? "opacity-100 z-10" : "opacity-0 z-0"
                   }`}
+                  onClick={() => handleClickBanner(banner.id)}
                 >
                   {/* Mobile Banner - Hidden on tablet and desktop */}
                   {banner.mobileImage && (
@@ -171,7 +180,7 @@ const PromotionalBanner: React.FC<PromotionalBannerProps> = ({
                       src={banner.mobileImage}
                       alt={banner.title}
                       fill
-                      className="object-cover md:hidden"
+                      className=" md:hidden"
                       priority={index === 0}
                       sizes="100vw"
                     />

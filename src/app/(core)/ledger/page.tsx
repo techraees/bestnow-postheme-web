@@ -260,32 +260,34 @@ const LedgerPage = () => {
     };
 
     return (
-      <div className="bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-4 md:p-6">
+      <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8">
         {/* Calendar Header */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <button
             onClick={goToPreviousMonth}
-            className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80"
+            className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80 active:opacity-60 transition-opacity p-2 rounded-full hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3"
+            aria-label="Previous month"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
           </button>
-          <h3 className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl font-semibold">
+          <h3 className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg lg:text-xl font-semibold">
             {monthNames[month]} {year}
           </h3>
           <button
             onClick={goToNextMonth}
-            className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80 rotate-180"
+            className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80 active:opacity-60 transition-opacity rotate-180 p-2 rounded-full hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3"
+            aria-label="Next month"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
           </button>
         </div>
 
         {/* Week Days Header */}
-        <div className="grid grid-cols-7 gap-2 mb-2">
+        <div className="grid grid-cols-7 gap-1.5 md:gap-2 mb-3 md:mb-4">
           {weekDays.map((day) => (
             <div
               key={day}
-              className="text-center text-light_mode_gray_color dark:text-dark_mode_gray_color text-xs md:text-sm font-medium"
+              className="text-center text-light_mode_gray_color dark:text-dark_mode_gray_color text-xs md:text-sm font-medium py-1"
             >
               {day}
             </div>
@@ -293,7 +295,7 @@ const LedgerPage = () => {
         </div>
 
         {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-1.5 md:gap-2">
           {/* Empty cells for days before month starts */}
           {Array.from({ length: startingDayOfWeek }).map((_, index) => (
             <div key={`empty-${index}`} className="aspect-square"></div>
@@ -317,16 +319,16 @@ const LedgerPage = () => {
                 key={day}
                 onClick={handleDayClick}
                 disabled={!hasTransactions}
-                className={`aspect-square flex flex-col items-center justify-center relative rounded-lg transition-all ${
+                className={`aspect-square flex flex-col items-center justify-center relative rounded-lg md:rounded-xl transition-all ${
                   isSelected
                     ? "bg-light_mode_blue_color dark:bg-dark_mode_blue_color border-2 border-light_mode_blue_color dark:border-dark_mode_blue_color"
                     : hasTransactions
-                    ? "hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2 cursor-pointer active:scale-95"
-                    : "opacity-50 cursor-not-allowed"
+                    ? "hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 cursor-pointer active:scale-95 bg-light_mode_color dark:bg-dark_mode_color"
+                    : "opacity-40 cursor-not-allowed bg-light_mode_color dark:bg-dark_mode_color"
                 }`}
               >
                 <span
-                  className={`text-sm md:text-base ${
+                  className={`text-xs md:text-sm lg:text-base font-medium ${
                     isSelected
                       ? "text-white"
                       : "text-light_mode_text dark:text-dark_mode_text"
@@ -335,14 +337,14 @@ const LedgerPage = () => {
                   {day}
                 </span>
                 {hasTransactions && (
-                  <div className="absolute bottom-1 flex gap-0.5">
+                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5">
                     {hasTransactions.credit && (
-                      <span className="text-[8px] md:text-[10px] bg-green-500 text-white px-1 rounded">
+                      <span className="text-[7px] md:text-[9px] bg-green-500 text-white px-1 py-0.5 rounded">
                         Cr
                       </span>
                     )}
                     {hasTransactions.debit && (
-                      <span className="text-[8px] md:text-[10px] bg-red-500 text-white px-1 rounded">
+                      <span className="text-[7px] md:text-[9px] bg-red-500 text-white px-1 py-0.5 rounded">
                         Dr
                       </span>
                     )}
@@ -354,17 +356,17 @@ const LedgerPage = () => {
         </div>
 
         {/* Legend */}
-        <div className="mt-6 pt-4 border-t border-light_mode_color3 dark:border-dark_mode_color3 flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] md:text-xs bg-green-500 text-white px-2 py-0.5 rounded">
+        <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-light_mode_color3 dark:border-dark_mode_color3 flex flex-col gap-2 md:gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
+            <span className="text-[10px] md:text-xs bg-green-500 text-white px-2 py-1 rounded">
               Cr
             </span>
             <span className="text-light_mode_text dark:text-dark_mode_text text-xs md:text-sm">
               Indicates a credit transaction
             </span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] md:text-xs bg-red-500 text-white px-2 py-0.5 rounded">
+          <div className="flex items-center gap-2 md:gap-3">
+            <span className="text-[10px] md:text-xs bg-red-500 text-white px-2 py-1 rounded">
               Dr
             </span>
             <span className="text-light_mode_text dark:text-dark_mode_text text-xs md:text-sm">
@@ -405,10 +407,10 @@ const LedgerPage = () => {
         </div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pb-4 md:py-6">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 md:py-6 lg:py-8 pb-8 md:pb-12 lg:pb-16">
         {/* Date Filters */}
-        <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl p-4 mb-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl md:rounded-2xl p-4 md:p-6 mb-4 md:mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             {/* From Date Picker */}
             <div className="relative">
               <input
@@ -486,28 +488,30 @@ const LedgerPage = () => {
         </div>
 
         {/* View Toggle */}
-        <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl p-1 mb-4 flex gap-2">
+        <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl md:rounded-2xl p-1 md:p-1.5 mb-4 md:mb-6 flex gap-2">
           <button
             onClick={() => setViewType("list")}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 md:py-3 rounded-lg md:rounded-xl transition-all ${
               viewType === "list"
-                ? "bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text"
-                : "text-light_mode_gray_color dark:text-dark_mode_gray_color"
+                ? "bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text shadow-sm"
+                : "text-light_mode_gray_color dark:text-dark_mode_gray_color hover:text-light_mode_text dark:hover:text-dark_mode_text"
             }`}
           >
             <List className="w-4 h-4 md:w-5 md:h-5" />
-            <span className="text-sm md:text-base font-medium">List View</span>
+            <span className="text-xs md:text-sm lg:text-base font-medium">
+              List View
+            </span>
           </button>
           <button
             onClick={() => setViewType("calendar")}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 md:py-3 rounded-lg md:rounded-xl transition-all ${
               viewType === "calendar"
-                ? "bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text"
-                : "text-light_mode_gray_color dark:text-dark_mode_gray_color"
+                ? "bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text shadow-sm"
+                : "text-light_mode_gray_color dark:text-dark_mode_gray_color hover:text-light_mode_text dark:hover:text-dark_mode_text"
             }`}
           >
             <Calendar className="w-4 h-4 md:w-5 md:h-5" />
-            <span className="text-sm md:text-base font-medium">
+            <span className="text-xs md:text-sm lg:text-base font-medium">
               Calendar View
             </span>
           </button>
@@ -515,12 +519,12 @@ const LedgerPage = () => {
 
         {/* Summary Cards - Only show in list view */}
         {viewType === "list" && (
-          <div className="space-y-2 md:space-y-4 mb-4 md:mb-6">
+          <div className="space-y-3 md:space-y-4 mb-4 md:mb-6 lg:mb-8">
             {/* Closing Balance Card */}
             <ClosingBalanceCard balance={closingBalance} />
 
             {/* Debit and Credit Cards */}
-            <div className="grid grid-cols-2 gap-2 md:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
               <DebitCreditCard amount={debitAmount} label="Debit" />
               <DebitCreditCard amount={creditAmount} label="Credit" />
             </div>
@@ -529,18 +533,34 @@ const LedgerPage = () => {
 
         {/* Content Area */}
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-16 md:py-20">
-            <p className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl font-medium mb-2">
+          <div className="flex flex-col items-center justify-center py-16 md:py-20 lg:py-24">
+            <div className="animate-spin rounded-full h-12 w-12 md:h-16 md:w-16 border-4 border-light_mode_color3 dark:border-dark_mode_color3 border-t-light_mode_yellow_color dark:border-t-dark_mode_yellow_color mb-4"></div>
+            <p className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg lg:text-xl font-medium mb-2">
               Loading ledger data...
             </p>
           </div>
         ) : viewType === "calendar" ? (
           <CalendarView />
         ) : (
-          <div className="space-y-6 md:space-y-8">
+          <div className="space-y-4 md:space-y-6 lg:space-y-8">
             {Object.keys(groupedTransactions).length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 md:py-20">
-                <p className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl font-medium mb-2">
+              <div className="flex flex-col items-center justify-center py-16 md:py-20 lg:py-24">
+                <div className="mb-4 md:mb-6">
+                  <svg
+                    className="w-16 h-16 md:w-20 md:h-20 mx-auto text-light_mode_gray_color dark:text-dark_mode_gray_color opacity-50"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </div>
+                <p className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl lg:text-2xl font-semibold mb-2 md:mb-3">
                   No transactions found
                 </p>
                 <p className="text-light_mode_gray_color dark:text-dark_mode_gray_color text-sm md:text-base">
@@ -550,25 +570,28 @@ const LedgerPage = () => {
             ) : (
               Object.entries(groupedTransactions).map(
                 ([date, dateTransactions]) => (
-                  <div key={date} className="space-y-3 md:space-y-4">
+                  <div
+                    key={date}
+                    className="space-y-3 md:space-y-4 lg:space-y-5"
+                  >
                     {/* Date Separator */}
-                    <div className="relative flex items-center justify-center py-2">
+                    <div className="relative flex items-center justify-center py-2 md:py-3">
                       <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-light_mode_color3 dark:border-dark_mode_color3"></div>
                       </div>
-                      <span className="relative bg-light_mode_color dark:bg-dark_mode_color px-4 text-light_mode_text dark:text-dark_mode_text text-sm md:text-base font-medium">
+                      <span className="relative bg-light_mode_color dark:bg-dark_mode_color px-3 md:px-4 lg:px-6 text-light_mode_text dark:text-dark_mode_text text-xs md:text-sm lg:text-base font-semibold">
                         {date}
                       </span>
                     </div>
 
                     {/* Closing Balance for this date */}
                     {dateTransactions.length > 0 && (
-                      <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl p-4 mb-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base font-medium">
+                      <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl md:rounded-2xl p-3 md:p-4 mb-3 md:mb-4">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                          <span className="text-light_mode_text dark:text-dark_mode_text text-xs md:text-sm lg:text-base font-medium">
                             Closing Balance
                           </span>
-                          <span className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color text-base md:text-lg font-semibold">
+                          <span className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color text-sm md:text-base lg:text-lg font-semibold">
                             {formatAmount(
                               dateTransactions[dateTransactions.length - 1]
                                 .balance
@@ -592,11 +615,11 @@ const LedgerPage = () => {
                       return (
                         <div
                           key={transaction.id}
-                          className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-2xl p-4"
+                          className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl md:rounded-2xl p-3 md:p-4 lg:p-5 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 transition-colors"
                         >
-                          <div className="flex justify-between items-start mb-2">
-                            <div className="flex-1">
-                              <p className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg font-semibold mb-1">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 md:gap-3">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base lg:text-lg font-semibold mb-1 break-words">
                                 {transaction.details}
                               </p>
                               {transaction.voucher && (
@@ -605,9 +628,9 @@ const LedgerPage = () => {
                                 </p>
                               )}
                             </div>
-                            <div className="text-right">
+                            <div className="text-left sm:text-right shrink-0">
                               <p
-                                className={`text-base md:text-lg font-semibold ${amountColor}`}
+                                className={`text-sm md:text-base lg:text-lg font-semibold ${amountColor}`}
                               >
                                 {amount}
                               </p>

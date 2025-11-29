@@ -4,12 +4,12 @@ import React from "react";
 import CategoryItem from "./CategoryItem";
 import { category1, category2, category3 } from "@/assets/images/category";
 import { BannerImage, BannerImage1 } from "@/assets";
+import Link from "next/link";
 
 interface Category {
   id: string;
-  name: string;
-  icon?: React.ReactNode;
-  image?: any; // Next.js Image type
+  label: string;
+  image_url: string;
 }
 
 interface CategoriesSectionProps {
@@ -91,12 +91,11 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         <h2 className="text-light_mode_text dark:text-dark_mode_text text-lg md:text-xl lg:text-2xl font-semibold">
           Categories
         </h2>
-        <button
-          onClick={onSeeAllClick}
-          className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base hover:opacity-80 transition-opacity"
-        >
-          See all
-        </button>
+        <Link href="/category-search">
+          <button className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base font-medium">
+            See All
+          </button>
+        </Link>
       </div>
 
       {/* Horizontal Scrollable Categories - Desktop: Show all, Mobile: Scrollable */}
@@ -105,9 +104,9 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
           {categories.map((category) => (
             <CategoryItem
               key={category.id}
-              name={category.name}
+              name={category.label}
               icon={category.icon}
-              image={category.image}
+              image={category.image_url}
               onClick={() => onCategoryClick?.(category)}
             />
           ))}
