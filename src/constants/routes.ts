@@ -10,6 +10,7 @@ export const HIDDEN_BOTTOM_NAVBAR_ROUTES = [
   "/checkout",
   "/orders",
   "/orders/[id]",
+  "/products",
   // Add more routes here as needed
   // Example: "/payment", "/products", etc.
 ];

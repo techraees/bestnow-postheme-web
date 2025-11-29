@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import SubHeader from "@/components/navigation/SubHeader";
 import { AddressCard, AddAddressCard } from "@/components/profile";
 
@@ -53,33 +52,63 @@ const AddressPage = () => {
   };
 
   return (
-    <TopSpacingWrapper>
+    <>
       <SubHeader title="Address" subtitle="Done" />
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8">
-        <div className="space-y-3 md:space-y-4">
-          {/* Add New Address Card */}
-          <AddAddressCard onClick={handleAddAddress} />
+        {/* Desktop Layout */}
+        <div className="hidden lg:block">
+          <div className="bg-light_mode_color1 dark:bg-dark_mode_color1 rounded-2xl shadow-lg p-8 lg:p-10">
+            <div className="space-y-4">
+              {/* Add New Address Card */}
+              <AddAddressCard onClick={handleAddAddress} />
 
-          {/* Address List */}
-          {addresses.map((address, index) => (
-            <AddressCard
-              key={address.id}
-              id={address.id}
-              index={index + 1}
-              label={address.label}
-              type={address.type}
-              addressLine1={address.addressLine1}
-              addressLine2={address.addressLine2}
-              city={address.city}
-              state={address.state}
-              postalCode={address.postalCode}
-              onEdit={() => handleEditAddress(address.id)}
-            />
-          ))}
+              {/* Address List */}
+              {addresses.map((address, index) => (
+                <AddressCard
+                  key={address.id}
+                  id={address.id}
+                  index={index + 1}
+                  label={address.label}
+                  type={address.type}
+                  addressLine1={address.addressLine1}
+                  addressLine2={address.addressLine2}
+                  city={address.city}
+                  state={address.state}
+                  postalCode={address.postalCode}
+                  onEdit={() => handleEditAddress(address.id)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="lg:hidden">
+          <div className="space-y-3 md:space-y-4">
+            {/* Add New Address Card */}
+            <AddAddressCard onClick={handleAddAddress} />
+
+            {/* Address List */}
+            {addresses.map((address, index) => (
+              <AddressCard
+                key={address.id}
+                id={address.id}
+                index={index + 1}
+                label={address.label}
+                type={address.type}
+                addressLine1={address.addressLine1}
+                addressLine2={address.addressLine2}
+                city={address.city}
+                state={address.state}
+                postalCode={address.postalCode}
+                onEdit={() => handleEditAddress(address.id)}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </TopSpacingWrapper>
+    </>
   );
 };
 

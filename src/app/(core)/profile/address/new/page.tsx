@@ -67,26 +67,62 @@ const NewAddressPage = () => {
         </div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8 pb-24 md:pb-8">
-        <AddressForm
-          addressType={addressType}
-          onAddressTypeChange={setAddressType}
-          addressName={addressName}
-          onAddressNameChange={setAddressName}
-          addressLine1={addressLine1}
-          onAddressLine1Change={setAddressLine1}
-          addressLine2={addressLine2}
-          onAddressLine2Change={setAddressLine2}
-          cityState={cityState}
-          onCityStateChange={setCityState}
-          postalCode={postalCode}
-          onPostalCodeChange={setPostalCode}
-          onSubmit={handleSubmit}
-        />
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8 pb-24 md:pb-8 lg:pb-8">
+        {/* Desktop Layout */}
+        <div className="hidden lg:block">
+          <div className="max-w-2xl mx-auto">
+            <AddressForm
+              addressType={addressType}
+              onAddressTypeChange={setAddressType}
+              addressName={addressName}
+              onAddressNameChange={setAddressName}
+              addressLine1={addressLine1}
+              onAddressLine1Change={setAddressLine1}
+              addressLine2={addressLine2}
+              onAddressLine2Change={setAddressLine2}
+              cityState={cityState}
+              onCityStateChange={setCityState}
+              postalCode={postalCode}
+              onPostalCodeChange={setPostalCode}
+              onSubmit={handleSubmit}
+            />
+            {/* Desktop Submit Button */}
+            <div className="mt-6">
+              <button
+                onClick={handleSubmit}
+                disabled={
+                  !addressName || !addressLine1 || !cityState || !postalCode
+                }
+                className="w-full bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color text-black dark:text-black py-4 rounded-2xl font-semibold text-base hover:opacity-90 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="lg:hidden">
+          <AddressForm
+            addressType={addressType}
+            onAddressTypeChange={setAddressType}
+            addressName={addressName}
+            onAddressNameChange={setAddressName}
+            addressLine1={addressLine1}
+            onAddressLine1Change={setAddressLine1}
+            addressLine2={addressLine2}
+            onAddressLine2Change={setAddressLine2}
+            cityState={cityState}
+            onCityStateChange={setCityState}
+            postalCode={postalCode}
+            onPostalCodeChange={setPostalCode}
+            onSubmit={handleSubmit}
+          />
+        </div>
       </div>
 
       {/* Fixed Bottom Done Button for Mobile */}
-      <div className="fixed bottom-4 left-4 right-4 md:hidden">
+      <div className="fixed bottom-4 left-4 right-4 lg:hidden">
         <button
           onClick={handleSubmit}
           disabled={!addressName || !addressLine1 || !cityState || !postalCode}
@@ -106,4 +142,3 @@ const NewAddressPage = () => {
 };
 
 export default NewAddressPage;
-
