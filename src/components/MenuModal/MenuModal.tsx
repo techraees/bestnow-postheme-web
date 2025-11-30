@@ -57,10 +57,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Home",
+      path: "/",
       onClick: () => {
-        router.push("/");
-
-        console.log("Home clicked");
       },
     },
     {
@@ -70,8 +68,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Favorites",
+      path: "#",
       onClick: () => {
-        console.log("Favorites clicked");
       },
     },
     {
@@ -81,10 +79,10 @@ const MenuModal = () => {
         </div>
       ),
       label: "My Cart",
+      path: "/cart",
       onClick: () => {
-        router.push("/cart");
-        console.log("My Cart clicked");
       },
+
     },
     {
       icon: (
@@ -93,8 +91,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Order History",
+      path: "#",
       onClick: () => {
-        console.log("Order History clicked");
       },
     },
     {
@@ -104,9 +102,10 @@ const MenuModal = () => {
         </div>
       ),
       label: "Categories",
+      path: "#",
       onClick: () => {
-        console.log("Categories clicked");
       },
+
     },
     {
       icon: (
@@ -115,12 +114,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Ledger",
+      path: user_profile?.id ? "/ledger" : "/login",
       onClick: () => {
-        if (user_profile?.id) {
-          router.push("/ledger");
-        } else {
-          router.push("/login");
-        }
       },
     },
     {
@@ -130,8 +125,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Voice Search",
+      path: "#",
       onClick: () => {
-        console.log("Voice Search clicked");
       },
     },
     {
@@ -141,8 +136,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Quick Order",
+      path: "#",
       onClick: () => {
-        console.log("Quick Order clicked");
       },
     },
     {
@@ -152,8 +147,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Messages",
+      path: "#",
       onClick: () => {
-        console.log("Messages clicked");
       },
       badge: "10+",
     },
@@ -164,8 +159,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Notification",
+      path: "#",
       onClick: () => {
-        console.log("Notification clicked");
       },
       badge: "10+",
     },
@@ -176,8 +171,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Replace & Return",
+      path: "#",
       onClick: () => {
-        console.log("Replace & Return clicked");
       },
       badge: "10+",
     },
@@ -188,8 +183,8 @@ const MenuModal = () => {
         </div>
       ),
       label: "Profile",
+      path: "/profile",
       onClick: () => {
-        console.log("Profile clicked");
       },
     },
   ];
