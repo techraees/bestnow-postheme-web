@@ -1,25 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { HiHeart, HiOutlineHeart } from "react-icons/hi";
-import { HiStar } from "react-icons/hi";
-import { BannerImage } from "@/assets";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import {
   useAddToCartMutation,
-  useUpdateCartItemMutation,
-  useGetCartQuery,
-  useRemoveCartItemMutation,
-  useGetCartItemsIdsQuery,
+  useGetCartItemsIdsQuery
 } from "@/redux/api/core/cartApi";
-import { toast } from "react-toastify";
-import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
-import FullImageModal from "../modal/FullImageModal";
 import { RootState } from "@/redux/store/store";
-import { useSelector } from "react-redux";
+import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { HiHeart, HiOutlineHeart, HiStar } from "react-icons/hi";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import FullImageModal from "../modal/FullImageModal";
 
 interface ProductCardProps {
   id: string;
@@ -28,6 +23,7 @@ interface ProductCardProps {
   rating?: number;
   soldCount?: string;
   price: number;
+  min_qty?: number;
   isFavorite?: boolean;
   onFavoriteClick?: (id: string) => void;
   onAddToCart?: (id: string) => void;
@@ -40,6 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   rating = 4.5,
   soldCount = "Stock very low",
   price,
+  min_qty,
   isFavorite = false,
   onFavoriteClick,
   onAddToCart,
@@ -50,8 +47,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const router = useRouter();
 
   const [favorite, setFavorite] = useState(isFavorite);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(min_qty || 1);
   const [currentImage, setCurrentImage] = useState<null | string>(null);
+
 
   const [addToCart, { isLoading: isAdding }] = useAddToCartMutation();
 
@@ -61,41 +59,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const handleFavoriteClick = () => {
     setFavorite(!favorite);
     onFavoriteClick?.(id);
-  };
-
-  const handleQuantityChange = async (newQuantity: number) => {
-    const validQuantity = Math.max(1, newQuantity);
-    setQuantity(validQuantity);
-  };
-
-  const handleIncrease = async () => {
-    const newQuantity = quantity + 1;
-    await handleQuantityChange(newQuantity);
-  };
-
-  const handleDecrease = async () => {
-    if (quantity <= 1) return; // Can't go below 1
-    const newQuantity = quantity - 1;
-    await handleQuantityChange(newQuantity);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    // Allow empty string for editing, or valid numbers
-    if (value === "" || /^\d+$/.test(value)) {
-      const numValue = value === "" ? 1 : parseInt(value, 10);
-      setQuantity(Math.max(1, numValue));
-    }
-  };
-
-  const handleInputBlur = async () => {
-    // Ensure minimum is 1 when input loses focus
-    if (quantity < 1) {
-      setQuantity(1);
-      await handleQuantityChange(1);
-    } else {
-      await handleQuantityChange(quantity);
-    }
   };
 
   const handleAddToCart = async () => {
@@ -117,6 +80,72 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // Format price with Rs. prefix
   const formattedPrice = `Rs. ${price.toLocaleString("en-PK")}`;
+
+  const minQty = min_qty ?? 1;
+
+  // draft = raw typable string
+  const [draftQty, setDraftQty] = useState(String(minQty));
+
+  // Sync when min changes
+  useEffect(() => {
+    setDraftQty(String(Math.max(quantity ?? minQty, minQty)));
+  }, [minQty]);
+
+  // Parse
+  const parseDraft = () => {
+    const n = parseInt(draftQty, 10);
+    return Number.isFinite(n) ? n : NaN;
+  };
+
+  // Clamp + commit
+  const commitClamp = () => {
+    const n = parseDraft();
+    const clamped = Number.isFinite(n)
+      ? Math.min(Math.max(n, minQty), 100000000)
+      : minQty;
+
+    setQuantity(clamped);
+    setDraftQty(String(clamped));
+  };
+
+  // Increment
+  const handleIncrease = () => {
+    const n = parseDraft();
+    const base = Number.isFinite(n) ? n : minQty;
+
+    if (base < 100000000) {
+      const next = base + 1;
+      setQuantity(next);
+      setDraftQty(String(next));
+    }
+  };
+
+  // Decrement
+  const handleDecrease = () => {
+    const n = parseDraft();
+    const base = Number.isFinite(n) ? n : minQty;
+    const next = Math.max(base - 1, minQty);
+
+    setQuantity(next);
+    setDraftQty(String(next));
+  };
+
+  // Raw change (digits allowed)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const clean = e.target.value.replace(/[^\d]/g, "");
+    setDraftQty(clean);
+  };
+
+  // On blur → clamp
+  const handleInputBlur = () => {
+    commitClamp();
+  };
+
+  // On Enter → clamp
+  const handleQtyKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") commitClamp();
+  };
+
 
   return (
     <>
@@ -208,7 +237,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <div className="flex items-center text-light_mode_blue_color dark:text-dark_mode_blue_color text-sm gap-0 md:gap-3">
                 <button
                   onClick={handleDecrease}
-                  disabled={quantity <= 1}
+                  disabled={parseDraft() <= minQty}
+
                   className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-dark_mode_color dark:text-light_mode_color hover:opacity-80 active:opacity-60 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                 >
                   <ChevronDown size={20} />
@@ -216,9 +246,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <input
                   type="number"
                   min="1"
-                  value={quantity}
+                  inputMode="numeric"
+                  value={draftQty}
                   onChange={handleInputChange}
                   onBlur={handleInputBlur}
+                  onKeyDown={handleQtyKeyDown}
                   disabled={isAdding}
                   className="min-w-[24px] max-w-[40px] text-center bg-transparent border-none outline-none text-light_mode_text dark:text-dark_mode_text text-sm font-medium focus:ring-0 p-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />

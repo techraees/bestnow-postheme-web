@@ -10,6 +10,7 @@ interface Product {
   rating?: number;
   soldCount?: string;
   price: number;
+  min_qty?: number;
   isFavorite?: boolean;
 }
 
@@ -40,6 +41,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
             rating={product.rating}
             soldCount={product.soldCount}
             price={product.price}
+            min_qty={product.min_qty}
             isFavorite={product.isFavorite}
             onFavoriteClick={onFavoriteClick}
             onAddToCart={onAddToCart}
