@@ -26,7 +26,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
 }) => {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -55,18 +55,21 @@ const AppHeader: React.FC<AppHeaderProps> = ({
     >
       <div className="flex items-center justify-between max-w-[1600px] mx-auto">
         {/* Logo and App Name */}
-        <div className="flex items-center gap-2 md:gap-3">
-          <Image
-            src={logo}
-            alt="BestNow Logo"
-            width={32}
-            height={32}
-            className="h-8 w-8  object-contain"
-            priority
-          />
-          <span className="text-light_mode_text dark:text-dark_mode_text text-sm font-semibold">
-            Bestnow Mobile Accessories
-          </span>
+        <div className="">
+          <Link href={'/'} className="flex items-center gap-2 md:gap-3">
+            <Image
+              src={logo}
+              alt="BestNow Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8  object-contain"
+              priority
+            />
+            <span className="text-light_mode_text dark:text-dark_mode_text text-sm font-semibold">
+              Bestnow Mobile Accessories
+            </span>
+          </Link>
+
         </div>
 
         {/* Right Side: Theme Toggle and Hamburger Menu */}

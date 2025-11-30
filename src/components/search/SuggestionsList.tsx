@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import Tag from "./Tag";
 
 interface SuggestionsListProps {
   suggestions: string[];
@@ -33,15 +34,11 @@ const SuggestionsList: React.FC<SuggestionsListProps> = ({
           Suggestions
         </h3>
       </div>
-      <ul className="py-1 lg:py-2">
-        {suggestions.map((suggestion, index) => (
-          <li
-            key={index}
-            onClick={() => handleClick(suggestion)}
-            className="px-0 lg:px-4 py-2 lg:py-3 cursor-pointer text-light_mode_text dark:text-dark_mode_text text-sm md:text-base lg:text-lg hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2 rounded-lg lg:rounded-xl transition-colors duration-200"
-          >
-            {suggestion}
-          </li>
+      <ul className="py-1 lg:py-2 flex flex-wrap gap-3">
+        {suggestions.map((s: string, i: number) => (
+          <Tag key={i} onClick={() => handleClick(s)}>
+            {s}
+          </Tag>
         ))}
       </ul>
     </div>
@@ -49,3 +46,5 @@ const SuggestionsList: React.FC<SuggestionsListProps> = ({
 };
 
 export default SuggestionsList;
+
+

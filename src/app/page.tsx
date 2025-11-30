@@ -170,7 +170,7 @@ export default function Home() {
     isLoading,
     isFetching,
   } = useGetAllProductsBasedOnFilterQuery(
-    `page=${page}&limit=20${queryString ? `&${queryString}` : ""}`
+    `page=${page}&limit=24${queryString ? `&${queryString}` : ""}`
   );
 
   // Merge new products with existing ones
@@ -275,7 +275,7 @@ export default function Home() {
     }
   }, [data]);
 
-  const { data: categoriesData } = useGetAllCategoriesQuery();
+  const { data: categoriesData } = useGetAllCategoriesQuery({});
 
   return (
     <TopSpacingWrapper>
@@ -337,7 +337,7 @@ export default function Home() {
               <div className="mb-6 md:mb-8 lg:mb-10">
                 {isLoading && products.length === 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4 lg:gap-5 xl:gap-6">
-                    {Array.from({ length: 12 }).map((_, index) => (
+                    {Array.from({ length: 24 }).map((_, index) => (
                       <ProductSkeleton key={index} />
                     ))}
                   </div>
@@ -350,7 +350,7 @@ export default function Home() {
                     />
                     {isFetching && (
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4 lg:gap-5 xl:gap-6 mt-6">
-                        {Array.from({ length: 6 }).map((_, index) => (
+                        {Array.from({ length: 24 }).map((_, index) => (
                           <ProductSkeleton key={`skeleton-${index}`} />
                         ))}
                       </div>
