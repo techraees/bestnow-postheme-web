@@ -41,7 +41,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         </div>
 
         {/* Category Name */}
-        <span className="text-light_mode_text dark:text-dark_mode_text text-[10px] md:text-xs lg:text-[16px] text-center font-medium max-w-[80px] truncate">
+        <span className="text-light_mode_text dark:text-dark_mode_text text-[10px] md:text-xs lg:text-[16px] text-center font-medium max-w-[80px] ">
           {name}
         </span>
       </button>
