@@ -2,12 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { THEME_DATA } from "@/data/coreData/coreData";
 import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import {
-  Dark_Mode_Bestnow_Icon,
-  Light_Mode_Bestnow_Icon,
-} from "@/assets/coreAssets/coreAssets";
+import { BestonDarkLogo, BestonLightLogo } from "@/assets/icons/logo";
 
 interface StatusHeaderProps {
   item: any;
@@ -18,7 +15,7 @@ const StatusHeader: React.FC<StatusHeaderProps> = ({ item }) => {
   return (
     <div className="fixed top-0 left-0 right-0 bg-transparent z-50 p-4 ">
       <div className="flex items-center justify-between w-full  gap-2">
-        <Link to="/status" className="w-[5%]">
+        <Link href="/status" className="w-[5%]">
           <IoMdArrowRoundBack className="text-lg" />
         </Link>
         <div className="flex w-[95%] items-center justify-between gap-5">
@@ -27,9 +24,9 @@ const StatusHeader: React.FC<StatusHeaderProps> = ({ item }) => {
               <img
                 src={
                   getImgBaseUrl(item?.profile_photo_url) ||
-                  theme_mode === THEME_DATA.DARK
-                    ? Dark_Mode_Bestnow_Icon.src
-                    : Light_Mode_Bestnow_Icon.src
+                  (theme_mode === THEME_DATA.DARK
+                    ? BestonDarkLogo.src
+                    : BestonLightLogo.src)
                 }
                 alt=""
                 className="w-[24px] h-[24px] object-cover"

@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import // Dark_Mode_Bestnow_Icon,
 // Light_Mode_Bestnow_Icon,
 "@/assets/coreAssets/coreAssets";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
@@ -48,7 +48,7 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
     <div className=" top-0 left-0 right-0 bg-white dark:bg-dark_mode_primary z-50 p-4 shadow-md">
       <div className="flex items-center justify-between w-full  gap-2">
         <div className="flex items-center w-full">
-          <Link to="/status">
+          <Link href="/status">
             <IoMdArrowRoundBack className="text-lg" />
           </Link>
           <div className="flex items-center">

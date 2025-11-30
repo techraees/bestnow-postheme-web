@@ -37,7 +37,11 @@ const OrdersPage = () => {
 
   // Extract opening balance value
   console.log("openingBalanceData", openingBalanceData);
-  const openingBalance = openingBalanceData?.payload || 0;
+  const openingBalanceRaw = openingBalanceData?.payload;
+  const openingBalance: string | number = 
+    typeof openingBalanceRaw === "string" || typeof openingBalanceRaw === "number"
+      ? openingBalanceRaw
+      : 0;
 
   // Extract orders count and results
   const ordersCount = ordersData?.payload?.count || 0;
@@ -94,7 +98,7 @@ const OrdersPage = () => {
   let openingBalanceNum = 0;
   if (typeof openingBalance === "string") {
     // Remove commas, spaces etc.
-    const cleaned = openingBalance.replace(/,/g, "").trim();
+    const cleaned = (openingBalance as string).replace(/,/g, "").trim();
     openingBalanceNum = Number(cleaned);
   } else if (typeof openingBalance === "number") {
     openingBalanceNum = openingBalance;

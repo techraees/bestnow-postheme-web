@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { BestonDarkLogo, BestonLightLogo } from "@/assets/icons/logo";
 import { THEME_DATA } from "@/data/coreData/coreData";

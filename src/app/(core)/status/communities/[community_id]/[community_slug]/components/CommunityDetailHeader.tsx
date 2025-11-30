@@ -11,7 +11,12 @@ import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import Link from "next/link";
 
-const CommunityDetailHeader: React.FC<> = ({ item, refetch }) => {
+interface CommunityDetailHeaderProps {
+  item: any;
+  refetch: () => void;
+}
+
+const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({ item, refetch }) => {
   const { theme_mode } = useSelector((state: any) => state.coreAppSlice);
   const { user_profile } = useSelector((state: any) => state.coreAppSlice);
   const router = useRouter();

@@ -1,8 +1,4 @@
 import React from "react";
-import {
-  Dark_Mode_Bestnow_Icon,
-  Light_Mode_Bestnow_Icon,
-} from "@/assets/coreAssets/coreAssets";
 import { useSelector } from "react-redux";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import ExploreCommunities from "./ExploreCommunities";

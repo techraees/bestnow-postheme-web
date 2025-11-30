@@ -1,12 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useRouter } from "next/navigation";
-
-import { MessageCircle, Send } from "lucide-react";
-import { useSelector } from "react-redux";
-import Slider from "react-slick";
+import { FC } from "react";
 import { useGetPostOfSpecificCommuntiyQuery } from "@/redux/api/core/communitiesApi";
-import "./index.css";
 
 import PostCard from "./components/PostCard";
 import PostDetailCardSkeletal from "./PostDetailCardSkeletal";
@@ -18,28 +11,38 @@ interface CommunityDetailPageProps {
   setCommunity_slug: (slug: string) => void;
 }
 
-const CommunityDetailPage: React.FC<CommunityDetailPageProps> = ({
+// Define the type of a post safely
+interface CommunityPost {
+  id: number;
+  slug: string;
+  content: string;
+  createdAt: string;
+  updatedAt?: string;
+  user?: any;
+  media?: any[];
+  [key: string]: any; // fallback to avoid TS errors
+}
+
+const CommunityDetailPage: FC<CommunityDetailPageProps> = ({
   community_id,
-  setCommunity_id,
-  community_slug,
-  setCommunity_slug,
 }) => {
   const { data, isLoading } = useGetPostOfSpecificCommuntiyQuery(
     `community_id=${community_id}`
   );
 
-  const posts = data?.payload?.results || [];
+  // Safe fallback typing
+  const posts: CommunityPost[] = data?.payload?.results ?? [];
 
   return (
-    <div className="p-2.5  text-black dark:text-white bg-[#f0f2f5] dark:bg-black h-[calc(100vh-130px)] scrollbar_hide_custom">
+    <div className="p-2.5 text-black dark:text-white bg-[#f0f2f5] dark:bg-black h-[calc(100vh-130px)] scrollbar_hide_custom">
       <div className="space-y-6">
         {isLoading ? (
-          Array.from({ length: 5 }).map((item, index) => (
+          Array.from({ length: 5 }).map((_, index) => (
             <PostDetailCardSkeletal key={index} />
           ))
         ) : posts.length > 0 ? (
-          posts.map((post, index) => (
-            <PostCard key={index} post={post} community_id={community_id} />
+          posts.map((post) => (
+            <PostCard key={post.id} post={post} community_id={community_id} />
           ))
         ) : (
           <div className="w-full text-center text-gray-500 py-4">
