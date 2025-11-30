@@ -105,6 +105,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ navItems }) => {
     <div className="lg:hidden block fixed bottom-0 left-0 right-0 z-50 w-full h-[60px] bg-light_mode_color dark:bg-dark_mode_color border-t border-light_mode_color2 dark:border-dark_mode_color2 shadow-lg backdrop-blur-sm">
       <div className="grid h-full max-w-lg grid-cols-5 px-2 mx-auto font-medium items-center">
         {items.map((item, index) => {
+          console.log(item.badge, "Check mate")
           const active = isActive(item.path);
           const isCart = item.name === "Cart";
 
@@ -112,49 +113,45 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ navItems }) => {
             <Link
               key={index}
               href={item.path}
-              className={`inline-flex flex-col relative  items-center justify-center group transition-all ${
-                isCart ? "bottom-2" : ""
-              } ${
-                active
+              className={`inline-flex flex-col relative  items-center justify-center group transition-all ${isCart ? "bottom-2" : ""
+                } ${active
                   ? "text-light_mode_yellow_color dark:text-dark_mode_yellow_color "
                   : "text-light_mode_gray_color dark:text-dark_mode_gray_color"
-              }`}
+                }`}
             >
               {/* Icon Container with elevated cart button */}
               <div
-                className={`relative flex items-center justify-center transition-all ${
-                  isCart && active
+                className={`relative flex items-center justify-center transition-all ${isCart && active
                     ? "bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color rounded-full p-2.5 md:p-3 shadow-lg -mt-3 "
                     : isCart
-                    ? "bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full p-2.5 md:p-3 shadow-md -mt-6"
-                    : ""
-                }`}
+                      ? "bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full p-2.5 md:p-3 shadow-md -mt-6"
+                      : ""
+                  }`}
               >
                 <div
-                  className={`${
-                    !isCart && active
+                  className={` ${!isCart && active
                       ? "text-light_mode_yellow_color dark:text-dark_mode_yellow_color"
                       : isCart && active
-                      ? "text-light_mode_color2 dark:text-dark_mode_color2"
-                      : "text-light_mode_text dark:text-dark_mode_text"
-                  }`}
+                        ? "text-light_mode_color2 dark:text-dark_mode_color2"
+                        : "text-light_mode_text dark:text-dark_mode_text"
+                    }`}
                 >
                   {item.icon}
                 </div>
-                {item.badge && item.badge > 0 && !isCart && (
+                {item.badge !== 0 && item.badge && item.badge > 0 && !isCart && (
                   <span className="absolute -top-1 -right-1 text-[10px] font-bold text-white text-center flex items-center justify-center rounded-full bg-red-500 w-4 h-4 min-w-[16px]">
                     {item.badge > 99 ? "99+" : item.badge}
                   </span>
-                )}
+                )
+                }
               </div>
 
               {/* Label */}
               <span
-                className={`text-[10px] md:text-[11px] font-medium mt-1 whitespace-nowrap transition-colors ${
-                  active
+                className={`text-[10px] md:text-[11px] font-medium mt-1 whitespace-nowrap transition-colors ${active
                     ? "text-light_mode_yellow_color dark:text-dark_mode_yellow_color"
                     : "text-light_mode_gray_color dark:text-dark_mode_gray_color"
-                }`}
+                  }`}
               >
                 {item.name}
               </span>
