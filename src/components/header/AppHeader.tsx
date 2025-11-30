@@ -75,7 +75,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({
 
         {/* Right Side: Theme Toggle and Hamburger Menu */}
         <div className="flex items-center gap-3 md:gap-4">
+          <div className="lg:block hidden">
           <SocialMediaLinks />
+          </div>
           {/* Theme Toggle Button */}
           <button
             onClick={onThemeToggle}
