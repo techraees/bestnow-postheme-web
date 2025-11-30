@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { useVerifyTokenQuery } from "@/redux/api/auth/customerAuthProfileApi";
 import { setUserProfile } from "@/redux/slice/coreSlice";
+import NextTopLoader from "nextjs-toploader";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -61,6 +62,16 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
 
   return (
     <div className="flex min-h-screen">
+      <NextTopLoader
+        color="#fdb801"
+        initialPosition={0.08}
+        crawlSpeed={200}
+        height={3}
+        crawl={true}
+        showSpinner={false}
+        easing="ease"
+        speed={200}
+      />
       {/* Left Panel */}
       <div className="w-full md:w-1/2 bg-light_mode_color dark:bg-dark_mode_color dark:text-dark_mode_text lg:pt-0 pt-20 flex flex-col lg:justify-center lg:items-center px-6">
         {children}

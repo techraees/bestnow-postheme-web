@@ -12,6 +12,7 @@ import {
   HIDDEN_BOTTOM_NAVBAR_ROUTES,
 } from "@/constants/routes";
 import { useVerifyTokenQuery } from "@/redux/api/auth/customerAuthProfileApi";
+import NextTopLoader from "nextjs-toploader";
 
 interface CoreLayoutProps {
   children: React.ReactNode;
@@ -46,6 +47,16 @@ const CoreLayout = ({ children }: CoreLayoutProps) => {
   }, [data]);
   return (
     <div className="min-h-screen bg-light_mode_color dark:bg-dark_mode_color w-full overflow-x-hidden pb-16 lg:pb-0">
+      <NextTopLoader
+        color="#fdb801"
+        initialPosition={0.08}
+        crawlSpeed={200}
+        height={3}
+        crawl={true}
+        showSpinner={false}
+        easing="ease"
+        speed={200}
+      />
       <AppHeader
         theme_mode={theme_mode}
         onMenuClick={handleMenuClick}
