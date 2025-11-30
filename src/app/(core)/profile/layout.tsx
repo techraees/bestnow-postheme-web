@@ -65,7 +65,7 @@ export default function ProfileLayout({
     {
       id: "account",
       icon: (
-        <ProfileIcon className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color w-5 h-5" />
+        <ProfileIcon className=" w-5 h-5" />
       ),
       title: "Account",
       subtitle: userEmail || "Account settings",
@@ -74,7 +74,7 @@ export default function ProfileLayout({
     {
       id: "address",
       icon: (
-        <MapIcon className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color w-5 h-5" />
+        <MapIcon className=" w-5 h-5" />
       ),
       title: "Address",
       subtitle: "Delivery address",
@@ -83,7 +83,7 @@ export default function ProfileLayout({
     {
       id: "notifications",
       icon: (
-        <NotificationIcon className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color w-5 h-5" />
+        <NotificationIcon className=" w-5 h-5" />
       ),
       title: "Notifications",
       subtitle: "Push • Email",
@@ -92,7 +92,7 @@ export default function ProfileLayout({
     {
       id: "membership",
       icon: (
-        <MembershipIcon className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color w-5 h-5" />
+        <MembershipIcon className=" w-5 h-5" />
       ),
       title: "Membership",
       subtitle: "Gold • Score",
@@ -101,7 +101,7 @@ export default function ProfileLayout({
     {
       id: "security",
       icon: (
-        <SecurityIcon className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color w-5 h-5" />
+        <SecurityIcon className=" w-5 h-5" />
       ),
       title: "Security",
       subtitle: "2 Factor • Mobile Number",
@@ -110,7 +110,7 @@ export default function ProfileLayout({
     {
       id: "apps-devices",
       icon: (
-        <DeviceIcon className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color w-5 h-5" />
+        <DeviceIcon className=" w-5 h-5" />
       ),
       title: "Apps & Devices",
       subtitle: "Gmail • Google",
@@ -179,14 +179,14 @@ export default function ProfileLayout({
                         className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 group ${
                           active
                             ? "bg-light_mode_yellow_color/10 dark:bg-dark_mode_yellow_color/10 hover:bg-light_mode_yellow_color/20 dark:hover:bg-dark_mode_yellow_color/20"
-                            : "hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2"
+                            : "hover:bg-light_mode_color2 dark:hover:bg-dark_mode_color2 text-light_mode_yellow_color dark:text-dark_mode_yellow_color"
                         }`}
                       >
                         {/* Icon */}
                         <div
                           className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                             active
-                              ? "bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color"
+                              ? "bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color text-black"
                               : "bg-light_mode_color2 dark:bg-dark_mode_color2 group-hover:bg-light_mode_color3 dark:group-hover:bg-dark_mode_color3"
                           }`}
                         >
