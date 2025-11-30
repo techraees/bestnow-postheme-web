@@ -17,6 +17,9 @@ import {
 import { toast } from "react-toastify";
 import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
 import FullImageModal from "../modal/FullImageModal";
+import { RootState } from "@/redux/store/store";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   id: string;
@@ -41,6 +44,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onFavoriteClick,
   onAddToCart,
 }) => {
+
+  const { user_profile } = useSelector((state: RootState) => state.coreAppSlice);
+  const router = useRouter();
+
   const [favorite, setFavorite] = useState(isFavorite);
   const [quantity, setQuantity] = useState(1);
   const [currentImage, setCurrentImage] = useState<null | string>(null)
@@ -90,8 +97,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
+
+
   const handleAddToCart = async () => {
     try {
+      if (!user_profile?.id) {
+        router.push("/login")
+        return
+      }
+
       const newQuantity = quantity + 1;
       setQuantity(newQuantity);
       await addToCart({ productId: id, quantity: newQuantity }).unwrap();
