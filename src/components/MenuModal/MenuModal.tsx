@@ -117,9 +117,9 @@ const MenuModal = () => {
       label: "Ledger",
       onClick: () => {
         if (user_profile?.id) {
-          router.push("/login");
-        } else {
           router.push("/ledger");
+        } else {
+          router.push("/login");
         }
       },
     },

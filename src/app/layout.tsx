@@ -5,7 +5,7 @@ import "./globals.css";
 import StoreProvider from "@/redux/store/StoreProvider";
 import ThemeProvider from "@/theme/ThemeProvider";
 import ToastProvider from "@/theme/ToastProvider";
-import NextTopLoader from 'nextjs-toploader';
+import TopLoader from "@/components/top-loader/TopLoader";
 
 // import { Navbar } from "@/components/navbar";
 // import ButtonNavbar from "@/components/navbar/ButtonNavbar";
@@ -41,16 +41,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-dark_mode_primary text-black dark:text-white`}
       >
-        <NextTopLoader
-          color="#fdb801"
-          initialPosition={0.08}
-          crawlSpeed={200}
-          height={3}
-          crawl={true}
-          showSpinner={false}
-          easing="ease"
-          speed={200}
-        />
+        <TopLoader />
 
         <StoreProvider>
           <ThemeProvider>

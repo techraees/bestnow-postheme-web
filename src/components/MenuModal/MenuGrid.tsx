@@ -14,6 +14,7 @@ const MenuGrid = ({ data }: { data: any }) => {
               label={item.label}
               onClick={item.onClick}
               badge={item.badge}
+              path={item?.path}
             />
           ))}
         </div>

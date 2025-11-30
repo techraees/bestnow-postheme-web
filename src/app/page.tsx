@@ -235,7 +235,8 @@ export default function Home() {
         </div>
       ),
       label: "Search",
-      onClick: () => router.push("/search"),
+      path: "/search",
+      onClick: () => { },
     },
     {
       icon: (
@@ -244,13 +245,8 @@ export default function Home() {
         </div>
       ),
       label: "Ledger",
-      onClick: () => {
-        if (user_profile?.id) {
-          router.push("/login");
-        } else {
-          router.push("/ledger");
-        }
-      },
+      path: user_profile?.id ? "/ledger" : "/login",
+      onClick: () => { },
     },
     {
       icon: (
@@ -259,9 +255,8 @@ export default function Home() {
         </div>
       ),
       label: "Categories",
-      onClick: () => {
-        console.log("Categories clicked");
-      },
+      path: "#",
+      onClick: () => { },
     },
     {
       icon: (
@@ -270,9 +265,8 @@ export default function Home() {
         </div>
       ),
       label: "Notification",
-      onClick: () => {
-        console.log("Notification clicked");
-      },
+      path: "/#",
+      onClick: () => { },
       badge: "10+",
     },
   ];
