@@ -82,7 +82,7 @@ const ExploreCommunities: React.FC = () => {
     }
     const res: any = await FollowCommunity(slug);
     if (res?.data?.status === "success") {
-      toast.success(res?.data?.payload?.message);
+      // toast.success(res?.data?.payload?.message);
       refetch();
     } else {
       toast.error(res?.error?.data?.message);

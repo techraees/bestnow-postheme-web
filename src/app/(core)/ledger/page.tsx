@@ -535,9 +535,8 @@ const LedgerPage = () => {
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-16 md:py-20 lg:py-24">
             <div className="animate-spin rounded-full h-12 w-12 md:h-16 md:w-16 border-4 border-light_mode_color3 dark:border-dark_mode_color3 border-t-light_mode_yellow_color dark:border-t-dark_mode_yellow_color mb-4"></div>
-            <p className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg lg:text-xl font-medium mb-2">
-              Loading ledger data...
-            </p>
+            {/* <p className="text-light_mode_text dark:text-dark_mode_text text-base md:text-lg lg:text-xl font-medium mb-2">
+            </p> */}
           </div>
         ) : viewType === "calendar" ? (
           <CalendarView />

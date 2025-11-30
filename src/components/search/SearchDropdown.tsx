@@ -114,7 +114,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
         quantity: quantity,
       }).unwrap();
       refetchCartItemsIds();
-      toast.success("Added to cart");
+      // toast.success("Added to cart");
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to add to cart");
     }

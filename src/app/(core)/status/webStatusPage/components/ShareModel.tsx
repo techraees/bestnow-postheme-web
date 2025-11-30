@@ -151,7 +151,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ onClose, url, post_slug }) => {
                       }).unwrap();
                       onClose();
 
-                      toast.success(`${label} share logged successfully`);
+                      // toast.success(`${label} share logged successfully`);
                     } catch (error) {
                       toast.error(`Failed to log share on ${label}`);
                     }

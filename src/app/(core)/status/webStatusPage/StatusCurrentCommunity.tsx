@@ -36,7 +36,7 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
     }
     const res = await FollowCommunity(slug);
     if (res?.data?.status === "success") {
-      toast.success(res?.data?.payload?.message);
+      // toast.success(res?.data?.payload?.message);
       refetch?.();
     } else {
       toast.error((res?.error as any)?.data?.message || "Something went wrong");

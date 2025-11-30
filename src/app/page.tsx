@@ -1,34 +1,31 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useRouter, useSearchParams } from "next/navigation";
-import { AppHeader } from "@/components/header";
-import { PromotionalBanner } from "@/components/promotional-banner";
+import { CategoriesIcon, LedgerIcon, NoficationIcon, SearchIcon } from "@/assets";
 import { CategoriesSection } from "@/components/categories";
 import {
-  FilterTabs,
-  FilterTab,
   FilterDrawer,
   FilterOptions,
+  FilterTab,
+  FilterTabs,
 } from "@/components/filter-tabs";
-import { ProductGrid, ProductSkeleton } from "@/components/products";
-import useThemeCache from "@/theme/useThemeCache";
-import { setIsMenuOpen, setUserProfile } from "@/redux/slice/coreSlice";
-import { CartIcon, DiscountIcon, QuickOrderIcon, SearchIcon } from "@/assets";
+import { AppHeader } from "@/components/header";
 import MenuGrid from "@/components/MenuModal/MenuGrid";
-import { BottomNavbar } from "@/components/navigation";
-import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import MenuModal from "@/components/MenuModal/MenuModal";
-import {
-  useGetAllProductsBasedOnFilterQuery,
-  useGetAllProductsCategoriesQuery,
-  useGetAllProductsBrandsNamesQuery,
-  useGetAllCategoriesQuery,
-} from "@/redux/api/core/coreApi";
+import { BottomNavbar } from "@/components/navigation";
+import { ProductGrid, ProductSkeleton } from "@/components/products";
+import { PromotionalBanner } from "@/components/promotional-banner";
+import TopSpacingWrapper from "@/components/top-spacing/TopSpacing";
 import { ALLOWED_QUERY_PARAMS_PRODUCTS_HOME_PAGE } from "@/data/coreData/coreEnums/coreGeneralEnums";
-import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
 import { useVerifyTokenQuery } from "@/redux/api/auth/customerAuthProfileApi";
+import {
+  useGetAllCategoriesQuery,
+  useGetAllProductsBasedOnFilterQuery
+} from "@/redux/api/core/coreApi";
+import { setIsMenuOpen, setUserProfile } from "@/redux/slice/coreSlice";
+import useThemeCache from "@/theme/useThemeCache";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 interface Product {
   id?: string;
@@ -241,29 +238,33 @@ export default function Home() {
     {
       icon: (
         <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
-          <CartIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+          <LedgerIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
         </div>
       ),
-      label: "My Cart",
-      onClick: () => router.push("/cart"),
+      label: "Ledger",
+      onClick: () => router.push("/ledger"),
     },
     {
       icon: (
         <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
-          <QuickOrderIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+          <CategoriesIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
         </div>
       ),
-      label: "Quick Order",
-      onClick: () => console.log("Quick Order clicked"),
+      label: "Categories",
+      onClick: () => {
+        console.log("Categories clicked");
+      },
     },
     {
       icon: (
         <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
-          <DiscountIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+          <NoficationIcon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
         </div>
       ),
-      label: "Discount & Offers",
-      onClick: () => console.log("Discount & Offers clicked"),
+      label: "Notification",
+      onClick: () => {
+        console.log("Notification clicked");
+      },
       badge: "10+",
     },
   ];

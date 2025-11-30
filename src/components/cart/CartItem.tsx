@@ -65,7 +65,7 @@ const CartItem: React.FC<CartItemProps> = ({
         cartItemId: id,
         quantity: newQuantity,
       }).unwrap();
-      toast.success("Cart updated");
+      // toast.success("Cart updated");
       onUpdateSuccess?.();
     } catch (error: any) {
       // Revert on error
@@ -80,7 +80,7 @@ const CartItem: React.FC<CartItemProps> = ({
 
     try {
       await removeCartItem({ cartItemId: id }).unwrap();
-      toast.success("Item removed from cart");
+      // toast.success("Item removed from cart");
       onRemove(id);
       onUpdateSuccess?.();
     } catch (error: any) {

@@ -108,7 +108,7 @@ const CheckoutPage = () => {
       };
 
       await placeOrder(orderData).unwrap();
-      toast.success("Order placed successfully!");
+      // toast.success("Order placed successfully!");
       router.push("/orders");
     } catch (error: any) {
       toast.error(

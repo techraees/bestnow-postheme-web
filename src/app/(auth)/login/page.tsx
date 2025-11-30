@@ -39,7 +39,7 @@ const LoginPage = () => {
         if (response?.data?.status === "success") {
           setCookie("access_token", response?.data?.payload?.access_token);
           setCookie("refresh_token", response?.data?.payload?.refresh_token);
-          toast.success("Login successful!...");
+          // toast.success("Login successful!...");
           methods.reset();
 
           // Now Reroute to other page

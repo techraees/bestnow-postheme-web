@@ -41,7 +41,7 @@ const PostReact: React.FC<PostReactProps> = ({ slug, liked }) => {
       }).unwrap();
 
       setReactionType(type);
-      toast.success(`Reacted with ${type}`);
+      // toast.success(`Reacted with ${type}`);
       setShowReactions(false);
     } catch (err) {
       toast.error("Failed to react");

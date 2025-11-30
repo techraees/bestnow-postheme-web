@@ -94,7 +94,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       setQuantity(newQuantity);
       await addToCart({ productId: id, quantity: newQuantity }).unwrap();
       refetchCartItemsIds();
-      toast.success("Added to cart");
+      // toast.success("Added to cart");
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to add to cart");
     }

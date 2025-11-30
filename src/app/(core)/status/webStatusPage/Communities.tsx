@@ -44,7 +44,7 @@ const Communities: React.FC<CommunitiesProps> = ({
     }
     const res = await FollowCommunity(slug);
     if (res?.data?.status === "success") {
-      toast.success(res?.data?.payload?.message);
+      // toast.success(res?.data?.payload?.message);
       refetch();
     } else {
       toast.error("Failed to follow community");

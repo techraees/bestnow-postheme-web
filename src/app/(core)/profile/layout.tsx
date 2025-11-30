@@ -51,7 +51,7 @@ export default function ProfileLayout({
     logoutCustomer({ refresh_token: getRefreshTokenFromCookie });
 
     // Now clear the redux state by reloading the page
-    toast.success("Logout successfully");
+    // toast.success("Logout successfully");
 
     // Remove the cookies
     removeCookie(COOKIES_LOGIN_TOKENS.REFRESH_TOKEN);

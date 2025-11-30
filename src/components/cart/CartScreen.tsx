@@ -93,7 +93,7 @@ const CartScreen: React.FC<CartScreenProps> = ({
       await clearCart().unwrap();
       setItems([]);
       setShowClearCartModal(false);
-      toast.success("Cart cleared successfully");
+      // toast.success("Cart cleared successfully");
       onClearCart?.();
       onCartUpdate?.();
     } catch (error: any) {

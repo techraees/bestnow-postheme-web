@@ -30,7 +30,7 @@ const PostSaved: React.FC<PostSavedProps> = ({ slug, saved }) => {
       }).unwrap();
 
       setIsBookmarked((prev) => !prev);
-      toast.success(!isBookmarked ? "Bookmarked!" : "Removed from bookmarks");
+      // toast.success(!isBookmarked ? "Bookmarked!" : "Removed from bookmarks");
     } catch (err) {
       toast.error("Something went wrong!");
     }

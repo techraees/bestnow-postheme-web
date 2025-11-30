@@ -52,7 +52,7 @@ const StatusReact: React.FC<StatusReactProps> = ({
 
       setReactionType(type);
       handleResume();
-      toast.success(`Reacted with ${type}`);
+      // toast.success(`Reacted with ${type}`);
       setShowReactions(false);
     } catch (err) {
       toast.error("Failed to react");
