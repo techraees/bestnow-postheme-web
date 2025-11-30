@@ -101,7 +101,7 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
       {/* Horizontal Scrollable Categories - Desktop: Show all, Mobile: Scrollable */}
       <div className="overflow-x-auto scrollbar_hide_custom ">
         <div className="flex gap-2.5 md:gap-3 lg:gap-4 pb-2  md:pb-0">
-          {categories.map((category) => (
+          {categories.map((category: any) => (
             <CategoryItem
               key={category.id}
               name={category.label}
