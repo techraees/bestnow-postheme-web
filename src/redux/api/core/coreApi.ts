@@ -48,6 +48,9 @@ export const coreApi = createApi({
     getAllCategories: builder.query({
       query: () => `/mobile-accessories/web/sales/products/category-list`,
     }),
+    getAllSocialLinksWithEngagements: builder.query({
+      query: () => `/mobile-accessories/web/engagements/social-media-links`,
+    }),
   }),
 });
 
@@ -60,4 +63,5 @@ export const {
   useGetSignupContactNumberQuery,
   useGetAllSocialLinksQuery,
   useGetAllCategoriesQuery,
+  useGetAllSocialLinksWithEngagementsQuery
 } = coreApi;

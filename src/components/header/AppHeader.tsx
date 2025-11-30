@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { ArrowUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { HIDDEN_HEADER_ROUTES } from "@/constants/routes";
+import SocialMediaLinks from "./SocialMediaLinks";
 
 interface AppHeaderProps {
   theme_mode: string;
@@ -74,6 +75,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
 
         {/* Right Side: Theme Toggle and Hamburger Menu */}
         <div className="flex items-center gap-3 md:gap-4">
+          <SocialMediaLinks />
           {/* Theme Toggle Button */}
           <button
             onClick={onThemeToggle}
