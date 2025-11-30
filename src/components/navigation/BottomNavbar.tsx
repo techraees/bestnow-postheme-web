@@ -29,7 +29,6 @@ interface BottomNavbarProps {
 
 const BottomNavbar: React.FC<BottomNavbarProps> = ({ navItems }) => {
   const { user_profile } = useSelector((state: any) => state.coreAppSlice);
-  console.log("user_profile", user_profile);
   const { data: cartItemsCount } = useGetCartItemsCountQuery();
 
   const cartCount = cartItemsCount?.payload || 0;
@@ -105,7 +104,6 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ navItems }) => {
     <div className="lg:hidden block fixed bottom-0 left-0 right-0 z-50 w-full h-[60px] bg-light_mode_color dark:bg-dark_mode_color border-t border-light_mode_color2 dark:border-dark_mode_color2 shadow-lg backdrop-blur-sm">
       <div className="grid h-full max-w-lg grid-cols-5 px-2 mx-auto font-medium items-center">
         {items.map((item, index) => {
-          console.log(item.badge, "Check mate")
           const active = isActive(item.path);
           const isCart = item.name === "Cart";
 

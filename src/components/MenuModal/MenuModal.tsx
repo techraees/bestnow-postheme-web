@@ -2,7 +2,7 @@
 import { ActionButtonsGrid } from "@/components/action-buttons";
 import React, { useEffect } from "react";
 import MenuGrid from "./MenuGrid";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsMenuOpen } from "@/redux/slice/coreSlice";
 import { HiXMark } from "react-icons/hi2";
 import {
@@ -20,8 +20,11 @@ import {
   QuickOrderIcon,
 } from "@/assets";
 import { useRouter } from "next/navigation";
+import { RootState } from "@/redux/store/store";
 
 const MenuModal = () => {
+  const { user_profile } = useSelector((state: RootState) => state.coreAppSlice);
+
   const dispatch = useDispatch();
   const router = useRouter();
   // Prevent body scroll when menu is open
@@ -113,9 +116,11 @@ const MenuModal = () => {
       ),
       label: "Ledger",
       onClick: () => {
-        router.push("/ledger");
-
-        console.log("Ledger clicked");
+        if (user_profile?.id) {
+          router.push("/login");
+        } else {
+          router.push("/ledger");
+        }
       },
     },
     {

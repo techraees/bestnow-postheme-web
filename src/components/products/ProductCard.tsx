@@ -103,7 +103,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   // Format price with Rs. prefix
   const formattedPrice = `Rs. ${price.toLocaleString("en-PK")}`;
 
-  console.log(cartItemsIds);
 
   return (
     <div className="relative w-full bg-light_mode_color dark:bg-dark_mode_color rounded-2xl overflow-hidden transition-transform hover:scale-[1.02] duration-200">
@@ -161,7 +160,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
               "text-light_mode_gray_color dark:text-dark_mode_gray_color";
             if (soldCount) {
               const lower = soldCount;
-              console.log(lower);
               if (lower === "Stock High") {
                 colorClass =
                   "text-light_mode_green_color dark:text-dark_mode_green_color";

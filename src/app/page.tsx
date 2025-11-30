@@ -22,6 +22,7 @@ import {
   useGetAllProductsBasedOnFilterQuery
 } from "@/redux/api/core/coreApi";
 import { setIsMenuOpen, setUserProfile } from "@/redux/slice/coreSlice";
+import { RootState } from "@/redux/store/store";
 import useThemeCache from "@/theme/useThemeCache";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -42,6 +43,7 @@ export default function Home() {
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const [mounted, setMounted] = useState(false);
+  const { user_profile } = useSelector((state: RootState) => state.coreAppSlice);
 
   // Redux state
   const { theme_mode } = useSelector((state: any) => state.coreAppSlice);
@@ -242,7 +244,13 @@ export default function Home() {
         </div>
       ),
       label: "Ledger",
-      onClick: () => router.push("/ledger"),
+      onClick: () => {
+        if (user_profile?.id) {
+          router.push("/login");
+        } else {
+          router.push("/ledger");
+        }
+      },
     },
     {
       icon: (
