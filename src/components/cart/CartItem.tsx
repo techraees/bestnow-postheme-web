@@ -1,15 +1,14 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { HiMinus, HiPlus } from "react-icons/hi";
-import { ChevronDown, ChevronUp, Trash2, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import {
   useUpdateCartItemMutation,
   useRemoveCartItemMutation,
 } from "@/redux/api/core/cartApi";
 import { toast } from "react-toastify";
-import CartItemSkeleton from "./CartItemSkeleton";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface CartItemProps {
   id: string;
@@ -32,32 +31,37 @@ const CartItem: React.FC<CartItemProps> = ({
   onRemove,
   onUpdateSuccess,
 }) => {
-  const [quantity, setQuantity] = useState(initialQuantity);
-  const [updateCartItem, { isLoading: isUpdating }] =
-    useUpdateCartItemMutation();
-  const [removeCartItem, { isLoading: isRemoving }] =
-    useRemoveCartItemMutation();
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const minQty = 1;
 
-  // Sync quantity when prop changes
+  const [draftQty, setDraftQty] = useState(String(initialQuantity));
+  const [updateCartItem, { isLoading: isUpdating }] = useUpdateCartItemMutation();
+  const [removeCartItem, { isLoading: isRemoving }] = useRemoveCartItemMutation();
+
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Sync external quantity
   useEffect(() => {
-    setQuantity(initialQuantity);
+    setDraftQty(String(initialQuantity));
   }, [initialQuantity]);
 
-  // Cleanup debounce timer on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, []);
+  // Parse helper
+  const parseDraft = () => {
+    const n = parseInt(draftQty, 10);
+    return Number.isFinite(n) ? n : NaN;
+  };
 
+  // Debounced update function
+  const debouncedUpdate = (val: number) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
+      await handleQuantityUpdate(val);
+    }, 500);
+  };
+
+  // API update
   const handleQuantityUpdate = async (newQuantity: number) => {
-    if (newQuantity < 1) return;
-
-    const previousQuantity = quantity;
-    setQuantity(newQuantity);
+    const previousQuantity = initialQuantity;
     onQuantityChange(id, newQuantity);
 
     try {
@@ -65,22 +69,68 @@ const CartItem: React.FC<CartItemProps> = ({
         cartItemId: id,
         quantity: newQuantity,
       }).unwrap();
-      // toast.success("Cart updated");
+
       onUpdateSuccess?.();
     } catch (error: any) {
-      // Revert on error
-      setQuantity(previousQuantity);
-      onQuantityChange(id, previousQuantity);
       toast.error(error?.data?.message || "Failed to update cart");
+      onQuantityChange(id, previousQuantity);
+      setDraftQty(String(previousQuantity));
     }
   };
 
+  // Clamp & commit
+  const commitClamp = async () => {
+    const n = parseDraft();
+    const clamped = Number.isFinite(n)
+      ? Math.min(Math.max(n, minQty), 100000000)
+      : minQty;
+
+    setDraftQty(String(clamped));
+    debouncedUpdate(clamped);
+  };
+
+  // Increment
+  const handleIncrease = () => {
+    const n = parseDraft();
+    const base = Number.isFinite(n) ? n : minQty;
+    const next = base + 1;
+
+    setDraftQty(String(next));
+    debouncedUpdate(next);
+  };
+
+  // Decrement
+  const handleDecrease = () => {
+    const n = parseDraft();
+    const base = Number.isFinite(n) ? n : minQty;
+    const next = Math.max(base - 1, minQty);
+
+    setDraftQty(String(next));
+    debouncedUpdate(next);
+  };
+
+  // Input typing
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const clean = e.target.value.replace(/[^\d]/g, "");
+    setDraftQty(clean);
+
+    const n = parseInt(clean, 10);
+    if (Number.isFinite(n)) {
+      debouncedUpdate(n);
+    }
+  };
+
+  const handleInputBlur = async () => commitClamp();
+  const handleQtyKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") commitClamp();
+  };
+
+  // Delete item
   const handleDelete = async () => {
     if (!onRemove) return;
 
     try {
       await removeCartItem({ cartItemId: id }).unwrap();
-      // toast.success("Item removed from cart");
       onRemove(id);
       onUpdateSuccess?.();
     } catch (error: any) {
@@ -88,148 +138,94 @@ const CartItem: React.FC<CartItemProps> = ({
     }
   };
 
-  const handleDecrease = async () => {
-    if (quantity > 1) {
-      await handleQuantityUpdate(quantity - 1);
-    }
-  };
-
-  const handleIncrease = async () => {
-    await handleQuantityUpdate(quantity + 1);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value === "" || /^\d+$/.test(value)) {
-      const numValue = value === "" ? 1 : parseInt(value, 10);
-      const validQuantity = Math.max(1, numValue);
-      setQuantity(validQuantity);
-      onQuantityChange(id, validQuantity);
-
-      // Clear previous debounce timer
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-
-      // Debounce API call - wait 500ms after user stops typing
-      debounceTimerRef.current = setTimeout(async () => {
-        if (validQuantity !== initialQuantity && validQuantity >= 1) {
-          await handleQuantityUpdate(validQuantity);
-        }
-      }, 500);
-    }
-  };
-
-  const handleInputBlur = async () => {
-    // Clear any pending debounce
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-      debounceTimerRef.current = null;
-    }
-
-    // Ensure minimum quantity
-    if (quantity < 1) {
-      const validQuantity = 1;
-      setQuantity(validQuantity);
-      await handleQuantityUpdate(validQuantity);
-    } else if (quantity !== initialQuantity) {
-      // Update immediately on blur if quantity changed
-      await handleQuantityUpdate(quantity);
-    }
-  };
-
-  const totalPrice = unitPrice * quantity;
+  const currentQuantity = parseInt(draftQty, 10) || minQty;
   const formattedUnitPrice = `Rs. ${unitPrice.toLocaleString("en-PK")}`;
-  const formattedTotalPrice = `Rs. ${totalPrice.toLocaleString("en-PK")}`;
-  const isLoading = isUpdating || isRemoving;
+  const formattedTotalPrice = `Rs. ${(unitPrice * currentQuantity).toLocaleString("en-PK")}`;
 
   return (
-    <div className="relative bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-1 md:p-4 lg:p-5 transition-shadow">
-      {/* Loading Skeleton */}
-      {isLoading && <CartItemSkeleton />}
+    <div className="relative bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-1 md:p-4 lg:p-5 shadow-sm">
 
-      {/* Cart Item Content - Hidden when loading */}
-      {!isLoading && (
-        <>
-          {/* Delete Button - Top Right */}
-          <button
-            onClick={handleDelete}
-            disabled={isRemoving}
-            className="absolute top-2 right-2 z-10   disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Remove item from cart"
-          >
-            <Trash2 className="w-4 h-4 md:w-5 md:h-5 text-light_mode_red_color dark:text-dark_mode_red_color" />
-          </button>
+      {/* DELETE BUTTON WITH LOADER BEHIND */}
+      <div className="absolute top-2 right-2 z-20 flex items-center justify-center w-8 h-8">
 
-          <div className="flex gap-3 md:gap-4 lg:gap-5">
-            {/* Product Image */}
-            <div className="relative shrink-0 w-[100px] h-[100px] md:w-24 md:h-24 lg:w-28 lg:h-28 bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-              <Image
-                src={image}
-                alt={name}
-                fill
-                className="object-fill"
-                sizes="(max-width: 768px) 80px, (max-width: 1024px) 96px, 112px"
-              />
-            </div>
-
-            {/* Product Details */}
-            <div className="flex-1 min-w-0 flex flex-col justify-between">
-              {/* Product Name and Unit Price */}
-              <div className="flex-1 mb-0 md:mb-3">
-                <h3 className="text-light_mode_text dark:text-dark_mode_text opacity-85 text-sm md:text-base lg:text-lg font-medium line-clamp-2 mb-1 md:mb-2 leading-tight">
-                  {name}
-                </h3>
-                <p className="text-light_mode_text dark:text-dark_mode_text text-[16px] lg:text-base font-[400]">
-                  {formattedUnitPrice}
-                </p>
-              </div>
-
-              {/* Quantity Controls and Total Price */}
-              <div className="flex items-center justify-between gap-3 md:gap-4">
-                {/* Quantity Controls */}
-                <div className="flex items-center text-light_mode_blue_color dark:text-dark_mode_blue_color text-sm gap-2 md:gap-3">
-                  {/* Decrease */}
-                  <button
-                    onClick={handleDecrease}
-                    disabled={isUpdating || isRemoving || quantity <= 1}
-                    className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px] flex justify-center items-center cursor-pointer text-dark_mode_color dark:text-light_mode_color hover:opacity-80 active:opacity-60 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
-                  >
-                    <ChevronDown size={20} />
-                  </button>
-
-                  {/* Quantity Input */}
-                  <input
-                    type="number"
-                    min="1"
-                    value={quantity}
-                    onChange={handleInputChange}
-                    onBlur={handleInputBlur}
-                    disabled={isUpdating || isRemoving}
-                    className="w-[32px] text-center bg-transparent border-none outline-none text-light_mode_text dark:text-dark_mode_text text-sm font-medium focus:ring-0 p-0 disabled:opacity-50 disabled:cursor-not-allowed [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-
-                  {/* Increase */}
-                  <button
-                    onClick={handleIncrease}
-                    disabled={isUpdating || isRemoving}
-                    className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px] flex justify-center items-center cursor-pointer text-light_mode_yellow_color dark:text-dark_mode_yellow_color hover:opacity-80 active:opacity-60 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
-                  >
-                    <ChevronUp size={20} />
-                  </button>
-                </div>
-
-                {/* Total Price */}
-                <div className="text-right">
-                  <p className="text-light_mode_text dark:text-dark_mode_text text-[16px] md:text-base lg:text-lg font-bold">
-                    {formattedTotalPrice}
-                  </p>
-                </div>
-              </div>
-            </div>
+        {/* Loader BEHIND delete icon */}
+        {(isRemoving || isUpdating) && (
+          <div className="absolute inset-0 flex items-center justify-center z-0">
+            <ClipLoader size={20} color="#fbbf24" />
           </div>
-        </>
-      )}
+        )}
+
+        {/* Delete Icon on TOP */}
+        <button
+          onClick={handleDelete}
+          disabled={isRemoving || isUpdating}
+          className="z-10 disabled:opacity-40"
+        >
+          <Trash2 className="w-5 h-5 text-light_mode_red_color dark:text-dark_mode_red_color" />
+        </button>
+      </div>
+
+      {/* CONTENT AREA */}
+      <div className={`${(isRemoving || isUpdating) ? "opacity-60 pointer-events-none" : ""}`}>
+        <div className="flex gap-3">
+
+          {/* IMAGE */}
+          <div className="relative w-[100px] h-[100px] bg-white rounded-xl overflow-hidden border">
+            <Image src={image} alt={name} fill className="object-fill" />
+          </div>
+
+          {/* DETAILS */}
+          <div className="flex-1 flex flex-col justify-between">
+            <div>
+              <h3 className="text-light_mode_text dark:text-dark_mode_text text-sm font-medium line-clamp-2">
+                {name}
+              </h3>
+              <p className="text-light_mode_text dark:text-dark_mode_text">
+                {formattedUnitPrice}
+              </p>
+            </div>
+
+            {/* QTY + TOTAL */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDecrease}
+                  type="button"
+                  disabled={isUpdating || isRemoving || currentQuantity <= minQty}
+                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px]"
+                >
+                  <ChevronDown size={20} />
+                </button>
+
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={draftQty}
+                  onChange={handleInputChange}
+                  onBlur={handleInputBlur}
+                  onKeyDown={handleQtyKeyDown}
+                  className="w-[34px] text-center bg-transparent outline-none"
+                />
+
+                <button
+                  onClick={handleIncrease}
+                  type="button"
+                  disabled={isUpdating || isRemoving}
+                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px]"
+                >
+                  <ChevronUp size={20} />
+                </button>
+              </div>
+
+              <div className="text-right font-bold text-light_mode_text dark:text-dark_mode_text">
+                {formattedTotalPrice}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };
