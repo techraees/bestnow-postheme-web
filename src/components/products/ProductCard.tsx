@@ -44,13 +44,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onFavoriteClick,
   onAddToCart,
 }) => {
-
-  const { user_profile } = useSelector((state: RootState) => state.coreAppSlice);
+  const { user_profile } = useSelector(
+    (state: RootState) => state.coreAppSlice
+  );
   const router = useRouter();
 
   const [favorite, setFavorite] = useState(isFavorite);
   const [quantity, setQuantity] = useState(1);
-  const [currentImage, setCurrentImage] = useState<null | string>(null)
+  const [currentImage, setCurrentImage] = useState<null | string>(null);
 
   const [addToCart, { isLoading: isAdding }] = useAddToCartMutation();
 
@@ -97,13 +98,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
-
-
   const handleAddToCart = async () => {
     try {
       if (!user_profile?.id) {
-        router.push("/login")
-        return
+        router.push("/login");
+        return;
       }
 
       const newQuantity = quantity + 1;
@@ -119,16 +118,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
   // Format price with Rs. prefix
   const formattedPrice = `Rs. ${price.toLocaleString("en-PK")}`;
 
-
   return (
     <>
       <div className="relative w-full bg-light_mode_color dark:bg-dark_mode_color rounded-2xl overflow-hidden transition-transform hover:scale-[1.02] duration-200">
         {/* Product Image Area - White Background with rounded corners (60-65% height) */}
         <div
           onClick={() => {
-            setCurrentImage(image)
+            setCurrentImage(image);
           }}
-          className="block">
+          className="block"
+        >
           <div className="relative border bg-white rounded-2xl mt-2 mb-3 h-[180px] md:h-[200px] lg:h-[220px] flex items-center justify-center cursor-pointer">
             {/* Favorite Icon - Light gray circular button with black outline heart */}
             <button
@@ -138,7 +137,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 handleFavoriteClick();
               }}
               className="absolute top-2 right-2 z-10 w-8 h-8 md:w-9 md:h-9 rounded-full bg-gray-300 dark:bg-gray-400 flex items-center justify-center hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
-              aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+              aria-label={
+                favorite ? "Remove from favorites" : "Add to favorites"
+              }
             >
               {favorite ? (
                 <HiHeart className="h-4 w-4 md:h-5 md:w-5 text-dark_mode_color fill-current" />
@@ -154,7 +155,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 alt={title}
                 width={190}
                 height={190}
-                className="object-fill  h-full max-w-full"
+                className="object-fill h-full w-full"
               />
             </div>
           </div>
@@ -185,7 +186,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   colorClass =
                     "text-light_mode_green_color dark:text-dark_mode_green_color";
                 } else if (lower == "Stock Low") {
-                  colorClass = "text-orange-500 dark:text-dark_mode_orange_color";
+                  colorClass =
+                    "text-orange-500 dark:text-dark_mode_orange_color";
                 } else if (lower == "Stock very low") {
                   colorClass =
                     "text-light_mode_red_color dark:text-dark_mode_red_color";
@@ -251,7 +253,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
         onClose={() => setCurrentImage("")}
         imageUrl={image || ""}
       />
-
     </>
   );
 };
