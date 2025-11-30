@@ -47,7 +47,7 @@ const CoreLayout = ({ children }: CoreLayoutProps) => {
   }, [data]);
   return (
     <div className="min-h-screen bg-light_mode_color dark:bg-dark_mode_color w-full overflow-x-hidden pb-16 lg:pb-0">
-            <TopLoaderProvider />
+      <TopLoaderProvider />
 
       <AppHeader
         theme_mode={theme_mode}
