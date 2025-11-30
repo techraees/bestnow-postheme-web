@@ -57,8 +57,8 @@ const SocialMediaLinks = () => {
                         gradientUnits="userSpaceOnUse"
                         gradientTransform="translate(7.41436 51.017) scale(65.31 65.2708)"
                     >
-                        <stop offset="0.09" stop-color="#FA8F21" />
-                        <stop offset="0.78" stop-color="#D82D7E" />
+                        <stop offset="0.09" stopColor="#FA8F21" />
+                        <stop offset="0.78" stopColor="#D82D7E" />
                     </radialGradient>
                     <radialGradient
                         id="paint1_radial_7092_54379"
@@ -68,8 +68,8 @@ const SocialMediaLinks = () => {
                         gradientUnits="userSpaceOnUse"
                         gradientTransform="translate(31.1086 53.257) scale(51.4733 51.4424)"
                     >
-                        <stop offset="0.64" stop-color="#8C3AAA" stop-opacity="0" />
-                        <stop offset="1" stop-color="#8C3AAA" />
+                        <stop offset="0.64" stopColor="#8C3AAA" stopOpacity="0" />
+                        <stop offset="1" stopColor="#8C3AAA" />
                     </radialGradient>
                 </defs>
             </svg>
