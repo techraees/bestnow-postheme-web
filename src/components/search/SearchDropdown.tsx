@@ -57,7 +57,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -68,10 +68,12 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [isOpen, onClose]);
 
@@ -202,7 +204,11 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                   </div>
 
                   {/* PRICE + QTY + CART */}
-                  <div className="flex items-center justify-between gap-3">
+                  <div
+                    className="flex items-center justify-between gap-3"
+                    onClick={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
+                  >
                     {/* PRICE */}
                     <p className="text-light_mode_text dark:text-dark_mode_text text-sm font-normal">
                       Rs. {product.productPrice.toLocaleString("en-PK")}
@@ -211,12 +217,17 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                     {/* QTY + CART */}
                     <div className="flex items-center gap-2">
                       {!isInCart && (
-                        <div className="flex items-center text-light_mode_blue_color dark:text-dark_mode_blue_color gap-1.5">
+                        <div
+                          className="flex items-center text-light_mode_blue_color dark:text-dark_mode_blue_color gap-1.5"
+                          onClick={(e) => e.stopPropagation()}
+                          onTouchStart={(e) => e.stopPropagation()}
+                        >
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDecrease(product.id);
                             }}
+                            onTouchStart={(e) => e.stopPropagation()}
                             disabled={quantity <= 1}
                             className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-dark_mode_color dark:text-light_mode_color hover:opacity-80 active:opacity-60 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
@@ -229,6 +240,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                             value={quantity}
                             onChange={(e) => handleInputChange(e, product.id)}
                             onClick={(e) => e.stopPropagation()}
+                            onTouchStart={(e) => e.stopPropagation()}
                             className="min-w-[24px] max-w-[40px] text-center bg-transparent border-none outline-none text-light_mode_text dark:text-dark_mode_text text-sm font-medium focus:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                           />
 
@@ -237,6 +249,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                               e.stopPropagation();
                               handleIncrease(product.id);
                             }}
+                            onTouchStart={(e) => e.stopPropagation()}
                             className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-light_mode_yellow_color dark:text-dark_mode_yellow_color hover:opacity-80 active:opacity-60"
                           >
                             <ChevronUp size={18} />
@@ -248,6 +261,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                       {isInCart ? (
                         <button
                           onClick={(e) => e.stopPropagation()}
+                          onTouchStart={(e) => e.stopPropagation()}
                           disabled
                           className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px] flex items-center justify-center opacity-60 cursor-not-allowed"
                         >
@@ -258,6 +272,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                           onClick={(e) =>
                             handleAddToCart(e, product.id, quantity)
                           }
+                          onTouchStart={(e) => e.stopPropagation()}
                           disabled={isAdding}
                           className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px] flex items-center justify-center hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                         >
