@@ -8,6 +8,8 @@ import { getCookie, removeCookie } from "@/utils/coreUtils/cookieFunction";
 import { toast } from "react-toastify";
 import { BestonDarkLogo, BestonLightLogo } from "@/assets";
 import { useLogoutCustomerMutation } from "@/redux/api/auth/customerAuthApi";
+import ProfileIcon from "@/assets/images/profile/ProfileIcon";
+import Image from "next/image";
 
 interface ProfileDropdownProps {
   user_profile: any;
@@ -57,8 +59,8 @@ const ProfileDropdown = memo(
         ref={dropdownRef}
       >
         <div
-          className={`w-[32px] h-[32px] ${
-            pathname?.includes("/profile") && "border-2 border-primary"
+          className={`w-[32px] h-[32px] border border-gray-400 dark:border-gray-400 ${
+            pathname?.includes("/profile") && ""
           } rounded-full cursor-pointer overflow-hidden flex justify-center items-center`}
         >
           {user_profile?.profile_path ? (
@@ -68,16 +70,7 @@ const ProfileDropdown = memo(
               className="w-20 h-20 rounded-full object-cover"
             />
           ) : mounted ? (
-            <img
-              src={
-                (theme_mode === THEME_DATA.DARK
-                  ? BestonDarkLogo
-                  : BestonLightLogo
-                ).src || ""
-              }
-              alt="Profile"
-              className="h-[25px] w-[25px] rounded-full object-cover"
-            />
+            <ProfileIcon className="w-[15px] h-[15px] text-light_mode_yellow_color dark:text-dark_mode_yellow_color rounded-full object-cover" />
           ) : (
             <div className="" />
           )}
