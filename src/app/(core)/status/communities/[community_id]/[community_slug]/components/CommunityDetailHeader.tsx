@@ -16,7 +16,10 @@ interface CommunityDetailHeaderProps {
   refetch: () => void;
 }
 
-const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({ item, refetch }) => {
+const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
+  item,
+  refetch,
+}) => {
   const { theme_mode } = useSelector((state: any) => state.coreAppSlice);
   const { user_profile } = useSelector((state: any) => state.coreAppSlice);
   const router = useRouter();
@@ -37,7 +40,7 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({ item, ref
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-white dark:bg-dark_mode_primary z-50 p-4 shadow-md">
+    <div className="fixed top-0 left-0 right-0 bg-light_mode_color dark:bg-dark_mode_color z-50 p-4 shadow-md">
       <div className="flex items-center justify-between w-full gap-2">
         <div className="flex items-center w-full">
           <Link href="/status">
@@ -100,23 +103,23 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({ item, ref
               {item?.follow ? (
                 followLoading ? (
                   <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
-                                  <ClipLoader
-                                    size={15}
-                                    className="!text-white mx-3 my-1"
-                                    color="currentColor"
-                                  />
-                                </div>
+                    <ClipLoader
+                      size={15}
+                      className="!text-white mx-3 my-1"
+                      color="currentColor"
+                    />
+                  </div>
                 ) : (
                   "Following"
                 )
               ) : followLoading ? (
                 <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
-                                <ClipLoader
-                                  size={15}
-                                  className="!text-white mx-3 my-1"
-                                  color="currentColor"
-                                />
-                              </div>
+                  <ClipLoader
+                    size={15}
+                    className="!text-white mx-3 my-1"
+                    color="currentColor"
+                  />
+                </div>
               ) : (
                 "Follow"
               )}

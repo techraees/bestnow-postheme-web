@@ -20,7 +20,7 @@ const StatusHeader: React.FC<StatusHeaderProps> = ({ item }) => {
   const { theme_mode } = useSelector((state: any) => state.coreAppSlice);
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-transparent z-50 p-4">
+    <div className="fixed top-0 left-0 right-0 bg-light_mode_color dark:bg-dark_mode_color z-50 p-4">
       <div className="flex items-center justify-between w-full gap-2">
         <Link href="/status" className="w-[5%]">
           <IoMdArrowRoundBack className="text-lg" />
