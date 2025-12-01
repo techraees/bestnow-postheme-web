@@ -182,7 +182,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, community_id }) => {
                       href={media.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[15px] bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 py-2 px-4 rounded-full font-medium hover:underline transition"
+                      className="text-[15px] bg-light_mode_color1 dark:bg-dark_mode_color1 text-blue-600 dark:text-blue-400 py-2 px-4 rounded-full font-medium hover:underline transition"
                     >
                       View Document
                     </a>
