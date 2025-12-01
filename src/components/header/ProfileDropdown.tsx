@@ -53,7 +53,7 @@ const ProfileDropdown = memo(
     return (
       <li
         onClick={() => setIsDropDownOpen(!isDropdownOpen)}
-        className="relative list-none"
+        className="relative lg:block hidden list-none"
         ref={dropdownRef}
       >
         <div

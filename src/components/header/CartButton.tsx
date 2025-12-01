@@ -22,7 +22,7 @@ const CartButton = memo(({ myItemsCountObj, onClick }: CartButtonProps) => {
       className="
         relative 
         cursor-pointer 
-        flex 
+        lg:flex hidden 
         items-center 
         justify-center
         w-[35px]
