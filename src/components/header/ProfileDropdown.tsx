@@ -59,7 +59,7 @@ const ProfileDropdown = memo(
         ref={dropdownRef}
       >
         <div
-          className={`w-[32px] h-[32px] border border-gray-400 dark:border-gray-400 ${
+          className={`w-[32px] h-[32px] border border-light_mode_yellow_color dark:border-dark_mode_yellow_color ${
             pathname?.includes("/profile") && ""
           } rounded-full cursor-pointer overflow-hidden flex justify-center items-center`}
         >

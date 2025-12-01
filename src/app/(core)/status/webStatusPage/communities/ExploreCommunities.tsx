@@ -216,7 +216,7 @@ const ExploreCommunities: React.FC<ExploreCommunitiesProps> = ({
 
                     <div className="flex items-center justify-between ml-3">
                       <div>
-                        <p>
+                        <p className="text-light_mode_text dark:text-dark_mode_text"> 
                           {item?.community_name
                             ?.split(" ")
                             .slice(0, 3)
