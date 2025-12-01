@@ -15,13 +15,22 @@
     height: 0; */
 }
 
+/* React Modal opens, lock scroll */
+.ReactModal__Body--open {
+  overflow: hidden !important;
+}
+
+/* React Modal overlay ke click areas ko scroll block */
+.ReactModal__Overlay {
+  overflow: hidden !important;
+}
+
 /* Prevent iOS auto zoom */
 input,
 textarea,
 select {
   font-size: 16px !important;
 }
-
 
 body {
   font-family: "Outfit", sans-serif;
@@ -93,6 +102,7 @@ body,
   --color-light_mode_yellow_hover_color: #ffcd1a;
   --color-light_mode_yellow_active_color: #ffd333;
   --color-light_mode_yellow_highlight_color: #fff4cc;
+  --color-light_mode_yellow_highlight1_color: #F5F5DC;
   --color-light_mode_yellow_pending_color: #ffea7f;
   --color-light_mode_green_color: #00d180;
   --color-light_mode_green1_color: #16c47f;

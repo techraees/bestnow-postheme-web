@@ -13,7 +13,6 @@ import {
   TwitterIcon,
   WhatsappIcon,
 } from "react-share";
-import { InstagramIcon } from "lucide-react";
 import { useEngagementOnSpecificPostMutation } from "@/redux/api/core/communitiesApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -161,7 +160,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ onClose, url, post_slug }) => {
                 </Button>
               ) : (
                 <button
-                  onClick={() => navigate("/auth/login")}
+                  onClick={() => router.push("/login")}
                   className="w-[44px] h-[44px] rounded-full flex items-center justify-center "
                 >
                   <Icon size={44} round />
@@ -172,7 +171,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ onClose, url, post_slug }) => {
               </span>
             </div>
           ))}
-          <div className="flex flex-col items-center space-y-1">
+          {/* <div className="flex flex-col items-center space-y-1">
             <button onClick={handleInstagramShare}>
               <img
                 src={InstagramIcon}
@@ -184,7 +183,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ onClose, url, post_slug }) => {
             <span className="text-xs font-bold text-black dark:text-white">
               Instagram
             </span>
-          </div>
+          </div> */}
         </div>
         <div className="flex items-center space-x-2 border border-gray-400 rounded-[10px] sm:px-3 px-1.5 sm:py-2.5 py-1.5">
           <input

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { HiOutlineMenu } from "react-icons/hi";
 import { HiMoon, HiSun } from "react-icons/hi";
@@ -10,15 +10,70 @@ import Link from "next/link";
 import { HiXMark } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import { ArrowUp } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { HIDDEN_HEADER_ROUTES } from "@/constants/routes";
 import SocialMediaLinks from "./SocialMediaLinks";
+import CartButton from "./CartButton";
+import { useGetCartItemsCountQuery } from "@/redux/api/core/cartApi";
+import ProfileDropdown from "./ProfileDropdown";
+import Modal from "react-modal";
+import { motion, AnimatePresence } from "framer-motion";
+import AddToCartModal from "../cart/AddToCartModal";
+import { SearchHeader } from "../search";
+import SearchNav from "./SearchNav";
+
+const LoginIcon = () => (
+  <svg
+    className="xl:w-[20.09px] xl:h-[20.09px] w-[16.09px] h-[16.09px]"
+    viewBox="0 0 45 45"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g id="login">
+      <mask
+        id="mask0_1804_9189"
+        maskUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        style={{ maskType: "alpha" }}
+      >
+        <rect
+          id="Bounding box"
+          x="0.0546875"
+          y="0.0913086"
+          width="44.0917"
+          height="44.0917"
+          fill="currentColor"
+        />
+      </mask>
+      <g mask="url(#mask0_1804_9189)">
+        <path
+          id="login_2"
+          d="M22.1008 38.6713V34.997H34.9608V9.27684H22.1008V5.60254H34.9608C35.9713 5.60254 36.8363 5.96231 37.5558 6.68187C38.2754 7.40142 38.6352 8.26641 38.6352 9.27684V34.997C38.6352 36.0074 38.2754 36.8724 37.5558 37.592C36.8363 38.3115 35.9713 38.6713 34.9608 38.6713H22.1008ZM18.4265 31.3227L15.9004 28.6588L20.5851 23.9741H5.56641V20.2998H20.5851L15.9004 15.615L18.4265 12.9511L27.6122 22.1369L18.4265 31.3227Z"
+          fill="currentColor"
+        />
+      </g>
+    </g>
+  </svg>
+);
 
 interface AppHeaderProps {
   theme_mode: string;
   onMenuClick?: () => void;
   onThemeToggle?: () => void;
 }
+
+const LOGIN_MENU = [
+  {
+    name: "Login",
+    path: "/login",
+    icon: (
+      <div className="relative  text-light_mode_yellow_color dark:text-dark_mode_yellow_color text-opacity-100">
+        <LoginIcon />
+      </div>
+    ),
+  },
+];
 
 const AppHeader: React.FC<AppHeaderProps> = ({
   theme_mode,
@@ -27,10 +82,15 @@ const AppHeader: React.FC<AppHeaderProps> = ({
 }) => {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const [isOpenCart, setIsOpenCart] = useState<boolean>(false);
+  const [isDropdownOpen, setIsDropDownOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+  const { user_profile } = useSelector((state: any) => state.coreAppSlice);
 
   // Use default logo until mounted to prevent hydration mismatch
   const logo =
@@ -45,6 +105,51 @@ const AppHeader: React.FC<AppHeaderProps> = ({
     pathname?.startsWith(route)
   );
 
+  const { data: cartItemsCount } = useGetCartItemsCountQuery();
+  console.log(cartItemsCount);
+
+  const cartCount = cartItemsCount?.payload || 0;
+
+  const handleCartClick = useCallback(() => {
+    if (user_profile) {
+      setIsOpenCart(true);
+    } else {
+      router.push("/auth/login");
+    }
+  }, [user_profile, router]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropDownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setIsOpenCart(false);
+  }, []);
+
+  useEffect(() => {
+    if (isOpenCart) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpenCart]);
+
   // Don't render header if route is in hidden routes array
   if (shouldHideHeader) {
     return null;
@@ -52,12 +157,12 @@ const AppHeader: React.FC<AppHeaderProps> = ({
 
   return (
     <header
-      className={`w-full lg:h-[60px] h-[55px] fixed top-0 left-0 right-0 z-50 bg-light_mode_color dark:bg-dark_mode_color px-4 py-3 md:px-6 lg:px-8 xl:px-12 bg-opacity-95 dark:bg-opacity-95 backdrop-blur-sm transition-transform duration-300`}
+      className={`w-full lg:h-[65px] h-[55px] fixed top-0 left-0 right-0 z-50 bg-light_mode_color dark:bg-dark_mode_color px-4 py-3 md:px-6 lg:px-8 xl:px-12 bg-opacity-95 dark:bg-opacity-95 backdrop-blur-sm transition-transform duration-300`}
     >
       <div className="flex items-center justify-between max-w-[1600px] mx-auto">
         {/* Logo and App Name */}
         <div className="">
-          <Link href={'/'} className="flex items-center gap-2 md:gap-3">
+          <Link href={"/"} className="flex items-center gap-2 md:gap-3">
             <Image
               src={logo}
               alt="BestNow Logo"
@@ -70,15 +175,17 @@ const AppHeader: React.FC<AppHeaderProps> = ({
               Bestnow Mobile Accessories
             </span>
           </Link>
-
         </div>
-
+        <SearchNav />
         {/* Right Side: Theme Toggle and Hamburger Menu */}
-        <div className="flex items-center gap-3 md:gap-4">
+        <div className="flex items-center gap-3 md:gap-2">
           <div className="lg:block hidden">
             <SocialMediaLinks />
           </div>
-          <Link className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color relative lg:block hidden" href="/status">
+          <Link
+            className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color relative lg:block hidden"
+            href="/status"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill={`${20 > 0 ? "currentColor" : "currentColor"}`}
@@ -87,8 +194,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({
               focusable="false"
               aria-hidden="true"
               style={{
-                pointerEvents: 'none',
-                display: 'inherit',
+                pointerEvents: "none",
+                display: "inherit",
               }}
             >
               <path
@@ -100,8 +207,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
             {20 > 0 && (
               <span
                 className={`absolute -top-[0px] -right-[6px] text-[11px] font-[600] p-1 text-white text-center flex items-center justify-center rounded-full  bg-light_mode_yellow_color dark:bg-dark_mode_yellow_color w-[6px] h-[6px]`}
-              >
-              </span>
+              ></span>
             )}
           </Link>
           {/* Theme Toggle Button */}
@@ -182,21 +288,114 @@ c16 -16 29 -39 29 -51 0 -28 -52 -80 -80 -80 -28 0 -80 52 -80 80 0 12 13 35
             )}
           </button>
 
-          {/* Hamburger Menu */}
-          <button
-            onClick={onMenuClick}
-            className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80 active:opacity-60 transition-opacity p-1 md:p-1.5"
-            aria-label="Menu"
-          >
-            {isMenuOpen ? (
-              <ArrowUp className="h-6 w-6 md:h-7 md:w-7" />
-            ) : (
-              <HiOutlineMenu className="h-6 w-6 md:h-7 md:w-7" />
+          {!user_profile ? (
+            LOGIN_MENU.map((item, index) => (
+              <li
+                key={index}
+                className={`group cursor-pointer text-light_mode_yellow_color dark:text-dark_mode_yellow_color flex items-center xl:gap-x-2 gap-x-1 ${
+                  index == 0 && "ml-0"
+                }`}
+              >
+                <Link href={item?.path}>{item?.icon}</Link>
+                <Link
+                  href={item?.path}
+                  className="relative cursor-pointer  mx-[0.25rem]  xl:text-[12.72px] text-[10.72px] font-bold font-['Plus Jakarta Sans']"
+                >
+                  {item?.name}
+                </Link>
+              </li>
+            ))
+          ) : (
+            <>
+              <CartButton
+                myItemsCountObj={cartCount}
+                onClick={handleCartClick}
+              />
+
+              <ProfileDropdown
+                user_profile={user_profile}
+                theme_mode={theme_mode}
+                pathname={pathname}
+                isDropdownOpen={isDropdownOpen}
+                setIsDropDownOpen={setIsDropDownOpen}
+                dropdownRef={dropdownRef}
+              />
+              <button
+                onClick={onMenuClick}
+                className="text-light_mode_text dark:text-dark_mode_text hover:opacity-80 active:opacity-60 transition-opacity p-1 md:p-1.5"
+                aria-label="Menu"
+              >
+                {isMenuOpen ? (
+                  <ArrowUp className="h-6 w-6 md:h-7 md:w-7" />
+                ) : (
+                  <HiOutlineMenu className="h-6 w-6 md:h-7 md:w-7" />
+                )}
+              </button>
+            </>
+          )}
+          <AnimatePresence>
+            {isOpenCart && (
+              <Modal
+                isOpen={isOpenCart}
+                onRequestClose={closeModal}
+                shouldCloseOnOverlayClick={true}
+                shouldCloseOnEsc={true}
+                contentLabel="Product Image"
+                style={{
+                  content: {
+                    top: 0,
+                    left: 0,
+                    width: "100svw",
+                    height: "100vh",
+                    border: "none",
+                    padding: 0,
+                    background: "transparent",
+                    position: "fixed",
+                    overflow: "hidden",
+                  },
+                  overlay: {
+                    backgroundColor: "rgba(0, 0, 0, 0.75)",
+                    zIndex: 1000,
+                  },
+                }}
+              >
+                {/* CLICK OUTSIDE TO CLOSE */}
+                <motion.div
+                  className="fixed inset-0"
+                  onClick={closeModal}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                />
+
+                {/* RIGHT SIDE DRAWER */}
+                <motion.div
+                  className="
+          dark:bg-dark_mode_primary 
+          bg-light_mode_primary 
+          h-full absolute right-0 w-[380px]
+          shadow-2xl
+        "
+                  initial={{ x: "100%", opacity: 0 }} // 👉 Start fully off-screen right
+                  animate={{ x: "0%", opacity: 1 }} // 👉 Slide into view
+                  exit={{ x: "100%", opacity: 0 }} // 👉 Slide back to right on close
+                  transition={{
+                    duration: 0.28,
+                    ease: "easeOut", // 👉 Smooth clean animation
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <AddToCartModal closeModal={closeModal} />
+                </motion.div>
+              </Modal>
             )}
-          </button>
+          </AnimatePresence>
+
+          {/* Hamburger Menu */}
         </div>
-      </div >
-    </header >
+      </div>
+    </header>
   );
 };
 

@@ -27,8 +27,8 @@ const StatusSidebar: React.FC<StatusSidebarProps> = ({
           <RecentUpdates
             community_id={community_id}
             setCommunity_id={setCommunity_id}
-            community_slug={community_slug}
-            setCommunity_slug={setCommunity_slug}
+            // community_slug={community_slug}
+            // setCommunity_slug={setCommunity_slug}
           />
 
           <Communities

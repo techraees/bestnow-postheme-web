@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
-import SmartImage from "@/components/image/SmartImage";
 import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
 
 interface CommunityDetailHeaderProps {
@@ -45,7 +44,7 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
   };
 
   return (
-    <div className=" top-0 left-0 right-0 bg-white dark:bg-dark_mode_primary z-50 p-4 shadow-md">
+    <div className=" top-0 left-0 right-0 bg-light_mode_color dark:bg-dark_mode_color z-50 p-4 shadow-md">
       <div className="flex items-center justify-between w-full  gap-2">
         <div className="flex items-center w-full">
           <Link href="/status">
@@ -87,26 +86,30 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
                         ${
                           item?.follow
                             ? "bg-transparent border border-primary text-primary"
-                            : "bg-blue-200 dark:bg-blue-900 dark:text-blue-300 text-primary"
+                            : "bg-light_mode_yellow_highlight_color dark:bg-dark_mode_yellow_highlight_color dark:text-dark_mode_yellow_color text-light_mode_yellow_color"
                         }
                       `}
             >
               {item?.follow ? (
                 followLoading ? (
-                  <ClipLoader
-                    size={15}
-                    className="!text-white mx-3 my-1"
-                    color="#006BFF"
-                  />
+                  <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+                    <ClipLoader
+                      size={15}
+                      className="!text-white mx-3 my-1"
+                      color="currentColor"
+                    />
+                  </div>
                 ) : (
                   "Following"
                 )
               ) : followLoading ? (
-                <ClipLoader
-                  size={15}
-                  className="!text-white mx-3 my-1"
-                  color="#006BFF"
-                />
+                <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+                  <ClipLoader
+                    size={15}
+                    className="!text-white mx-3 my-1"
+                    color="currentColor"
+                  />
+                </div>
               ) : (
                 "Follow"
               )}

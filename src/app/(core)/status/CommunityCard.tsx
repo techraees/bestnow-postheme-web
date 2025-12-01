@@ -77,29 +77,32 @@ const CommunityCard: React.FC<CommunityCardProps> = ({ item, refetch }) => {
               }}
               disabled={followLoading}
               className={`w-full h-full rounded-lg px-3 py-0.5 flex items-center cursor-pointer justify-center text-[14px]
-    ${
-      item.follow
-        ? "bg-transparent border border-primary text-primary"
-        : "bg-blue-200 dark:bg-blue-900 dark:text-blue-300 text-primary"
-    }
+    ${item.follow
+                  ? "bg-transparent border border-primary text-primary"
+                  : "bg-light_mode_yellow_highlight_color dark:bg-dark_mode_yellow_highlight_color dark:text-dark_mode_yellow_color text-light_mode_yellow_color"
+                }
   `}
             >
               {item?.follow ? (
                 followLoading ? (
-                  <ClipLoader
-                    size={15}
-                    className="!text-white mx-3 my-1"
-                    color="#006BFF"
-                  />
+                  <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+                    <ClipLoader
+                      size={15}
+                      className="!text-white mx-3 my-1"
+                      color="currentColor"
+                    />
+                  </div>
                 ) : (
                   "Following"
                 )
               ) : followLoading ? (
-                <ClipLoader
-                  size={15}
-                  className="!text-white mx-3 my-1"
-                  color="#006BFF"
-                />
+                <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+                  <ClipLoader
+                    size={15}
+                    className="!text-white mx-3 my-1"
+                    color="currentColor"
+                  />
+                </div>
               ) : (
                 "Follow"
               )}

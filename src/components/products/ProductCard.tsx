@@ -146,6 +146,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
     if (e.key === "Enter") commitClamp();
   };
 
+  useEffect(() => {
+    const html = document.documentElement;
+
+    if (currentImage) {
+      html.style.overflow = "hidden";
+    } else {
+      html.style.overflow = "";
+    }
+
+    return () => {
+      html.style.overflow = "";
+    };
+  }, [currentImage]);
+
 
   return (
     <>
@@ -273,7 +287,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <button
               onClick={handleAddToCart}
               disabled={isAdding}
-              className="w-full mt-1 md:mt-2 bg-light_mode_color2 dark:bg-dark_mode_yellow_highlight_color hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 text-light_mode_text dark:text-dark_mode_text py-2.5 md:py-3 rounded-2xl font-medium text-xs md:text-sm transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-1 md:mt-2 bg-light_mode_yellow_highlight1_color dark:bg-dark_mode_yellow_highlight_color hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 text-light_mode_text dark:text-dark_mode_text py-2.5 md:py-3 rounded-2xl font-medium text-xs md:text-sm transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isAdding ? "Adding..." : "Add to Cart"}
             </button>

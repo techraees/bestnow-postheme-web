@@ -12,6 +12,8 @@ import {
 import { toast } from "react-toastify";
 import { BannerImage } from "@/assets";
 import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
 
 interface Product {
   id: number;
@@ -41,6 +43,8 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
   const [addToCart, { isLoading: isAdding }] = useAddToCartMutation();
   const { data: cartItemsIds, refetch: refetchCartItemsIds } =
     useGetCartItemsIdsQuery();
+
+  console.log(cartItemsIds);
 
   // Initialize quantities
   useEffect(() => {
@@ -102,12 +106,19 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
     }
   };
 
+  const { user_profile } = useSelector(
+    (state: RootState) => state.coreAppSlice
+  );
+
   const handleAddToCart = async (
     e: React.MouseEvent,
     productId: number,
     quantity: number
   ) => {
     e.stopPropagation();
+    if (!user_profile) {
+      router.push("/login");
+    }
     try {
       await addToCart({
         productId: productId.toString(),
@@ -150,35 +161,35 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
       <div className="p-3 space-y-3">
         {products.slice(0, 5).map((product) => {
           const quantity = quantities[product.id] || 1;
-          const isInCart = cartItemsIds?.payload?.includes(
-            product.id.toString()
-          );
+          const isInCart = cartItemsIds?.payload?.includes(product.id);
+          console.log(product.id);
+          console.log(isInCart);
 
           return (
             <div
               key={product.id}
               onClick={() => handleProductClick(product.id)}
-              className="group relative bg-light_mode_color dark:bg-dark_mode_color border border-light_mode_color2 dark:border-dark_mode_color2 rounded-2xl p-3 md:p-4 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] border border-transparent hover:border-light_mode_color3 dark:hover:border-dark_mode_color3"
+              className="group relative bg-light_mode_color dark:bg-dark_mode_color border border-light_mode_color2 dark:border-dark_mode_color2 rounded-2xl p-3 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] border border-transparent hover:border-light_mode_color3 dark:hover:border-dark_mode_color3"
             >
-              <div className="flex items-start gap-3 md:gap-4">
-                {/* Product Image */}
-                <div className="relative w-20 h-20 md:w-24 md:h-24 shrink-0 bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+              <div className="flex items-start gap-3">
+                {/* IMAGE */}
+                <div className="relative w-20 h-20 shrink-0 bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
                   <Image
                     src={getImgBaseUrl(product.image)}
                     alt={product.product_name}
                     fill
                     className="object-contain p-1.5"
-                    sizes="(max-width: 768px) 80px, 96px"
                   />
                 </div>
 
-                {/* Product Info */}
+                {/* INFO */}
                 <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
-                  {/* Top Section: Name and Stock */}
+                  {/* NAME + STOCK */}
                   <div className="space-y-1">
-                    <h3 className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base font-medium line-clamp-2 leading-tight opacity-85">
+                    <h3 className="text-light_mode_text truncate dark:text-dark_mode_text text-sm md:text-base font-medium line-clamp-2 leading-tight opacity-85">
                       {product.product_name}
                     </h3>
+
                     {product.stock_status && (
                       <span
                         className={`text-xs font-medium ${getStockStatusColor(
@@ -190,14 +201,14 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                     )}
                   </div>
 
-                  {/* Bottom Section: Price, Quantity, and Cart Button */}
+                  {/* PRICE + QTY + CART */}
                   <div className="flex items-center justify-between gap-3">
-                    {/* Price */}
-                    <p className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base font-normal">
+                    {/* PRICE */}
+                    <p className="text-light_mode_text dark:text-dark_mode_text text-sm font-normal">
                       Rs. {product.productPrice.toLocaleString("en-PK")}
                     </p>
 
-                    {/* Quantity Controls and Cart Button */}
+                    {/* QTY + CART */}
                     <div className="flex items-center gap-2">
                       {!isInCart && (
                         <div className="flex items-center text-light_mode_blue_color dark:text-dark_mode_blue_color gap-1.5">
@@ -207,10 +218,11 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                               handleDecrease(product.id);
                             }}
                             disabled={quantity <= 1}
-                            className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-dark_mode_color dark:text-light_mode_color hover:opacity-80 active:opacity-60 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                            className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-dark_mode_color dark:text-light_mode_color hover:opacity-80 active:opacity-60 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <ChevronDown size={18} />
                           </button>
+
                           <input
                             type="number"
                             min="1"
@@ -219,26 +231,27 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                             onClick={(e) => e.stopPropagation()}
                             className="min-w-[24px] max-w-[40px] text-center bg-transparent border-none outline-none text-light_mode_text dark:text-dark_mode_text text-sm font-medium focus:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                           />
+
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleIncrease(product.id);
                             }}
-                            className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-light_mode_yellow_color dark:text-dark_mode_yellow_color hover:opacity-80 active:opacity-60 transition-opacity"
+                            className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[25px] w-[25px] flex justify-center items-center text-light_mode_yellow_color dark:text-dark_mode_yellow_color hover:opacity-80 active:opacity-60"
                           >
                             <ChevronUp size={18} />
                           </button>
                         </div>
                       )}
 
-                      {/* Cart Button */}
+                      {/* CART BUTTON */}
                       {isInCart ? (
                         <button
                           onClick={(e) => e.stopPropagation()}
                           disabled
                           className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px] flex items-center justify-center opacity-60 cursor-not-allowed"
                         >
-                          <HiShoppingCart className="w-4 h-4 md:w-5 md:h-5 text-light_mode_text dark:text-dark_mode_text" />
+                          <HiShoppingCart className="w-4 h-4 text-light_mode_text dark:text-dark_mode_text" />
                         </button>
                       ) : (
                         <button
@@ -248,7 +261,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                           disabled={isAdding}
                           className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px] flex items-center justify-center hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                         >
-                          <HiShoppingCart className="w-4 h-4 md:w-5 md:h-5 text-light_mode_yellow_color dark:text-dark_mode_yellow_color" />
+                          <HiShoppingCart className="w-4 h-4 text-light_mode_yellow_color dark:text-dark_mode_yellow_color" />
                         </button>
                       )}
                     </div>

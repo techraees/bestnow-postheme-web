@@ -257,7 +257,6 @@ const StatusViewer: React.FC<StatusViewerProps> = ({
 
       <BottomDrawer
         setIsPaused={setIsPaused}
-        isPaused={isPaused}
         status={status}
         community_id={community_id}
         handlePause={handlePause}

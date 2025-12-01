@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import {
-  SearchIcon,
+  SearchIconLatest,
   FastBillingIcon,
   MyCartIcon,
   DiscountOffersIcon,
@@ -33,7 +33,7 @@ const ActionButtonsGrid: React.FC<ActionButtonsGridProps> = ({
         <ActionButton
           icon={
             <Image
-              src={SearchIcon}
+              src={SearchIconLatest}
               alt="Search"
               width={24}
               height={24}

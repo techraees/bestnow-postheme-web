@@ -34,8 +34,10 @@ const CartItem: React.FC<CartItemProps> = ({
   const minQty = 1;
 
   const [draftQty, setDraftQty] = useState(String(initialQuantity));
-  const [updateCartItem, { isLoading: isUpdating }] = useUpdateCartItemMutation();
-  const [removeCartItem, { isLoading: isRemoving }] = useRemoveCartItemMutation();
+  const [updateCartItem, { isLoading: isUpdating }] =
+    useUpdateCartItemMutation();
+  const [removeCartItem, { isLoading: isRemoving }] =
+    useRemoveCartItemMutation();
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -140,14 +142,14 @@ const CartItem: React.FC<CartItemProps> = ({
 
   const currentQuantity = parseInt(draftQty, 10) || minQty;
   const formattedUnitPrice = `Rs. ${unitPrice.toLocaleString("en-PK")}`;
-  const formattedTotalPrice = `Rs. ${(unitPrice * currentQuantity).toLocaleString("en-PK")}`;
+  const formattedTotalPrice = `Rs. ${(
+    unitPrice * currentQuantity
+  ).toLocaleString("en-PK")}`;
 
   return (
-    <div className="relative bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-1 md:p-4 lg:p-5 shadow-sm">
-
+    <div className="relative bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-1 md:p-4 lg:p-3 shadow-sm">
       {/* DELETE BUTTON WITH LOADER BEHIND */}
       <div className="absolute top-2 right-2 z-20 flex items-center justify-center w-8 h-8">
-
         {/* Loader BEHIND delete icon */}
         {(isRemoving || isUpdating) && (
           <div className="absolute inset-0 flex items-center justify-center z-0">
@@ -166,9 +168,12 @@ const CartItem: React.FC<CartItemProps> = ({
       </div>
 
       {/* CONTENT AREA */}
-      <div className={`${(isRemoving || isUpdating) ? "opacity-60 pointer-events-none" : ""}`}>
+      <div
+        className={`${
+          isRemoving || isUpdating ? "opacity-60 pointer-events-none" : ""
+        }`}
+      >
         <div className="flex gap-3">
-
           {/* IMAGE */}
           <div className="relative w-[100px] h-[100px] bg-white rounded-xl overflow-hidden border">
             <Image src={image} alt={name} fill className="object-fill" />
@@ -191,8 +196,10 @@ const CartItem: React.FC<CartItemProps> = ({
                 <button
                   onClick={handleDecrease}
                   type="button"
-                  disabled={isUpdating || isRemoving || currentQuantity <= minQty}
-                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px]"
+                  disabled={
+                    isUpdating || isRemoving || currentQuantity <= minQty
+                  }
+                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 flex justify-center items-center rounded-full h-[30px] w-[30px]"
                 >
                   <ChevronDown size={20} />
                 </button>
@@ -211,7 +218,7 @@ const CartItem: React.FC<CartItemProps> = ({
                   onClick={handleIncrease}
                   type="button"
                   disabled={isUpdating || isRemoving}
-                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px]"
+                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 flex justify-center items-center rounded-full h-[30px] w-[30px]"
                 >
                   <ChevronUp size={20} />
                 </button>
@@ -221,11 +228,9 @@ const CartItem: React.FC<CartItemProps> = ({
                 {formattedTotalPrice}
               </div>
             </div>
-
           </div>
         </div>
       </div>
-
     </div>
   );
 };
