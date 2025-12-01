@@ -1,5 +1,4 @@
 export const getImgBaseUrl = (path: string | undefined | null): string => {
-
   // Return empty string if path is invalid
   if (!path || path.trim() === "") {
     return "";
