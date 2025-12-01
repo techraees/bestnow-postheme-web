@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
-import SmartImage from "@/components/image/SmartImage";
 import { getImgBaseUrl } from "@/utils/coreUtils/getImgBaseUrl";
 
 interface CommunityDetailHeaderProps {

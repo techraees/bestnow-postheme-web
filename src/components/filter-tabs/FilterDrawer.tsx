@@ -43,9 +43,9 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
 
   // Fetch brands and categories from API
   const { data: brandsData, isLoading: brandsLoading } =
-    useGetAllProductsBrandsNamesQuery();
+    useGetAllProductsBrandsNamesQuery("");
   const { data: categoriesData, isLoading: categoriesLoading } =
-    useGetAllProductsCategoriesQuery();
+    useGetAllProductsCategoriesQuery("");
 
   const brands = brandsData?.payload || [];
   const categories = categoriesData?.payload || [];

@@ -58,7 +58,7 @@ const CommentReply: React.FC<CommentReplyProps> = ({
           return comment;
         })
       );
-      setReply();
+      // setReply();
       reset();
     } catch (err) {
       console.error("Failed to comment:", err);

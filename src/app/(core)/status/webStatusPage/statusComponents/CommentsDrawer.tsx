@@ -22,6 +22,7 @@ import {
 } from "@/data/coreData/coreData";
 
 interface BottomDrawerProps {
+  setIsPaused: any;
   status: {
     slug: string;
   };
@@ -62,6 +63,7 @@ interface FormData {
 }
 
 export default function BottomDrawer({
+  setIsPaused,
   status,
   community_id,
   handlePause,
