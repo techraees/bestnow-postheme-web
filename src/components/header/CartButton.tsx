@@ -37,15 +37,14 @@ const CartButton = memo(({ myItemsCountObj, onClick }: CartButtonProps) => {
           right-[2px] 
           text-[9px]
           font-semibold
-          text-black
-          dark:text-white
+          text-white
           flex 
           items-center 
           justify-center 
           rounded-full 
           border
-          dark:bg-dark_mode_yellow_highlight_color
-          bg-light_mode_yellow_highlight_color
+          dark:bg-dark_mode_red_color
+          bg-light_mode_red_color
           shadow-sm
           ${displayCount && displayCount.length > 1 ? "w-[16px] h-[16px]" : "w-[13px] h-[13px]"}
         `}
