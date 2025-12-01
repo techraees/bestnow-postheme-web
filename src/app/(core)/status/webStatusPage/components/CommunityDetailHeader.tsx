@@ -6,8 +6,8 @@ import {
 } from "@/redux/api/core/communitiesApi";
 import { useSelector } from "react-redux";
 import // Dark_Mode_Bestnow_Icon,
-  // Light_Mode_Bestnow_Icon,
-  "@/assets/coreAssets/coreAssets";
+// Light_Mode_Bestnow_Icon,
+"@/assets/coreAssets/coreAssets";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -44,7 +44,7 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
   };
 
   return (
-    <div className=" top-0 left-0 right-0 bg-white dark:bg-dark_mode_primary z-50 p-4 shadow-md">
+    <div className=" top-0 left-0 right-0 bg-light_mode_color dark:bg-dark_mode_color z-50 p-4 shadow-md">
       <div className="flex items-center justify-between w-full  gap-2">
         <div className="flex items-center w-full">
           <Link href="/status">
@@ -83,10 +83,11 @@ const CommunityDetailHeader: React.FC<CommunityDetailHeaderProps> = ({
               }}
               disabled={followLoading}
               className={`w-full h-full rounded-lg px-3 py-0.5 flex items-center cursor-pointer justify-center text-[14px]
-                        ${item?.follow
-                  ? "bg-transparent border border-primary text-primary"
-                  : "bg-light_mode_yellow_highlight_color dark:bg-dark_mode_yellow_highlight_color dark:text-dark_mode_yellow_color text-light_mode_yellow_color"
-                }
+                        ${
+                          item?.follow
+                            ? "bg-transparent border border-primary text-primary"
+                            : "bg-light_mode_yellow_highlight_color dark:bg-dark_mode_yellow_highlight_color dark:text-dark_mode_yellow_color text-light_mode_yellow_color"
+                        }
                       `}
             >
               {item?.follow ? (
