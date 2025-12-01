@@ -176,7 +176,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                 <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
                   {/* Top Section: Name and Stock */}
                   <div className="space-y-1">
-                    <h3 className="text-light_mode_text truncate dark:text-dark_mode_text text-sm md:text-base font-medium line-clamp-2 leading-tight opacity-85">
+                    <h3 className="text-light_mode_text dark:text-dark_mode_text text-sm md:text-base font-medium line-clamp-2 leading-tight opacity-85">
                       {product.product_name}
                     </h3>
                     {product.stock_status && (
