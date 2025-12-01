@@ -131,7 +131,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, community_id }) => {
   return (
     <div
       ref={cardRef}
-      className="bg-white   dark:bg-dark_mode_primary_overlay_5 rounded-lg p-2 shadow-md "
+      className="bg-light_mode_color2   dark:bg-dark_mode_color2 rounded-lg p-2 shadow-md "
     >
       <p className="mt-1 mb-5 text-[1.25rem]" style={{ fontWeight: 500 }}>
         {post?.title}

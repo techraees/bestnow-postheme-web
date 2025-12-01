@@ -49,7 +49,7 @@ const CommunityDetailPage: React.FC = () => {
   const posts = data?.payload?.results || [];
 
   return (
-    <div className="p-2.5 text-black dark:text-white bg-[#f0f2f5] dark:bg-black">
+    <div className="p-2.5 text-black dark:text-white bg-light_mode_color1 dark:bg-dark_mode_color1">
       {/* Community Header */}
       <CommunityDetailHeader
         item={getCommunityDetail?.payload}
