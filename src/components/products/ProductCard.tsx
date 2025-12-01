@@ -146,6 +146,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
     if (e.key === "Enter") commitClamp();
   };
 
+  useEffect(() => {
+    const html = document.documentElement;
+
+    if (currentImage) {
+      html.style.overflow = "hidden";
+    } else {
+      html.style.overflow = "";
+    }
+
+    return () => {
+      html.style.overflow = "";
+    };
+  }, [currentImage]);
+
 
   return (
     <>
