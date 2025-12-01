@@ -2,7 +2,7 @@
 
 import { SearchIcon } from "@/assets";
 import FilterIcon from "@/assets/icons/input/FilterIcon";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface SearchInputProps {
   initialValue?: string;
@@ -20,6 +20,11 @@ const SearchInput: React.FC<SearchInputProps> = ({
   placeholder = "Search products...",
 }) => {
   const [value, setValue] = useState(initialValue);
+
+  // Update value when initialValue changes
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
