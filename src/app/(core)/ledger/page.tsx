@@ -319,20 +319,18 @@ const LedgerPage = () => {
                 key={day}
                 onClick={handleDayClick}
                 disabled={!hasTransactions}
-                className={`aspect-square flex flex-col items-center justify-center relative rounded-lg md:rounded-xl transition-all ${
-                  isSelected
-                    ? "bg-light_mode_blue_color dark:bg-dark_mode_blue_color border-2 border-light_mode_blue_color dark:border-dark_mode_blue_color"
-                    : hasTransactions
+                className={`aspect-square flex flex-col items-center justify-center relative rounded-lg md:rounded-xl transition-all ${isSelected
+                  ? "bg-light_mode_blue_color dark:bg-dark_mode_blue_color border-2 border-light_mode_blue_color dark:border-dark_mode_blue_color"
+                  : hasTransactions
                     ? "hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 cursor-pointer active:scale-95 bg-light_mode_color dark:bg-dark_mode_color"
                     : "opacity-40 cursor-not-allowed bg-light_mode_color dark:bg-dark_mode_color"
-                }`}
+                  }`}
               >
                 <span
-                  className={`text-xs md:text-sm lg:text-base font-medium ${
-                    isSelected
-                      ? "text-white"
-                      : "text-light_mode_text dark:text-dark_mode_text"
-                  }`}
+                  className={`text-xs md:text-sm lg:text-base font-medium ${isSelected
+                    ? "text-white"
+                    : "text-light_mode_text dark:text-dark_mode_text"
+                    }`}
                 >
                   {day}
                 </span>
@@ -413,12 +411,19 @@ const LedgerPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             {/* From Date Picker */}
             <div className="relative">
-              <input
+              {/* <input
                 type="date"
                 id="start-date-input"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
                 className="absolute opacity-0 w-0 h-0 pointer-events-none"
+              /> */}
+              <input
+                type="date"
+                id="start-date-input"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="absolute inset-0 opacity-0 cursor-pointer"
               />
               <button
                 type="button"
@@ -450,12 +455,20 @@ const LedgerPage = () => {
 
             {/* To Date Picker */}
             <div className="relative">
-              <input
+              {/* <input
                 type="date"
                 id="end-date-input"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
                 className="absolute opacity-0 w-0 h-0 pointer-events-none"
+              /> */}
+
+              <input
+                type="date"
+                id="end-date-input"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="absolute inset-0 opacity-0 cursor-pointer"
               />
               <button
                 type="button"
@@ -491,11 +504,10 @@ const LedgerPage = () => {
         <div className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl md:rounded-2xl p-1 md:p-1.5 mb-4 md:mb-6 flex gap-2">
           <button
             onClick={() => setViewType("list")}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 md:py-3 rounded-lg md:rounded-xl transition-all ${
-              viewType === "list"
-                ? "bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text shadow-sm"
-                : "text-light_mode_gray_color dark:text-dark_mode_gray_color hover:text-light_mode_text dark:hover:text-dark_mode_text"
-            }`}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 md:py-3 rounded-lg md:rounded-xl transition-all ${viewType === "list"
+              ? "bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text shadow-sm"
+              : "text-light_mode_gray_color dark:text-dark_mode_gray_color hover:text-light_mode_text dark:hover:text-dark_mode_text"
+              }`}
           >
             <List className="w-4 h-4 md:w-5 md:h-5" />
             <span className="text-xs md:text-sm lg:text-base font-medium">
@@ -504,11 +516,10 @@ const LedgerPage = () => {
           </button>
           <button
             onClick={() => setViewType("calendar")}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 md:py-3 rounded-lg md:rounded-xl transition-all ${
-              viewType === "calendar"
-                ? "bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text shadow-sm"
-                : "text-light_mode_gray_color dark:text-dark_mode_gray_color hover:text-light_mode_text dark:hover:text-dark_mode_text"
-            }`}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 md:py-3 rounded-lg md:rounded-xl transition-all ${viewType === "calendar"
+              ? "bg-light_mode_color dark:bg-dark_mode_color text-light_mode_text dark:text-dark_mode_text shadow-sm"
+              : "text-light_mode_gray_color dark:text-dark_mode_gray_color hover:text-light_mode_text dark:hover:text-dark_mode_text"
+              }`}
           >
             <Calendar className="w-4 h-4 md:w-5 md:h-5" />
             <span className="text-xs md:text-sm lg:text-base font-medium">
