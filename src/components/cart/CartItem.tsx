@@ -199,7 +199,7 @@ const CartItem: React.FC<CartItemProps> = ({
                   disabled={
                     isUpdating || isRemoving || currentQuantity <= minQty
                   }
-                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px]"
+                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 flex justify-center items-center rounded-full h-[30px] w-[30px]"
                 >
                   <ChevronDown size={20} />
                 </button>
@@ -218,7 +218,7 @@ const CartItem: React.FC<CartItemProps> = ({
                   onClick={handleIncrease}
                   type="button"
                   disabled={isUpdating || isRemoving}
-                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-full h-[30px] w-[30px]"
+                  className="bg-light_mode_color2 dark:bg-dark_mode_color2 flex justify-center items-center rounded-full h-[30px] w-[30px]"
                 >
                   <ChevronUp size={20} />
                 </button>
