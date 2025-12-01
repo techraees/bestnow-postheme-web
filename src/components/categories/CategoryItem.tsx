@@ -24,7 +24,8 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         className="flex flex-col items-center gap-2  active:scale-95 transition-transform"
       >
         {/* Category Icon/Image */}
-        <div className="
+        <div
+          className="
           relative 
           w-[65px] h-[65px] 
           md:w-16 md:h-16 
@@ -36,14 +37,15 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           border lg:border-2 
           hover:border-accent 
           transition-colors
-        ">
+        "
+        >
           {image ? (
             <Image
               src={image}
               alt={name}
               fill
               priority
-              className="object-contain"
+              className="object-cover"
               sizes="(max-width: 768px) 65px, (max-width: 1024px) 70px, 200px"
             />
           ) : (
