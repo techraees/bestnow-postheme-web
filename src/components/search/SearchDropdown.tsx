@@ -117,7 +117,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
   ) => {
     e.stopPropagation();
     if (!user_profile) {
-      router.push("/auth");
+      router.push("/login");
     }
     try {
       await addToCart({
