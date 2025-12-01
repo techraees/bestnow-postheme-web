@@ -262,7 +262,7 @@ export default function Home() {
         </div>
       ),
       label: "Categories",
-      path: "#",
+      path: "/category-search",
       onClick: () => {},
     },
     {

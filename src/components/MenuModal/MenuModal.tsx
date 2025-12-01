@@ -103,7 +103,7 @@ const MenuModal = () => {
         </div>
       ),
       label: "Categories",
-      path: "#",
+      path: "/category-search",
       onClick: () => {
       },
 
