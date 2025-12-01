@@ -4,7 +4,7 @@ import React from "react";
 
 const CartItemSkeleton: React.FC = () => {
   return (
-    <div className="bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-1 md:p-4 lg:p-5 animate-pulse">
+    <div className="bg-light_mode_color dark:bg-dark_mode_color rounded-2xl p-1 md:p-4 lg:p-3 animate-pulse">
       <div className="flex gap-3 md:gap-4 lg:gap-5">
         {/* Product Image Skeleton */}
         <div className="relative shrink-0 w-[100px] h-[100px] md:w-24 md:h-24 lg:w-28 lg:h-28 bg-light_mode_color2 dark:bg-dark_mode_color2 rounded-xl"></div>
