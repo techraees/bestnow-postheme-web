@@ -19,6 +19,8 @@ import ProfileDropdown from "./ProfileDropdown";
 import Modal from "react-modal";
 import { motion, AnimatePresence } from "framer-motion";
 import AddToCartModal from "../cart/AddToCartModal";
+import { SearchHeader } from "../search";
+import SearchNav from "./SearchNav";
 
 const LoginIcon = () => (
   <svg
@@ -155,7 +157,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
 
   return (
     <header
-      className={`w-full lg:h-[60px] h-[55px] fixed top-0 left-0 right-0 z-50 bg-light_mode_color dark:bg-dark_mode_color px-4 py-3 md:px-6 lg:px-8 xl:px-12 bg-opacity-95 dark:bg-opacity-95 backdrop-blur-sm transition-transform duration-300`}
+      className={`w-full lg:h-[65px] h-[55px] fixed top-0 left-0 right-0 z-50 bg-light_mode_color dark:bg-dark_mode_color px-4 py-3 md:px-6 lg:px-8 xl:px-12 bg-opacity-95 dark:bg-opacity-95 backdrop-blur-sm transition-transform duration-300`}
     >
       <div className="flex items-center justify-between max-w-[1600px] mx-auto">
         {/* Logo and App Name */}
@@ -174,7 +176,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
             </span>
           </Link>
         </div>
-
+        <SearchNav />
         {/* Right Side: Theme Toggle and Hamburger Menu */}
         <div className="flex items-center gap-3 md:gap-2">
           <div className="lg:block hidden">
