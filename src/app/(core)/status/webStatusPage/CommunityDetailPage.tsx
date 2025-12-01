@@ -34,7 +34,7 @@ const CommunityDetailPage: FC<CommunityDetailPageProps> = ({
   const posts: CommunityPost[] = data?.payload?.results ?? [];
 
   return (
-    <div className="p-2.5 text-black dark:text-white bg-[#f0f2f5] dark:bg-black h-[calc(100vh-130px)] scrollbar_hide_custom">
+    <div className="p-2.5 text-black dark:text-white bg-light_mode_color1 dark:bg-dark_mode_color1 h-[calc(100vh-130px)] scrollbar_hide_custom">
       <div className="space-y-6">
         {isLoading ? (
           Array.from({ length: 5 }).map((_, index) => (

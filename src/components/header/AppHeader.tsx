@@ -176,7 +176,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({
         </div>
 
         {/* Right Side: Theme Toggle and Hamburger Menu */}
-        <div className="flex items-center gap-3 md:gap-4">
+        <div className="flex items-center gap-3 md:gap-2">
           <div className="lg:block hidden">
             <SocialMediaLinks />
           </div>
@@ -291,7 +291,7 @@ c16 -16 29 -39 29 -51 0 -28 -52 -80 -80 -80 -28 0 -80 52 -80 80 0 12 13 35
               <li
                 key={index}
                 className={`group cursor-pointer text-light_mode_yellow_color dark:text-dark_mode_yellow_color flex items-center xl:gap-x-2 gap-x-1 ${
-                  index == 0 && "ml-2.5"
+                  index == 0 && "ml-0"
                 }`}
               >
                 <Link href={item?.path}>{item?.icon}</Link>
