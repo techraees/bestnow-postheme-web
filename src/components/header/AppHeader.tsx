@@ -66,7 +66,7 @@ const LOGIN_MENU = [
     name: "Login",
     path: "/login",
     icon: (
-      <div className="relative text-primary group-hover:text-primary text-opacity-100">
+      <div className="relative  text-light_mode_yellow_color dark:text-dark_mode_yellow_color text-opacity-100">
         <LoginIcon />
       </div>
     ),
@@ -290,14 +290,14 @@ c16 -16 29 -39 29 -51 0 -28 -52 -80 -80 -80 -28 0 -80 52 -80 80 0 12 13 35
             LOGIN_MENU.map((item, index) => (
               <li
                 key={index}
-                className={`group cursor-pointer flex items-center xl:gap-x-2 gap-x-1 ${
+                className={`group cursor-pointer text-light_mode_yellow_color dark:text-dark_mode_yellow_color flex items-center xl:gap-x-2 gap-x-1 ${
                   index == 0 && "ml-2.5"
                 }`}
               >
                 <Link href={item?.path}>{item?.icon}</Link>
                 <Link
                   href={item?.path}
-                  className="relative cursor-pointer dark:text-white group-hover:text-primary mx-[0.25rem] text-black xl:text-[12.72px] text-[10.72px] font-bold font-['Plus Jakarta Sans']"
+                  className="relative cursor-pointer  mx-[0.25rem]  xl:text-[12.72px] text-[10.72px] font-bold font-['Plus Jakarta Sans']"
                 >
                   {item?.name}
                 </Link>
@@ -331,26 +331,24 @@ c16 -16 29 -39 29 -51 0 -28 -52 -80 -80 -80 -28 0 -80 52 -80 80 0 12 13 35
               </button>
             </>
           )}
-
           <AnimatePresence>
             {isOpenCart && (
               <Modal
-                isOpen={isOpenCart} // ✔ boolean
+                isOpen={isOpenCart}
                 onRequestClose={closeModal}
                 shouldCloseOnOverlayClick={true}
                 shouldCloseOnEsc={true}
                 contentLabel="Product Image"
                 style={{
                   content: {
-                    top: "0px",
-                    left: "0px",
+                    top: 0,
+                    left: 0,
                     width: "100svw",
                     height: "100vh",
                     border: "none",
                     padding: 0,
                     background: "transparent",
                     position: "fixed",
-                    borderRadius: "0px",
                     overflow: "hidden",
                   },
                   overlay: {
@@ -359,10 +357,14 @@ c16 -16 29 -39 29 -51 0 -28 -52 -80 -80 -80 -28 0 -80 52 -80 80 0 12 13 35
                   },
                 }}
               >
-                {/* Overlay Click */}
-                <div
-                  className="fixed top-0 left-0 w-full h-full"
+                {/* CLICK OUTSIDE TO CLOSE */}
+                <motion.div
+                  className="fixed inset-0"
                   onClick={closeModal}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
                 />
 
                 {/* RIGHT SIDE DRAWER */}
@@ -370,13 +372,16 @@ c16 -16 29 -39 29 -51 0 -28 -52 -80 -80 -80 -28 0 -80 52 -80 80 0 12 13 35
                   className="
           dark:bg-dark_mode_primary 
           bg-light_mode_primary 
-           h-full absolute right-0 w-[380px] 
+          h-full absolute right-0 w-[380px]
           shadow-2xl
         "
-                  initial={{ x: 400, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: 400, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 120 }}
+                  initial={{ x: "100%", opacity: 0 }} // 👉 Start fully off-screen right
+                  animate={{ x: "0%", opacity: 1 }} // 👉 Slide into view
+                  exit={{ x: "100%", opacity: 0 }} // 👉 Slide back to right on close
+                  transition={{
+                    duration: 0.28,
+                    ease: "easeOut", // 👉 Smooth clean animation
+                  }}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <AddToCartModal closeModal={closeModal} />
