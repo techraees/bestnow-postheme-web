@@ -99,91 +99,93 @@ const ExploreCommunities: React.FC<ExploreCommunitiesProps> = ({
       {/* Render Parent Communities with their Children */}
       {getAllCommunitiesLoading
         ? Array.from({
-            length: 4,
-          }).map((item, index) => <ExploreCardSkeletal key={index} />)
+          length: 4,
+        }).map((item, index) => <ExploreCardSkeletal key={index} />)
         : explore_communities.map((item, index) => (
-            <div className={`${index === 0 ? "mb-5" : "my-7"}`} key={index}>
-              {/* Parent Name with See All */}
-              <div className="flex items-center justify-between">
-                <h2>{item?.community_name}</h2>
-              </div>
+          <div className={`${index === 0 ? "mb-5" : "my-7"}`} key={index}>
+            {/* Parent Name with See All */}
+            <div className="flex items-center justify-between">
+              <h2>{item?.community_name}</h2>
+            </div>
 
-              {/* Child Communities List */}
-              <div className="flex flex-col gap-5 mt-4">
-                {item.communities?.map((item: any) => {
-                  const isThisLoading =
-                    followLoading && originalArgs === item.slug;
+            {/* Child Communities List */}
+            <div className="flex flex-col gap-5 mt-4">
+              {item.communities?.map((item: any) => {
+                const isThisLoading =
+                  followLoading && originalArgs === item.slug;
 
-                  return (
-                    <div key={item.id}>
-                      <div
-                        onClick={() => {
-                          setCommunity_id(item.id);
-                          setCommunity_slug(item.slug);
-                        }}
-                        className="flex items-center justify-between"
-                      >
-                        <div className="flex">
-                          <Image
-                            src={getImgBaseUrl(item.img_url)}
-                            alt={item.community_name}
-                            width={40}
-                            height={40}
-                            className="rounded-full object-cover"
-                          />
+                return (
+                  <div key={item.id}>
+                    <div
+                      onClick={() => {
+                        setCommunity_id(item.id);
+                        setCommunity_slug(item.slug);
+                      }}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex">
+                        <Image
+                          src={getImgBaseUrl(item.img_url)}
+                          alt={item.community_name}
+                          width={40}
+                          height={40}
+                          className="rounded-full object-cover"
+                        />
 
-                          <div className="flex items-center justify-between ml-3">
-                            <div>
-                              <p>
-                                {item?.community_name
-                                  ?.split(" ")
-                                  .slice(0, 3)
-                                  .join(" ")}
-                              </p>
-                              <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
-                                {item?.followers} followers
-                              </span>
-                            </div>
+                        <div className="flex items-center justify-between ml-3">
+                          <div>
+                            <p>
+                              {item?.community_name
+                                ?.split(" ")
+                                .slice(0, 3)
+                                .join(" ")}
+                            </p>
+                            <span className="text-[14px] text-gray-600 dark:text-dark_mode_gray_color">
+                              {item?.followers} followers
+                            </span>
                           </div>
                         </div>
+                      </div>
 
-                        <div>
-                          <button
-                            onClick={(e: any) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleFollowCommunities(item.slug);
-                            }}
-                            disabled={isThisLoading}
-                            className={`w-full h-full rounded-lg px-3 py-0.5 flex items-center justify-center text-[14px]
-                        ${
-                          item.follow
-                            ? "bg-transparent border border-primary text-primary"
-                            : "bg-blue-200 dark:bg-blue-900 dark:text-blue-300 text-primary"
-                        }
+                      <div>
+                        <button
+                          onClick={(e: any) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleFollowCommunities(item.slug);
+                          }}
+                          disabled={isThisLoading}
+                          className={`w-full h-full rounded-lg px-3 py-0.5 flex items-center justify-center text-[14px]
+                        ${item.follow
+                              ? "bg-transparent border border-primary text-primary"
+                              : "bg-light_mode_yellow_highlight_color dark:bg-dark_mode_yellow_highlight_color dark:text-dark_mode_yellow_color text-light_mode_yellow_color"
+                            }
                       `}
-                          >
-                            {item?.follow ? (
-                              isThisLoading ? (
+                        >
+                          {item?.follow ? (
+                            isThisLoading ? (
+                              <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
                                 <ClipLoader
                                   size={15}
                                   className="!text-white mx-3 my-1"
+                                  color="currentColor"
                                 />
-                              ) : (
-                                "Following"
-                              )
+                              </div>
                             ) : (
-                              "Follow"
-                            )}
-                          </button>
-                        </div>
+                              "Following"
+                            )
+                          ) : (
+                            "Follow"
+                          )}
+                        </button>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
-          ))}
+          </div>
+        ))}
 
       <div className="flex items-center justify-between">
         <h2>Others</h2>
@@ -216,7 +218,7 @@ const ExploreCommunities: React.FC<ExploreCommunitiesProps> = ({
 
                     <div className="flex items-center justify-between ml-3">
                       <div>
-                        <p className="text-light_mode_text dark:text-dark_mode_text"> 
+                        <p className="text-light_mode_text dark:text-dark_mode_text">
                           {item?.community_name
                             ?.split(" ")
                             .slice(0, 3)
@@ -238,29 +240,32 @@ const ExploreCommunities: React.FC<ExploreCommunitiesProps> = ({
                       }}
                       disabled={isThisLoading}
                       className={`w-full h-full rounded-lg px-3 py-0.5 flex items-center cursor-pointer justify-center text-[14px]
-    ${
-      item.follow
-        ? "bg-transparent border border-primary text-primary"
-        : "bg-blue-200 dark:bg-blue-900 dark:text-blue-300 text-primary"
-    }
+    ${item.follow
+                          ? "bg-transparent border border-primary text-primary"
+                          : "bg-light_mode_yellow_highlight_color dark:bg-dark_mode_yellow_highlight_color dark:text-dark_mode_yellow_color text-light_mode_yellow_color"
+                        }
   `}
                     >
                       {item?.follow ? (
                         isThisLoading ? (
-                          <ClipLoader
-                            size={15}
-                            className="!text-white mx-3 my-1"
-                            color="#006BFF"
-                          />
+                          <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+                            <ClipLoader
+                              size={15}
+                              className="!text-white mx-3 my-1"
+                              color="currentColor"
+                            />
+                          </div>
                         ) : (
                           "Following"
                         )
                       ) : isThisLoading ? (
-                        <ClipLoader
-                          size={15}
-                          className="!text-white mx-3 my-1"
-                          color="#006BFF"
-                        />
+                        <div className="text-light_mode_yellow_color dark:text-dark_mode_yellow_color">
+                          <ClipLoader
+                            size={15}
+                            className="!text-white mx-3 my-1"
+                            color="currentColor"
+                          />
+                        </div>
                       ) : (
                         "Follow"
                       )}

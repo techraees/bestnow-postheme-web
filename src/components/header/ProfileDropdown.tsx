@@ -88,7 +88,7 @@ const ProfileDropdown = memo(
               <li>
                 <Link
                   href={"/profile"}
-                  className="block px-4 py-2 dark:hover:bg-dark_mode_primary_overlay_5 hover:bg-light_mode_light_bg_color_hover_color cursor-pointer"
+                  className="block px-4 py-2 dark:hover:bg-dark_mode_color1 hover:bg-light_mode_light_bg_color_hover_color cursor-pointer"
                 >
                   Profile
                 </Link>
@@ -97,7 +97,7 @@ const ProfileDropdown = memo(
               <li>
                 <p
                   onClick={handleLogoutCustomer}
-                  className="block px-4 py-2 dark:hover:bg-dark_mode_primary_overlay_5 hover:bg-light_mode_light_bg_color_hover_color cursor-pointer"
+                  className="block px-4 py-2 dark:hover:bg-dark_mode_color1 hover:bg-light_mode_light_bg_color_hover_color cursor-pointer"
                 >
                   Log out
                 </p>
