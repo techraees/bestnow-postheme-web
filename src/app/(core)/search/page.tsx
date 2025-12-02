@@ -32,7 +32,7 @@ const page = () => {
   // Extract suggestions from API response
   const suggestions =
     searchSuggestionsData?.payload &&
-    Array.isArray(searchSuggestionsData.payload)
+      Array.isArray(searchSuggestionsData.payload)
       ? searchSuggestionsData.payload
       : [];
 
@@ -95,7 +95,7 @@ const page = () => {
                   {/* Dropdown with Product Results */}
                   <SearchDropdown
                     products={dropdownProducts}
-                    isOpen={showDropdown && !isDropdownLoading}
+                    isOpen={(showDropdown && !isDropdownLoading) || (searchQuery ? true : false)}
                     onClose={() => setShowDropdown(false)}
                   />
                 </div>
