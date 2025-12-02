@@ -49,7 +49,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
             <SearchInput
               initialValue={searchQuery}
               onSearchChange={(query) => {
-                onSearchChange(query);
+                onSearchChange?.(query);
+              }}
+              onSearchSubmit={(query) => {
+                onSearchSubmit?.(query);
               }}
               placeholder="Search products..."
             />
