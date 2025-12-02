@@ -36,7 +36,7 @@ const CheckoutPage = () => {
   const router = useRouter();
 
   const userProfile = useSelector(
-    (state: any) => state.coreAppSlice.userProfile
+    (state: any) => state.coreAppSlice.user_profile
   );
   const {
     data: cartData,
@@ -51,6 +51,7 @@ const CheckoutPage = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset
   } = useForm();
 
   // Transform cart items
@@ -68,7 +69,7 @@ const CheckoutPage = () => {
         total_amount:
           item.total_amount ||
           (item.price_rate || item.unitPrice || item.price || 0) *
-            (item.quantity || item.item_quantity || 1),
+          (item.quantity || item.item_quantity || 1),
         image:
           item.image ||
           "https://adminapi.beston.co/uploads/products/commonImages/7646/images/RF_PARTS_____BOARD_FLEX_HUAWEI_Y6_20182.webp",
@@ -131,7 +132,16 @@ const CheckoutPage = () => {
   };
 
   const userName = userProfile?.name || userProfile?.username || "";
-  const userPhone = userProfile?.phone || "";
+  const userPhone = userProfile?.contacts && userProfile?.contacts[0]?.value || "";
+
+  useEffect(() => {
+    if (userProfile) {
+      reset({
+        new_type_city: userProfile?.addresses?.[0]?.city || "",
+        whole_address_of_customer: userProfile?.addresses?.[0]?.address || "",
+      });
+    }
+  }, [userProfile, reset]);
 
   return (
     <TopSpacingWrapper>
@@ -186,12 +196,13 @@ const CheckoutPage = () => {
                     </span>
                     <input
                       type="text"
-                      {...register("new_active_phone_number")}
-                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color ${
-                        errors.new_active_phone_number
-                          ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
-                          : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
-                      }`}
+                      {...register("new_active_phone_number", {
+                        required: "Phone Number is required"
+                      })}
+                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color ${errors.new_active_phone_number
+                        ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
+                        : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
+                        }`}
                       placeholder="Enter actual phone number"
                       maxLength={11}
                     />
@@ -210,11 +221,10 @@ const CheckoutPage = () => {
                     <input
                       type="text"
                       {...register("new_type_city")}
-                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color ${
-                        errors.new_type_city
-                          ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
-                          : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
-                      }`}
+                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color ${errors.new_type_city
+                        ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
+                        : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
+                        }`}
                       placeholder="City"
                     />
                     {errors.new_type_city && (
@@ -232,11 +242,10 @@ const CheckoutPage = () => {
                     <textarea
                       {...register("whole_address_of_customer")}
                       rows={3}
-                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color resize-none ${
-                        errors.whole_address_of_customer
-                          ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
-                          : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
-                      }`}
+                      className={`w-full rounded-lg md:rounded-xl border py-2.5 md:py-3 lg:py-3.5 pl-9 md:pl-11 pr-4 text-sm md:text-base text-light_mode_text dark:text-dark_mode_text placeholder:text-light_mode_gray_color dark:placeholder:text-dark_mode_gray_color bg-light_mode_color dark:bg-dark_mode_color resize-none ${errors.whole_address_of_customer
+                        ? "border-2 !border-light_mode_red_color dark:!border-dark_mode_red_color focus:!border-light_mode_red_color dark:focus:!border-dark_mode_red_color focus:!ring-0"
+                        : "border-light_mode_color3 dark:border-dark_mode_color3 focus:outline-none focus:ring-2 focus:ring-light_mode_yellow_color dark:focus:ring-dark_mode_yellow_color focus:border-light_mode_yellow_color dark:focus:border-dark_mode_yellow_color"
+                        }`}
                       placeholder="Enter complete address"
                     />
                     {errors.whole_address_of_customer && (
@@ -323,11 +332,10 @@ const CheckoutPage = () => {
                               Prev. Bal
                             </span>
                             <span
-                              className={`font-semibold ${
-                                previousBalance < 0
-                                  ? "text-red-500 dark:text-red-400"
-                                  : "text-light_mode_text dark:text-dark_mode_text"
-                              }`}
+                              className={`font-semibold ${previousBalance < 0
+                                ? "text-red-500 dark:text-red-400"
+                                : "text-light_mode_text dark:text-dark_mode_text"
+                                }`}
                             >
                               {formatPrice(previousBalance)}
                             </span>
@@ -397,11 +405,10 @@ const CheckoutPage = () => {
                       Prev. Bal
                     </span>
                     <span
-                      className={`font-semibold ${
-                        previousBalance < 0
-                          ? "text-red-500 dark:text-red-400"
-                          : "text-light_mode_text dark:text-dark_mode_text"
-                      }`}
+                      className={`font-semibold ${previousBalance < 0
+                        ? "text-red-500 dark:text-red-400"
+                        : "text-light_mode_text dark:text-dark_mode_text"
+                        }`}
                     >
                       {formatPrice(previousBalance)}
                     </span>
