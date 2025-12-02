@@ -56,24 +56,26 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
   }, [products]);
 
   // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (
+  //       dropdownRef.current &&
+  //       !dropdownRef.current.contains(event.target as Node)
+  //     ) {
+  //       onClose();
+  //     }
+  //   };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+  //   if (isOpen) {
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //   }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, onClose]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [isOpen, onClose]);
+
+
 
   const handleQuantityChange = (productId: number, newQuantity: number) => {
     const validQuantity = Math.max(1, newQuantity);
@@ -158,6 +160,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
       ref={dropdownRef}
       className="absolute top-full left-0 right-0 mt-2 bg-light_mode_color dark:bg-dark_mode_color border border-light_mode_color2 dark:border-dark_mode_color2 rounded-2xl shadow-xl z-50 max-h-[500px] overflow-y-auto scrollbar_hide_custom"
     >
+      <span className="absolute top-0 right-3 z-[1000] cursor-pointer" onClick={() => { onClose() }}>x</span>
       <div className="p-3 space-y-3">
         {products.slice(0, 5).map((product) => {
           const quantity = quantities[product.id] || 1;
@@ -168,8 +171,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
           return (
             <div
               key={product.id}
-              onClick={() => handleProductClick(product.id)}
-              className="group relative bg-light_mode_color dark:bg-dark_mode_color border border-light_mode_color2 dark:border-dark_mode_color2 rounded-2xl p-3 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 cursor-pointer transition-all duration-200 hover:shadow-lg active:scale-[0.98] border border-transparent hover:border-light_mode_color3 dark:hover:border-dark_mode_color3"
+              className="group relative bg-light_mode_color dark:bg-dark_mode_color border border-light_mode_color2 dark:border-dark_mode_color2 rounded-2xl p-3 hover:bg-light_mode_color3 dark:hover:bg-dark_mode_color3 transition-all duration-200 hover:shadow-lg active:scale-[0.98] border border-transparent hover:border-light_mode_color3 dark:hover:border-dark_mode_color3"
             >
               <div className="flex items-start gap-3">
                 {/* IMAGE */}
@@ -185,8 +187,12 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({
                 {/* INFO */}
                 <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
                   {/* NAME + STOCK */}
-                  <div className="space-y-1">
-                    <h3 className="text-light_mode_text dark:text-dark_mode_text text-sm font-medium line-clamp-2 leading-tight truncate opacity-85">
+                  <div className="space-y-1"
+
+                  >
+                    <h3 className="text-light_mode_text dark:text-dark_mode_text text-sm font-medium line-clamp-2 leading-tight hover:underline opacity-85 cursor-pointer"
+                      onClick={() => handleProductClick(product.id)}
+                    >
                       {product.product_name}
                     </h3>
 
